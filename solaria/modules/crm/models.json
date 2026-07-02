@@ -1,0 +1,1004 @@
+{
+ "_meta": {
+  "module": "crm",
+  "display_name": "CRM",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "crm.lead",
+   "business_meaning": "Lead",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_lead.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "campaign tracking",
+    "chatter+email blacklist",
+    "chatter+phone",
+    "chatter/log",
+    "stage-duration tracking"
+   ],
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "crm.stage",
+     "label": "Stage",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "selection": [
+      "lead",
+      "opportunity"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Opportunity",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "won_status",
+     "type": "Selection",
+     "label": "Won/Lost",
+     "selection": [
+      "won",
+      "lost",
+      "pending"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "expected_revenue",
+     "type": "Monetary",
+     "label": "Expected Revenue",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "recurring_revenue",
+     "type": "Monetary",
+     "label": "Recurring Revenues",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "phone_state",
+     "type": "Selection",
+     "label": "Phone Quality",
+     "selection": [
+      "correct",
+      "incorrect"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "email_state",
+     "type": "Selection",
+     "label": "Email Quality",
+     "selection": [
+      "correct",
+      "incorrect"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lost_reason_id",
+     "type": "Many2one",
+     "relates_to": "crm.lost.reason",
+     "label": "Lost Reason",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "prorated_revenue",
+     "type": "Monetary",
+     "label": "Prorated Revenue",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_revenue_monthly",
+     "type": "Monetary",
+     "label": "Expected MRR",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_revenue_monthly_prorated",
+     "type": "Monetary",
+     "label": "Prorated MRR",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_revenue_prorated",
+     "type": "Monetary",
+     "label": "Prorated Recurring Revenues",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "contact_name",
+     "type": "Char",
+     "label": "Contact Name",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_name",
+     "type": "Char",
+     "label": "Company Name",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "email_from",
+     "type": "Char",
+     "label": "Email",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "phone",
+     "type": "Char",
+     "label": "Phone",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lang_id",
+     "type": "Many2one",
+     "relates_to": "res.lang",
+     "label": "Language",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "State",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_company_ids",
+     "type": "Many2many",
+     "relates_to": "res.company",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "label": "Active",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "crm.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "recurring_plan",
+     "type": "Many2one",
+     "relates_to": "crm.recurring.plan",
+     "label": "Recurring Plan"
+    }
+   ],
+   "total_field_count_declared": 70
+  },
+  {
+   "model": "crm.lead.scoring.frequency",
+   "business_meaning": "Lead Scoring Frequency",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_lead_scoring_frequency.py",
+   "key_fields": [
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "crm.lead.scoring.frequency.field",
+   "business_meaning": "Fields that can be used for predictive lead scoring computation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_lead_scoring_frequency.py",
+   "key_fields": [
+    {
+     "name": "field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "crm.lost.reason",
+   "business_meaning": "Opp. Lost Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_lost_reason.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "crm.recurring.plan",
+   "business_meaning": "CRM Recurring revenue plans",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_recurring_plan.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Plan Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "number_of_months",
+     "type": "Integer",
+     "label": "# Months",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "crm.stage",
+   "business_meaning": "CRM Stages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/models/crm_stage.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Stage Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_ids",
+     "type": "Many2many",
+     "relates_to": "crm.team",
+     "label": "Sales Teams"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "crm.lead.lost",
+   "business_meaning": "Get Lost Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/wizard/crm_lead_lost.py",
+   "key_fields": [
+    {
+     "name": "lead_ids",
+     "type": "Many2many",
+     "relates_to": "crm.lead",
+     "label": "Leads"
+    },
+    {
+     "name": "lost_reason_id",
+     "type": "Many2one",
+     "relates_to": "crm.lost.reason"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "crm.lead.pls.update",
+   "business_meaning": "Update the probabilities",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/wizard/crm_lead_pls_update.py",
+   "key_fields": [
+    {
+     "name": "pls_start_date",
+     "type": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pls_fields",
+     "type": "Many2many",
+     "relates_to": "crm.lead.scoring.frequency.field"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "crm.lead2opportunity.partner",
+   "business_meaning": "Convert Lead to Opportunity (not in mass)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/wizard/crm_lead_to_opportunity.py",
+   "key_fields": [
+    {
+     "name": "action",
+     "type": "Selection",
+     "label": "Related Customer",
+     "selection": [
+      "create",
+      "exist"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Selection",
+     "selection": [
+      "convert",
+      "merge"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lead_id",
+     "type": "Many2one",
+     "relates_to": "crm.lead",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "duplicated_lead_ids",
+     "type": "Many2many",
+     "relates_to": "crm.lead",
+     "label": "Opportunities",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "crm.lead2opportunity.partner.mass",
+   "business_meaning": "Convert Lead to Opportunity (in mass)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/wizard/crm_lead_to_opportunity_mass.py",
+   "key_fields": [
+    {
+     "name": "lead_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "lead_tomerge_ids",
+     "type": "Many2many",
+     "relates_to": "crm.lead",
+     "label": "Active Leads"
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Salespersons"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "crm.merge.opportunity",
+   "business_meaning": "Merge Opportunities",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/wizard/crm_merge_opportunities.py",
+   "key_fields": [
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "opportunity_ids",
+     "type": "Many2many",
+     "relates_to": "crm.lead",
+     "label": "Leads/Opportunities"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "crm.activity.report",
+   "business_meaning": "CRM Activity Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "crm/report/crm_activity_report.py",
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "crm.stage"
+    },
+    {
+     "name": "lead_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "lead",
+      "opportunity"
+     ]
+    },
+    {
+     "name": "won_status",
+     "type": "Selection",
+     "label": "Is Won",
+     "selection": [
+      "won",
+      "lost",
+      "pending"
+     ]
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team"
+    },
+    {
+     "name": "lead_id",
+     "type": "Many2one",
+     "relates_to": "crm.lead"
+    },
+    {
+     "name": "subtype_id",
+     "type": "Many2one",
+     "relates_to": "mail.message.subtype"
+    },
+    {
+     "name": "mail_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "crm.team",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "alias_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "assignment_domain",
+     "type": "Char",
+     "label": "Assignment Domain",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "use_leads",
+     "type": "Boolean",
+     "label": "Leads"
+    },
+    {
+     "name": "use_opportunities",
+     "type": "Boolean",
+     "label": "Pipeline"
+    },
+    {
+     "name": "assignment_enabled",
+     "type": "Boolean",
+     "label": "Lead Assign",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "assignment_auto_enabled",
+     "type": "Boolean",
+     "label": "Auto Assignment",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "assignment_optout",
+     "type": "Boolean",
+     "label": "Skip auto assignment"
+    },
+    {
+     "name": "assignment_max",
+     "type": "Integer",
+     "label": "Lead Average Capacity",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lead_unassigned_count",
+     "type": "Integer",
+     "label": "# Unassigned Leads",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lead_all_assigned_month_count",
+     "type": "Integer",
+     "label": "# Leads/Opps assigned this month",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "crm/models/crm_team.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "crm_auto_assignment_action",
+     "type": "Selection",
+     "label": "Auto Assignment Action",
+     "selection": [
+      "manual",
+      "auto"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "crm_auto_assignment_interval_type",
+     "type": "Selection",
+     "label": "Auto Assignment Interval Unit",
+     "selection": [
+      "minutes",
+      "hours",
+      "days",
+      "weeks"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lead_enrich_auto",
+     "type": "Selection",
+     "label": "Enrich lead automatically",
+     "selection": [
+      "manual",
+      "auto"
+     ]
+    },
+    {
+     "name": "predictive_lead_scoring_fields",
+     "type": "Many2many",
+     "relates_to": "crm.lead.scoring.frequency.field",
+     "label": "Lead Scoring Frequency Fields",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "crm_auto_assignment_interval_number",
+     "type": "Integer",
+     "label": "Repeat every",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "crm_auto_assignment_run_datetime",
+     "type": "Datetime",
+     "label": "Auto Assignment Next Execution Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "group_use_lead",
+     "type": "Boolean",
+     "label": "Leads"
+    },
+    {
+     "name": "group_use_recurring_revenues",
+     "type": "Boolean",
+     "label": "Recurring Revenues"
+    },
+    {
+     "name": "is_membership_multi",
+     "type": "Boolean",
+     "label": "Multi Teams"
+    },
+    {
+     "name": "module_partnership",
+     "type": "Boolean",
+     "label": "Membership / Partnership"
+    }
+   ],
+   "evidence_files": [
+    "crm/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "crm.team.member",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "assignment_domain",
+     "type": "Char",
+     "label": "Assignment Domain",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "assignment_domain_preferred",
+     "type": "Char",
+     "label": "Preference assignment Domain",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "assignment_enabled",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "assignment_optout",
+     "type": "Boolean",
+     "label": "Pause assignment"
+    },
+    {
+     "name": "assignment_max",
+     "type": "Integer",
+     "label": "Average Leads Capacity (on 30 days)"
+    },
+    {
+     "name": "lead_day_count",
+     "type": "Integer",
+     "label": "Leads (last 24h)",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lead_month_count",
+     "type": "Integer",
+     "label": "Leads (30 days)",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "crm/models/crm_team_member.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_crm_lead_created",
+     "type": "Boolean",
+     "label": "New Leads"
+    },
+    {
+     "name": "kpi_crm_lead_created_value",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kpi_crm_opportunities_won",
+     "type": "Boolean",
+     "label": "Opportunities Won"
+    },
+    {
+     "name": "kpi_crm_opportunities_won_value",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "crm/models/digest.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "opportunity_ids",
+     "type": "One2many",
+     "relates_to": "crm.lead",
+     "label": "Opportunities"
+    },
+    {
+     "name": "opportunity_count",
+     "type": "Integer",
+     "label": "Opportunity Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "crm/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "utm.campaign",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "use_leads",
+     "type": "Boolean",
+     "label": "Use Leads",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "crm_lead_count",
+     "type": "Integer",
+     "label": "Leads/Opportunities count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "crm/models/utm.py"
+   ]
+  },
+  {
+   "model": "calendar.event",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "opportunity_id",
+     "type": "Many2one",
+     "relates_to": "crm.lead"
+    }
+   ],
+   "evidence_files": [
+    "crm/models/calendar.py"
+   ]
+  },
+  {
+   "model": "ir.config_parameter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "crm/models/ir_config_parameter.py"
+   ]
+  },
+  {
+   "model": "mail.activity",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "crm/models/mail_activity.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "crm/models/res_users.py"
+   ]
+  }
+ ]
+}

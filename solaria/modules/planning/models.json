@@ -1,0 +1,736 @@
+{
+ "_meta": {
+  "module": "planning",
+  "display_name": "Planning",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "planning.calendar.resource",
+   "business_meaning": "planning calendar resource",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_calendar_resource.py",
+   "key_fields": [
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "resource_id",
+     "type": "Many2one",
+     "relates_to": "resource.resource"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "planning.planning",
+   "business_meaning": "Schedule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_planning.py",
+   "key_fields": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "start_datetime",
+     "type": "Datetime",
+     "label": "Start Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "end_datetime",
+     "type": "Datetime",
+     "label": "Stop Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "label": "Security Token",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "planning.recurrency",
+   "business_meaning": "Planning Recurrence",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_recurrency.py",
+   "key_fields": [
+    {
+     "name": "repeat_unit",
+     "type": "Selection",
+     "selection": [
+      "day",
+      "week",
+      "month",
+      "year"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "repeat_type",
+     "type": "Selection",
+     "label": "Weeks",
+     "selection": [
+      "forever",
+      "until",
+      "x_times"
+     ]
+    },
+    {
+     "name": "slot_ids",
+     "type": "One2many",
+     "relates_to": "planning.slot",
+     "label": "Related Planning Entries"
+    },
+    {
+     "name": "repeat_interval",
+     "type": "Integer",
+     "label": "Repeat Every",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "planning.role",
+   "business_meaning": "Planning Role",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_role.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "resource_ids",
+     "type": "Many2many",
+     "relates_to": "resource.resource"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "planning.slot",
+   "business_meaning": "Planning Shift",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_slot.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "published"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "repeat_unit",
+     "type": "Selection",
+     "selection": [
+      "day",
+      "week",
+      "month",
+      "year"
+     ],
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Text",
+     "label": "Note"
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "planning.role",
+     "label": "Role",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "start_datetime",
+     "type": "Datetime",
+     "label": "Start Date",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "end_datetime",
+     "type": "Datetime",
+     "label": "End Date",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "allocation_type",
+     "type": "Selection",
+     "selection": [
+      "planning",
+      "forecast"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "planning.slot.template",
+     "label": "Shift Templates",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "repeat_type",
+     "type": "Selection",
+     "label": "Repeat Type",
+     "selection": [
+      "forever",
+      "until",
+      "x_times"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "recurrence_update",
+     "type": "Selection",
+     "selection": [
+      "this",
+      "subsequent",
+      "all"
+     ]
+    },
+    {
+     "name": "resource_id",
+     "type": "Many2one",
+     "relates_to": "resource.resource"
+    },
+    {
+     "name": "resource_roles",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "work_location_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "conflicting_slot_ids",
+     "type": "Many2many",
+     "relates_to": "planning.slot",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "template_autocomplete_ids",
+     "type": "Many2many",
+     "relates_to": "planning.slot.template",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "previous_template_id",
+     "type": "Many2one",
+     "relates_to": "planning.slot.template"
+    },
+    {
+     "name": "recurrency_id",
+     "type": "Many2one",
+     "relates_to": "planning.recurrency"
+    },
+    {
+     "name": "allocated_hours",
+     "type": "Float",
+     "label": "Allocated Time",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "allocated_percentage",
+     "type": "Float",
+     "label": "Allocated Time %",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "publication_warning",
+     "type": "Boolean",
+     "label": "Modified Since Last Publication",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 51
+  },
+  {
+   "model": "planning.slot.template",
+   "business_meaning": "Shift Template",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/models/planning_template.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Hours",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "planning.role",
+     "label": "Role"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "planning.preview",
+   "business_meaning": "Planning Preview",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/wizard/planning_preview.py",
+   "key_fields": [
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "planning.send",
+   "business_meaning": "Send Planning",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/wizard/planning_send.py",
+   "key_fields": [
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employees",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "slot_ids",
+     "type": "Many2many",
+     "relates_to": "planning.slot",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "start_datetime",
+     "type": "Datetime",
+     "label": "Period",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "end_datetime",
+     "type": "Datetime",
+     "label": "Stop Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "employees_no_email",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employees without email",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "planning.analysis.report",
+   "business_meaning": "Planning Analysis Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "planning/report/planning_analysis_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "published"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Text",
+     "label": "Note"
+    },
+    {
+     "name": "resource_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "user",
+      "material"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department"
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee"
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Manager"
+    },
+    {
+     "name": "recurrency_id",
+     "type": "Many2one",
+     "relates_to": "planning.recurrency"
+    },
+    {
+     "name": "resource_id",
+     "type": "Many2one",
+     "relates_to": "resource.resource",
+     "label": "Resource"
+    },
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "planning.role",
+     "label": "Role"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "slot_id",
+     "type": "Many2one",
+     "relates_to": "planning.slot",
+     "label": "Planning Slot"
+    }
+   ],
+   "total_field_count_declared": 19
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "hr.employee",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "default_planning_role_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "planning_role_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_token",
+     "type": "Char",
+     "label": "Security Token"
+    },
+    {
+     "name": "has_slots",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "planning/models/hr.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "planning_generation_interval",
+     "type": "Integer",
+     "label": "Rate Of Shift Generation",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "module_project_forecast",
+     "type": "Boolean",
+     "label": "Project Planning"
+    },
+    {
+     "name": "planning_employee_unavailabilities",
+     "type": "Selection",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "planning_self_unassign_days_before",
+     "type": "Integer",
+     "label": "Days before shift for unassignment",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "planning/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "resource.resource",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "role_ids",
+     "type": "Many2many",
+     "relates_to": "planning.role",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "default_role_id",
+     "type": "Many2one",
+     "relates_to": "planning.role",
+     "label": "Default Role",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "avatar_128",
+     "type": "Image",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "planning/models/resource_resource.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "planning_employee_unavailabilities",
+     "type": "Selection",
+     "label": "Employee Unavailabilities",
+     "selection": [
+      "switch",
+      "unassign"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "planning_generation_interval",
+     "type": "Integer",
+     "label": "Rate Of Shift Generation",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "planning_self_unassign_days_before",
+     "type": "Integer",
+     "label": "Days before shift for unassignment"
+    }
+   ],
+   "evidence_files": [
+    "planning/models/res_company.py"
+   ]
+  },
+  {
+   "model": "hr.employee.public",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "has_slots",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "planning/models/hr_employee_public.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "planning/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "hr.departure.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "planning/wizard/hr_departure_wizard.py"
+   ]
+  }
+ ]
+}

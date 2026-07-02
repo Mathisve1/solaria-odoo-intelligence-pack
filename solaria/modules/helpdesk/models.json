@@ -1,0 +1,945 @@
+{
+ "_meta": {
+  "module": "helpdesk",
+  "display_name": "Helpdesk",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "helpdesk.sla",
+   "business_meaning": "Helpdesk SLA Policies",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_sla.py",
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.team",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "exclude_stage_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.stage",
+     "label": "Excluding Stages"
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "label": "Priority",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Customers"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "time",
+     "type": "Float",
+     "label": "Within",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "helpdesk.sla.status",
+   "business_meaning": "Ticket SLA Status",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_sla_status.py",
+   "key_fields": [
+    {
+     "name": "ticket_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.ticket",
+     "label": "Ticket",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sla_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.sla",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "status",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "failed",
+      "reached",
+      "ongoing"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "sla_stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "deadline",
+     "type": "Datetime",
+     "label": "Deadline",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "exceeded_hours",
+     "type": "Float",
+     "label": "Exceeded Working Hours",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "helpdesk.stage",
+   "business_meaning": "Helpdesk Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_stage.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.team",
+     "label": "Helpdesk Teams",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template"
+    },
+    {
+     "name": "legend_blocked",
+     "type": "Char",
+     "label": "Red Kanban Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "legend_done",
+     "type": "Char",
+     "label": "Green Kanban Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "legend_normal",
+     "type": "Char",
+     "label": "Grey Kanban Label",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "helpdesk.tag",
+   "business_meaning": "Helpdesk Tags",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_tag.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "helpdesk.tag.assignment",
+   "business_meaning": "Helpdesk Tag Assignment",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_tag_assignment.py",
+   "key_fields": [
+    {
+     "name": "tag_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.tag",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Team Members",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.team"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "helpdesk.team",
+   "business_meaning": "Helpdesk Team",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_team.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Helpdesk Team",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "assign_method",
+     "type": "Selection",
+     "label": "Assignment Method",
+     "selection": [
+      "randomly",
+      "balanced",
+      "tags"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "privacy_visibility",
+     "type": "Selection",
+     "label": "Visibility",
+     "selection": [
+      "invited_internal",
+      "internal",
+      "portal"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "member_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Team Members",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "to_stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "label": "Move to Stage",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "stage_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.stage",
+     "label": "Stages"
+    },
+    {
+     "name": "ticket_ids",
+     "type": "One2many",
+     "relates_to": "helpdesk.ticket",
+     "label": "Tickets"
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar"
+    },
+    {
+     "name": "from_stage_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.stage",
+     "label": "In Stages"
+    },
+    {
+     "name": "use_website_helpdesk_form",
+     "type": "Boolean",
+     "label": "Website Form",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_website_helpdesk_forum",
+     "type": "Boolean",
+     "label": "Community Forum",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_website_helpdesk_slides",
+     "type": "Boolean",
+     "label": "eLearning",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_website_helpdesk_knowledge",
+     "type": "Boolean",
+     "label": "Knowledge",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_helpdesk_timesheet",
+     "type": "Boolean",
+     "label": "Timesheets",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_helpdesk_sale_timesheet",
+     "type": "Boolean",
+     "label": "Time Billing",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 49
+  },
+  {
+   "model": "helpdesk.ticket",
+   "business_meaning": "Helpdesk Ticket",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/models/helpdesk_ticket.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "campaign tracking",
+    "chatter/log",
+    "customer rating",
+    "portal sharing",
+    "stage-duration tracking"
+   ],
+   "key_fields": [
+    {
+     "name": "kanban_state",
+     "type": "Selection",
+     "label": "Kanban State",
+     "selection": [
+      "normal",
+      "done",
+      "blocked"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "label": "Stage",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Subject",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Assigned to",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.team",
+     "label": "Helpdesk Team",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "kanban_state_label",
+     "type": "Char",
+     "label": "Kanban State Label",
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "domain_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_ticket_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.ticket",
+     "label": "Partner Tickets",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "label": "Priority",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "sla_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.sla",
+     "label": "SLAs"
+    },
+    {
+     "name": "sla_status_ids",
+     "type": "One2many",
+     "relates_to": "helpdesk.sla.status",
+     "label": "SLA Status"
+    },
+    {
+     "name": "website_message_ids",
+     "type": "One2many"
+    },
+    {
+     "name": "partner_name",
+     "type": "Char",
+     "label": "Customer Name",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_email",
+     "type": "Char",
+     "label": "Customer Email",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_phone",
+     "type": "Char",
+     "label": "Customer Phone",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "assign_hours",
+     "type": "Float",
+     "label": "Time to first assignment (hours)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "close_hours",
+     "type": "Float",
+     "label": "Time to close (hours)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sla_reached_late",
+     "type": "Boolean",
+     "label": "Has SLA reached late",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sla_reached",
+     "type": "Boolean",
+     "label": "Has SLA reached",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sla_deadline",
+     "type": "Datetime",
+     "label": "SLA Deadline",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sla_deadline_hours",
+     "type": "Float",
+     "label": "Working Hours until SLA Deadline",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 61
+  },
+  {
+   "model": "helpdesk.stage.delete.wizard",
+   "business_meaning": "Helpdesk Stage Delete Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/wizard/helpdesk_stage_delete.py",
+   "key_fields": [
+    {
+     "name": "team_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.team",
+     "label": "Helpdesk Teams"
+    },
+    {
+     "name": "stage_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.stage",
+     "label": "Stages To Delete"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "helpdesk.sla.report.analysis",
+   "business_meaning": "SLA Status Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/report/helpdesk_sla_report_analysis.py",
+   "key_fields": [
+    {
+     "name": "kanban_state",
+     "type": "Selection",
+     "label": "Kanban State",
+     "selection": [
+      "normal",
+      "done",
+      "blocked"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "label": "Stage"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Subject"
+    },
+    {
+     "name": "sla_status",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "failed",
+      "reached",
+      "ongoing"
+     ]
+    },
+    {
+     "name": "ticket_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.ticket",
+     "label": "Ticket"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Assigned To"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "sla_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.sla",
+     "label": "SLA"
+    },
+    {
+     "name": "sla_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.sla",
+     "label": "SLAs"
+    },
+    {
+     "name": "sla_status_ids",
+     "type": "One2many",
+     "relates_to": "helpdesk.sla.status",
+     "label": "SLA Status"
+    },
+    {
+     "name": "sla_stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "label": "SLA Stage"
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.team",
+     "label": "Helpdesk Team"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 37
+  },
+  {
+   "model": "helpdesk.ticket.report.analysis",
+   "business_meaning": "Ticket Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "helpdesk/report/helpdesk_ticket_analysis.py",
+   "key_fields": [
+    {
+     "name": "kanban_state",
+     "type": "Selection",
+     "label": "Kanban State",
+     "selection": [
+      "normal",
+      "done",
+      "blocked"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.stage",
+     "label": "Stage"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Subject"
+    },
+    {
+     "name": "ticket_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.ticket",
+     "label": "Ticket"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "sla_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.sla",
+     "label": "SLAs"
+    },
+    {
+     "name": "sla_status_ids",
+     "type": "One2many",
+     "relates_to": "helpdesk.sla.status",
+     "label": "SLA Status"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Assigned To"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.team",
+     "label": "Helpdesk Team"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 33
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "helpdesk_target_closed",
+     "type": "Integer"
+    },
+    {
+     "name": "helpdesk_target_rating",
+     "type": "Float"
+    },
+    {
+     "name": "helpdesk_target_success",
+     "type": "Float"
+    }
+   ],
+   "evidence_files": [
+    "helpdesk/models/res_users.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_helpdesk_tickets_closed",
+     "type": "Boolean",
+     "label": "Tickets Closed"
+    },
+    {
+     "name": "kpi_helpdesk_tickets_closed_value",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "helpdesk/models/digest.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sla_ids",
+     "type": "Many2many",
+     "relates_to": "helpdesk.sla",
+     "label": "SLA Policies"
+    },
+    {
+     "name": "ticket_count",
+     "type": "Integer",
+     "label": "Tickets",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "helpdesk/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "rating.rating",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "ticket_id",
+     "type": "Many2one",
+     "relates_to": "helpdesk.ticket",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "helpdesk/models/rating_rating.py"
+   ]
+  },
+  {
+   "model": "ir.module.module",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "helpdesk/models/ir_module.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "helpdesk/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "mail.message",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "helpdesk/models/mail_message.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "helpdesk/models/res_company.py"
+   ]
+  },
+  {
+   "model": "portal.share",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "helpdesk/wizard/portal_share.py"
+   ]
+  }
+ ]
+}

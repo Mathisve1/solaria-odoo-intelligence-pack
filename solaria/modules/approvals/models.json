@@ -1,0 +1,472 @@
+{
+ "_meta": {
+  "module": "approvals",
+  "display_name": "Approvals",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "approval.approver",
+   "business_meaning": "Approver",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "approvals/models/approval_approver.py",
+   "key_fields": [
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "status",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "new",
+      "pending",
+      "waiting",
+      "approved",
+      "refused",
+      "cancel"
+     ]
+    },
+    {
+     "name": "existing_request_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "request_id",
+     "type": "Many2one",
+     "relates_to": "approval.request",
+     "label": "Request"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "approval.category",
+   "business_meaning": "Approval Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "approvals/models/approval_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "requirer_document",
+     "type": "Selection",
+     "label": "Documents",
+     "selection": [
+      "required",
+      "optional"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "approval_type",
+     "type": "Selection",
+     "label": "Approval Type"
+    },
+    {
+     "name": "manager_approval",
+     "type": "Selection",
+     "label": "Employee's Manager",
+     "selection": [
+      "approver",
+      "required"
+     ]
+    },
+    {
+     "name": "has_date",
+     "type": "Selection",
+     "label": "Has Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_period",
+     "type": "Selection",
+     "label": "Has Period",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_quantity",
+     "type": "Selection",
+     "label": "Has Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_amount",
+     "type": "Selection",
+     "label": "Has Amount",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_reference",
+     "type": "Selection",
+     "label": "Has Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_partner",
+     "type": "Selection",
+     "label": "Has Contact",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_payment_method",
+     "type": "Selection",
+     "label": "Has Payment",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_location",
+     "type": "Selection",
+     "label": "Has Location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "has_product",
+     "type": "Selection",
+     "label": "Has Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "approval_minimum",
+     "type": "Integer",
+     "label": "Minimum Approval",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Approver Users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "approver_ids",
+     "type": "One2many",
+     "relates_to": "approval.category.approver",
+     "label": "Approvers"
+    },
+    {
+     "name": "sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence"
+    }
+   ],
+   "total_field_count_declared": 29
+  },
+  {
+   "model": "approval.category.approver",
+   "business_meaning": "Approval Category Approver",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "approvals/models/approval_category_approver.py",
+   "key_fields": [
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "approval.category",
+     "label": "Approval Category",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "existing_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "approval.product.line",
+   "business_meaning": "Product Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "approvals/models/approval_product_line.py",
+   "key_fields": [
+    {
+     "name": "approval_request_id",
+     "type": "Many2one",
+     "relates_to": "approval.request",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "description",
+     "type": "Char",
+     "label": "Description",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Products"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "approval.request",
+   "business_meaning": "Approval Request",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "approvals/models/approval_request.py",
+   "built_in_capabilities": [
+    "activities/to-dos"
+   ],
+   "key_fields": [
+    {
+     "name": "request_status",
+     "type": "Selection",
+     "selection": [
+      "new",
+      "pending",
+      "approved",
+      "refused",
+      "cancel"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Approval Subject",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "approval.category",
+     "label": "Category",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "approver_ids",
+     "type": "One2many",
+     "relates_to": "approval.approver",
+     "label": "Approvers",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_status",
+     "type": "Selection",
+     "selection": [
+      "new",
+      "pending",
+      "waiting",
+      "approved",
+      "refused",
+      "cancel"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact"
+    },
+    {
+     "name": "request_owner_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Request Owner"
+    },
+    {
+     "name": "attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "product_line_ids",
+     "type": "One2many",
+     "relates_to": "approval.product.line"
+    }
+   ],
+   "total_field_count_declared": 40
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "mail.activity",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "approval_request_id",
+     "type": "Many2one",
+     "relates_to": "approval.request",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "approver_id",
+     "type": "Many2one",
+     "relates_to": "approval.approver",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "approvals/models/mail_activity.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "approvals/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "mail.activity.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "approvals/models/mail_activity_type.py"
+   ]
+  }
+ ]
+}

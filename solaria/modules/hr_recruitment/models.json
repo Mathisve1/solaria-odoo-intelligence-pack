@@ -1,0 +1,899 @@
+{
+ "_meta": {
+  "module": "hr_recruitment",
+  "display_name": "Recruitment",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "hr.applicant",
+   "business_meaning": "Applicant",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_applicant.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "campaign tracking",
+    "chatter+email blacklist",
+    "chatter+phone",
+    "chatter/log",
+    "stage-duration tracking"
+   ],
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "hr.recruitment.stage",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "kanban_state",
+     "type": "Selection",
+     "label": "Kanban State",
+     "selection": [
+      "normal",
+      "done",
+      "waiting",
+      "blocked"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "job_id",
+     "type": "Many2one",
+     "relates_to": "hr.job",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "refuse_reason_id",
+     "type": "Many2one",
+     "relates_to": "hr.applicant.refuse.reason",
+     "label": "Refuse Reason",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "interviewer_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Interviewers",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "date_closed",
+     "type": "Datetime",
+     "label": "Hire Date",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "application_status",
+     "type": "Selection",
+     "selection": [
+      "ongoing",
+      "hired",
+      "refused",
+      "archived"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "type_id",
+     "type": "Many2one",
+     "relates_to": "hr.recruitment.degree"
+    },
+    {
+     "name": "availability",
+     "type": "Date",
+     "label": "Availability",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee"
+    },
+    {
+     "name": "employee_name",
+     "type": "Char",
+     "label": "Employee Name",
+     "flags": [
+      "tracked",
+      "related"
+     ]
+    },
+    {
+     "name": "last_stage_id",
+     "type": "Many2one",
+     "relates_to": "hr.recruitment.stage"
+    },
+    {
+     "name": "categ_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant.category",
+     "label": "Tags"
+    },
+    {
+     "name": "salary_proposed_extra",
+     "type": "Char",
+     "label": "Proposed Salary Extra",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "salary_expected_extra",
+     "type": "Char",
+     "label": "Expected Salary Extra",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "salary_proposed",
+     "type": "Float",
+     "label": "Proposed",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "salary_expected",
+     "type": "Float",
+     "label": "Expected",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "meeting_ids",
+     "type": "One2many",
+     "relates_to": "calendar.event"
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "medium_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "source_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "talent_pool_ids",
+     "type": "Many2many",
+     "relates_to": "hr.talent.pool",
+     "label": "Talent Pools"
+    },
+    {
+     "name": "pool_applicant_id",
+     "type": "Many2one",
+     "relates_to": "hr.applicant"
+    }
+   ],
+   "total_field_count_declared": 61
+  },
+  {
+   "model": "hr.applicant.category",
+   "business_meaning": "Category of applicant",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_applicant_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "hr.applicant.refuse.reason",
+   "business_meaning": "Refuse Reason of Applicant",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_applicant_refuse_reason.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "hr.job.platform",
+   "business_meaning": "Job Platforms",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_job_platform.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "email",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "hr.recruitment.degree",
+   "business_meaning": "Applicant Degree",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_recruitment_degree.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Degree Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "score",
+     "type": "Float",
+     "label": "Score",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "hr.recruitment.source",
+   "business_meaning": "Source of Applicants",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_recruitment_source.py",
+   "key_fields": [
+    {
+     "name": "job_id",
+     "type": "Many2one",
+     "relates_to": "hr.job"
+    },
+    {
+     "name": "alias_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias"
+    },
+    {
+     "name": "medium_id",
+     "type": "Many2one",
+     "relates_to": "utm.medium"
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "utm.campaign"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "hr.recruitment.stage",
+   "business_meaning": "Recruitment Stages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_recruitment_stage.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Stage Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "job_ids",
+     "type": "Many2many",
+     "relates_to": "hr.job",
+     "label": "Job Specific"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template"
+    },
+    {
+     "name": "legend_blocked",
+     "type": "Char",
+     "label": "Red Kanban Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "legend_waiting",
+     "type": "Char",
+     "label": "Orange Kanban Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "legend_done",
+     "type": "Char",
+     "label": "Green Kanban Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "legend_normal",
+     "type": "Char",
+     "label": "Grey Kanban Label",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "hr.talent.pool",
+   "business_meaning": "Talent Pool",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/models/hr_talent_pool.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "pool_manager",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "talent_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant",
+     "label": "Talent"
+    },
+    {
+     "name": "categ_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant.category",
+     "label": "Tags"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "applicant.get.refuse.reason",
+   "business_meaning": "Get Refuse Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/wizard/applicant_refuse_reason.py",
+   "key_fields": [
+    {
+     "name": "refuse_reason_id",
+     "type": "Many2one",
+     "relates_to": "hr.applicant.refuse.reason",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "duplicate_applicant_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant",
+     "label": "Duplicate Applications",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "applicant_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant"
+    },
+    {
+     "name": "send_mail",
+     "type": "Boolean",
+     "label": "Send Email",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "scheduled_date",
+     "type": "Char",
+     "label": "Scheduled Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "applicant.send.mail",
+   "business_meaning": "Send mails to applicants",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/wizard/applicant_send_mail.py",
+   "key_fields": [
+    {
+     "name": "applicant_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant",
+     "label": "Applications",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "job.add.applicants",
+   "business_meaning": "Add applicants to a job",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/wizard/job_add_applicants.py",
+   "key_fields": [
+    {
+     "name": "applicant_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant",
+     "label": "Applications",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "job_ids",
+     "type": "Many2many",
+     "relates_to": "hr.job",
+     "label": "Job Positions",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "talent.pool.add.applicants",
+   "business_meaning": "Add applicants to talent pool",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_recruitment/wizard/talent_pool_add_applicants.py",
+   "key_fields": [
+    {
+     "name": "applicant_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant",
+     "label": "Applicants",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "talent_pool_ids",
+     "type": "Many2many",
+     "relates_to": "hr.talent.pool",
+     "label": "Talent Pool"
+    },
+    {
+     "name": "categ_ids",
+     "type": "Many2many",
+     "relates_to": "hr.applicant.category",
+     "label": "Tags"
+    }
+   ],
+   "total_field_count_declared": 3
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "hr.job",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "industry_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.industry",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "extended_interviewer_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "application_ids",
+     "type": "One2many",
+     "relates_to": "hr.applicant"
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Department Manager",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "document_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "label": "Documents",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "alias_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "favorite_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "interviewer_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Interviewers"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/hr_job.py"
+   ]
+  },
+  {
+   "model": "hr.department",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "new_applicant_count",
+     "type": "Integer",
+     "label": "New Applicant",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "new_hired_employee",
+     "type": "Integer",
+     "label": "New Hired Employee",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "expected_employee",
+     "type": "Integer",
+     "label": "Expected Employee",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/hr_department.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "module_website_hr_recruitment",
+     "type": "Boolean",
+     "label": "Online Posting"
+    },
+    {
+     "name": "module_hr_recruitment_survey",
+     "type": "Boolean",
+     "label": "Interview Forms"
+    },
+    {
+     "name": "module_hr_recruitment_extract",
+     "type": "Boolean",
+     "label": "Send CV to OCR to fill applications"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_hr_recruitment_new_colleagues",
+     "type": "Boolean",
+     "label": "New Employees"
+    },
+    {
+     "name": "kpi_hr_recruitment_new_colleagues_value",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/digest.py"
+   ]
+  },
+  {
+   "model": "calendar.event",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "applicant_id",
+     "type": "Many2one",
+     "relates_to": "hr.applicant",
+     "label": "Applicant"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/calendar.py"
+   ]
+  },
+  {
+   "model": "hr.employee",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "applicant_ids",
+     "type": "One2many",
+     "relates_to": "hr.applicant"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/hr_employee.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "job_properties_definition",
+     "type": "PropertiesDefinition",
+     "label": "Job Properties"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "applicant_ids",
+     "type": "One2many",
+     "relates_to": "hr.applicant",
+     "label": "Applicants"
+    }
+   ],
+   "evidence_files": [
+    "hr_recruitment/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "mail.activity.plan",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/mail_activity_plan.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/res_users.py"
+   ]
+  },
+  {
+   "model": "utm.campaign",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/utm_campaign.py"
+   ]
+  },
+  {
+   "model": "utm.source",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/models/utm_source.py"
+   ]
+  },
+  {
+   "model": "mail.activity.schedule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_recruitment/wizard/mail_activity_schedule.py"
+   ]
+  }
+ ]
+}

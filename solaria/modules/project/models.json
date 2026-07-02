@@ -1,0 +1,1323 @@
+{
+ "_meta": {
+  "module": "project",
+  "display_name": "Project",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "project.collaborator",
+   "business_meaning": "Collaborators in project shared",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_collaborator.py",
+   "key_fields": [
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "project.milestone",
+   "business_meaning": "Project Milestone",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_milestone.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "deadline",
+     "type": "Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "task_ids",
+     "type": "One2many",
+     "relates_to": "project.task"
+    },
+    {
+     "name": "reached_date",
+     "type": "Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "project.project",
+   "business_meaning": "Project",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_project.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "portal sharing",
+    "stage-duration tracking"
+   ],
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "project.project.stage",
+     "label": "Stage",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "privacy_visibility",
+     "type": "Selection",
+     "label": "Visibility",
+     "selection": [
+      "followers",
+      "invited_users",
+      "employees",
+      "portal"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "last_update_status",
+     "type": "Selection",
+     "selection": [
+      "on_track",
+      "at_risk",
+      "off_track",
+      "on_hold",
+      "to_define",
+      "done"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Project Manager",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "analytic_account_balance",
+     "type": "Monetary",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.analytic.account"
+    },
+    {
+     "name": "favorite_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Members"
+    },
+    {
+     "name": "tasks",
+     "type": "One2many",
+     "relates_to": "project.task",
+     "label": "Task Activities"
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar",
+     "label": "Working Time",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "type_ids",
+     "type": "Many2many",
+     "relates_to": "project.task.type",
+     "label": "Tasks Stages"
+    },
+    {
+     "name": "task_ids",
+     "type": "One2many",
+     "relates_to": "project.task",
+     "label": "Tasks"
+    },
+    {
+     "name": "alias_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "label": "Expiration Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "project.tags",
+     "label": "Tags"
+    },
+    {
+     "name": "collaborator_ids",
+     "type": "One2many",
+     "relates_to": "project.collaborator",
+     "label": "Collaborators"
+    },
+    {
+     "name": "update_ids",
+     "type": "One2many",
+     "relates_to": "project.update"
+    },
+    {
+     "name": "last_update_id",
+     "type": "Many2one",
+     "relates_to": "project.update",
+     "label": "Last Update"
+    },
+    {
+     "name": "milestone_ids",
+     "type": "One2many",
+     "relates_to": "project.milestone"
+    },
+    {
+     "name": "next_milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 53
+  },
+  {
+   "model": "project.project.stage",
+   "business_meaning": "Project Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_project_stage.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mail_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "project.role",
+   "business_meaning": "Project Role",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_role.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "project.tags",
+   "business_meaning": "Project Tags",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_tags.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "project_ids",
+     "type": "Many2many",
+     "relates_to": "project.project",
+     "label": "Projects"
+    },
+    {
+     "name": "task_ids",
+     "type": "Many2many",
+     "relates_to": "project.task",
+     "label": "Tasks"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "project.task",
+   "business_meaning": "Task",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_task.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log",
+    "customer rating",
+    "portal sharing",
+    "stage-duration tracking"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "01_in_progress",
+      "02_changes_requested",
+      "03_approved",
+      "04_waiting_normal"
+     ],
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "project.task.type",
+     "label": "Stage",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "label": "Priority",
+     "selection": [
+      "0",
+      "1",
+      "2",
+      "3"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "label": "Project",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Assignees",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "label": "Parent Task",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "depend_on_ids",
+     "type": "Many2many",
+     "relates_to": "project.task",
+     "label": "Blocked By",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "repeat_unit",
+     "type": "Selection",
+     "selection": [
+      "day",
+      "week",
+      "month",
+      "year"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "repeat_type",
+     "type": "Selection",
+     "label": "Until",
+     "selection": [
+      "forever",
+      "until"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "project.tags",
+     "label": "Tags"
+    },
+    {
+     "name": "date_deadline",
+     "type": "Datetime",
+     "label": "Deadline",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "allocated_hours",
+     "type": "Float",
+     "label": "Allocated Time",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "role_ids",
+     "type": "Many2many",
+     "relates_to": "project.role",
+     "label": "Project Roles"
+    },
+    {
+     "name": "personal_stage_type_ids",
+     "type": "Many2many",
+     "relates_to": "project.task.type",
+     "label": "Personal Stages"
+    },
+    {
+     "name": "personal_stage_id",
+     "type": "Many2one",
+     "relates_to": "project.task.stage.personal",
+     "label": "Personal Stage State",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "personal_stage_type_id",
+     "type": "Many2one",
+     "relates_to": "project.task.type",
+     "label": "Personal Stage",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "displayed_image_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Cover Image"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "project.task",
+     "label": "Sub-tasks"
+    },
+    {
+     "name": "project_privacy_visibility",
+     "type": "Selection",
+     "label": "Project Visibility",
+     "flags": [
+      "tracked",
+      "related"
+     ]
+    },
+    {
+     "name": "website_message_ids",
+     "type": "One2many"
+    },
+    {
+     "name": "dependent_ids",
+     "type": "Many2many",
+     "relates_to": "project.task",
+     "label": "Block"
+    },
+    {
+     "name": "recurrence_id",
+     "type": "Many2one",
+     "relates_to": "project.task.recurrence"
+    },
+    {
+     "name": "display_in_project",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 72
+  },
+  {
+   "model": "project.task.recurrence",
+   "business_meaning": "Task Recurrence",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_task_recurrence.py",
+   "key_fields": [
+    {
+     "name": "repeat_unit",
+     "type": "Selection",
+     "selection": [
+      "day",
+      "week",
+      "month",
+      "year"
+     ]
+    },
+    {
+     "name": "repeat_type",
+     "type": "Selection",
+     "label": "Until",
+     "selection": [
+      "forever",
+      "until"
+     ]
+    },
+    {
+     "name": "task_ids",
+     "type": "One2many",
+     "relates_to": "project.task"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "project.task.stage.personal",
+   "business_meaning": "Personal Task Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_task_stage_personal.py",
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "project.task.type"
+    },
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "project.task.type",
+   "business_meaning": "Task Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_task_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rating_status",
+     "type": "Selection",
+     "label": "Customer Ratings Status",
+     "selection": [
+      "stage",
+      "periodic"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rating_status_period",
+     "type": "Selection",
+     "label": "Rating Frequency",
+     "selection": [
+      "daily",
+      "weekly",
+      "bimonthly",
+      "monthly",
+      "quarterly",
+      "yearly"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "project_ids",
+     "type": "Many2many",
+     "relates_to": "project.project",
+     "label": "Projects"
+    },
+    {
+     "name": "mail_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template"
+    },
+    {
+     "name": "rating_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Rating Email Template"
+    },
+    {
+     "name": "rating_request_deadline",
+     "type": "Datetime",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "project.update",
+   "business_meaning": "Project Update",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/models/project_update.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "status",
+     "type": "Selection",
+     "selection": [
+      "on_track",
+      "at_risk",
+      "off_track",
+      "on_hold",
+      "done"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Author",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "progress",
+     "type": "Integer",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "project.project.stage.delete.wizard",
+   "business_meaning": "Project Stage Delete Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_project_stage_delete.py",
+   "key_fields": [
+    {
+     "name": "stage_ids",
+     "type": "Many2many",
+     "relates_to": "project.project.stage",
+     "label": "Stages To Delete"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "project.share.collaborator.wizard",
+   "business_meaning": "Project Sharing Collaborator Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_share_collaborator_wizard.py",
+   "key_fields": [
+    {
+     "name": "access_mode",
+     "type": "Selection",
+     "selection": [
+      "read",
+      "edit_limited",
+      "edit"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Collaborator",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_wizard_id",
+     "type": "Many2one",
+     "relates_to": "project.share.wizard"
+    },
+    {
+     "name": "send_invitation",
+     "type": "Boolean",
+     "label": "Send Invitation",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "project.share.wizard",
+   "business_meaning": "Project Sharing",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_share_wizard.py",
+   "key_fields": [
+    {
+     "name": "collaborator_ids",
+     "type": "One2many",
+     "relates_to": "project.share.collaborator.wizard",
+     "label": "Collaborators"
+    },
+    {
+     "name": "existing_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "task.share.wizard",
+   "business_meaning": "Task Sharing",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_task_share_wizard.py",
+   "key_fields": [
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "project.task.type.delete.wizard",
+   "business_meaning": "Project Task Stage Delete Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_task_type_delete.py",
+   "key_fields": [
+    {
+     "name": "project_ids",
+     "type": "Many2many",
+     "relates_to": "project.project",
+     "label": "Projects"
+    },
+    {
+     "name": "stage_ids",
+     "type": "Many2many",
+     "relates_to": "project.task.type",
+     "label": "Stages To Delete"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "project.template.create.wizard",
+   "business_meaning": "Project Template create Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_template_create_wizard.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "label": "Alias Domain"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "project.project"
+    },
+    {
+     "name": "role_to_users_ids",
+     "type": "One2many",
+     "relates_to": "project.template.role.to.users.map"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "project.template.role.to.users.map",
+   "business_meaning": "Project role to users mapping",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/wizard/project_template_create_wizard.py",
+   "key_fields": [
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "project.role",
+     "label": "Project Role",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "project.template.create.wizard"
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Assignees"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "report.project.task.user",
+   "business_meaning": "Tasks Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/report/project_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "01_in_progress",
+      "1_done",
+      "04_waiting_normal",
+      "03_approved",
+      "1_canceled",
+      "02_changes_requested"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "project.task.type",
+     "label": "Stage"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Task Title"
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "label": "Priority",
+     "selection": [
+      "0",
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Assignees"
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "label": "Project"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "label": "Task"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "project.tags",
+     "label": "Tags"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "label": "Parent Task"
+    },
+    {
+     "name": "personal_stage_type_ids",
+     "type": "Many2many",
+     "relates_to": "project.task.type",
+     "label": "Personal Stage"
+    },
+    {
+     "name": "milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone"
+    },
+    {
+     "name": "dependent_ids",
+     "type": "Many2many",
+     "relates_to": "project.task",
+     "label": "Block"
+    }
+   ],
+   "total_field_count_declared": 33
+  },
+  {
+   "model": "project.task.burndown.chart.report",
+   "business_meaning": "Burndown Chart",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "project/report/project_task_burndown_chart_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "01_in_progress",
+      "1_done",
+      "04_waiting_normal",
+      "03_approved",
+      "1_canceled",
+      "02_changes_requested"
+     ]
+    },
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "project.task.type"
+    },
+    {
+     "name": "is_closed",
+     "type": "Selection",
+     "label": "Closing Stage",
+     "selection": [
+      "closed",
+      "open"
+     ]
+    },
+    {
+     "name": "milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "project.tags",
+     "label": "Tags"
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Assignees"
+    }
+   ],
+   "total_field_count_declared": 13
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "project_ids",
+     "type": "One2many",
+     "relates_to": "project.project",
+     "label": "Projects"
+    },
+    {
+     "name": "task_ids",
+     "type": "One2many",
+     "relates_to": "project.task",
+     "label": "Tasks"
+    },
+    {
+     "name": "task_count",
+     "type": "Integer",
+     "label": "# Tasks",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "project/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "account.analytic.account",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "project_ids",
+     "type": "One2many",
+     "relates_to": "project.project",
+     "label": "Projects"
+    },
+    {
+     "name": "project_count",
+     "type": "Integer",
+     "label": "Project Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "project/models/account_analytic_account.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_project_task_opened",
+     "type": "Boolean",
+     "label": "Open Tasks"
+    },
+    {
+     "name": "kpi_project_task_opened_value",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "project/models/digest_digest.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "module_hr_timesheet",
+     "type": "Boolean",
+     "label": "Task Logs"
+    },
+    {
+     "name": "group_project_stages",
+     "type": "Boolean",
+     "label": "Project Stages"
+    }
+   ],
+   "evidence_files": [
+    "project/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "favorite_project_ids",
+     "type": "Many2many",
+     "relates_to": "project.project",
+     "label": "Favorite Projects"
+    }
+   ],
+   "evidence_files": [
+    "project/models/res_users.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "project/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "mail.message",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "project/models/mail_message.py"
+   ]
+  },
+  {
+   "model": "res.users.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "project/models/res_users_settings.py"
+   ]
+  },
+  {
+   "model": "portal.share",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "project/wizard/portal_share.py"
+   ]
+  }
+ ]
+}

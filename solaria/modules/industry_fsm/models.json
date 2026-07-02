@@ -1,0 +1,308 @@
+{
+ "_meta": {
+  "module": "industry_fsm",
+  "display_name": "Field Service",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "project.task.stop.timers.wizard",
+   "business_meaning": "Task stop running timers confirmation wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "industry_fsm/wizard/task_stop_timer_confirmation_wizard.py",
+   "key_fields": [
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "project.task.stop.timers.wizard.line",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "project.task.stop.timers.wizard.line",
+   "business_meaning": "Task stop running timers confirmation wizard line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "industry_fsm/wizard/task_stop_timer_confirmation_wizard.py",
+   "key_fields": [
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "project.task.stop.timers.wizard"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "report.project.task.user.fsm",
+   "business_meaning": "FSM Tasks Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "industry_fsm/report/project_report.py",
+   "key_fields": [
+    {
+     "name": "partner_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "partner_state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "Customer State"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "report.industry_fsm.worksheet_custom",
+   "business_meaning": "Task Worksheet Custom Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "industry_fsm/report/worksheet_custom_reports.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "project.task",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "partner_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "Customer State",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "fsm_done",
+     "type": "Boolean",
+     "label": "Task Done",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_fsm",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "display_enabled_conditions_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "display_satisfied_conditions_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "display_mark_as_done_primary",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "display_mark_as_done_secondary",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_city",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_zip",
+     "type": "Char",
+     "label": "ZIP",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "industry_fsm/models/project_task.py"
+   ]
+  },
+  {
+   "model": "project.project",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "allow_geolocation",
+     "type": "Boolean",
+     "label": "Geolocation",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_fsm",
+     "type": "Boolean",
+     "label": "Field Service"
+    }
+   ],
+   "evidence_files": [
+    "industry_fsm/models/project_project.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "module_industry_fsm_report",
+     "type": "Boolean",
+     "label": "Worksheet Templates"
+    },
+    {
+     "name": "module_industry_fsm_sale",
+     "type": "Boolean",
+     "label": "Time and Material Invoicing"
+    }
+   ],
+   "evidence_files": [
+    "industry_fsm/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "rating.rating",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "industry_fsm/models/rating_rating.py"
+   ]
+  },
+  {
+   "model": "hr.timesheet.stop.timer.confirmation.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "allow_geolocation",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "industry_fsm/wizard/hr_timesheet_stop_timer_confirmation_wizard.py"
+   ]
+  },
+  {
+   "model": "account.analytic.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/account_analytic_line.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "project.task.recurrence",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/project_task_recurrence.py"
+   ]
+  },
+  {
+   "model": "project.task.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/project_task_type.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "base.document.layout",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "industry_fsm/wizard/base_document_layout.py"
+   ]
+  }
+ ]
+}

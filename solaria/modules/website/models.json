@@ -1,0 +1,1399 @@
+{
+ "_meta": {
+  "module": "website",
+  "display_name": "Website",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "website.assets",
+   "business_meaning": "Assets Utils",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/assets.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "website.html.text.processor",
+   "business_meaning": "HTML Text Processor Abstract Model",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/html_text_processor.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "website.seo.metadata",
+   "business_meaning": "SEO metadata",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "key_fields": [
+    {
+     "name": "is_seo_optimized",
+     "type": "Boolean",
+     "label": "SEO optimized",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "website.cover_properties.mixin",
+   "business_meaning": "Cover Properties Website Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.page_visibility_options.mixin",
+   "business_meaning": "Website page/record specific visibility options",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "website.page_options.mixin",
+   "business_meaning": "Website page/record specific options",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "website.multi.mixin",
+   "business_meaning": "Multi Website Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "key_fields": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.published.mixin",
+   "business_meaning": "Website Published Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "website.published.multi.mixin",
+   "business_meaning": "Multi Website Published Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "built_in_capabilities": [
+    "website publishing"
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.searchable.mixin",
+   "business_meaning": "Website Searchable Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/mixins.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "theme.ir.asset",
+   "business_meaning": "Theme Asset",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "directive",
+     "type": "Selection"
+    },
+    {
+     "name": "bundle",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "path",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "copy_ids",
+     "type": "One2many",
+     "relates_to": "ir.asset"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "theme.ir.ui.view",
+   "business_meaning": "Theme UI View",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mode",
+     "type": "Selection",
+     "selection": [
+      "primary",
+      "extension"
+     ]
+    },
+    {
+     "name": "inherit_id",
+     "type": "Reference",
+     "selection": [
+      "ir.ui.view",
+      "theme.ir.ui.view"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "copy_ids",
+     "type": "One2many",
+     "relates_to": "ir.ui.view"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "theme.ir.attachment",
+   "business_meaning": "Theme Attachments",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "key",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "copy_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "theme.website.menu",
+   "business_meaning": "Website Theme Menu",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "page_id",
+     "type": "Many2one",
+     "relates_to": "theme.website.page"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "theme.website.menu"
+    },
+    {
+     "name": "copy_ids",
+     "type": "One2many",
+     "relates_to": "website.menu"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "theme.website.page",
+   "business_meaning": "Website Theme Page",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "key_fields": [
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "theme.ir.ui.view",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "copy_ids",
+     "type": "One2many",
+     "relates_to": "website.page"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "theme.utils",
+   "business_meaning": "Theme Utils",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/theme_models.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "website",
+   "business_meaning": "Website",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Website Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "language_ids",
+     "type": "Many2many",
+     "relates_to": "res.lang",
+     "label": "Languages",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "default_lang_id",
+     "type": "Many2one",
+     "relates_to": "res.lang",
+     "label": "Default Language",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Public User",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "auth_signup_uninvited",
+     "type": "Selection",
+     "label": "Customer Account",
+     "selection": [
+      "b2b",
+      "b2c"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "label": "Public Partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "menu_id",
+     "type": "Many2one",
+     "relates_to": "website.menu",
+     "label": "Main Menu",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "theme_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module"
+    },
+    {
+     "name": "has_social_default_image",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 44
+  },
+  {
+   "model": "website.configurator.feature",
+   "business_meaning": "Website Configurator Feature",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_configurator_feature.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "page_view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view"
+    },
+    {
+     "name": "module_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "website.controller.page",
+   "business_meaning": "Model Page",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_controller_page.py",
+   "delegates_to": [
+    "ir.ui.view"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "The name is used to generate the URL and is shown in the browser title bar",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Listing view",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "default_layout",
+     "type": "Selection",
+     "selection": [
+      "grid",
+      "list"
+     ]
+    },
+    {
+     "name": "record_view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Record view"
+    },
+    {
+     "name": "menu_ids",
+     "type": "One2many",
+     "relates_to": "website.menu"
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "name_slugified",
+     "type": "Char",
+     "label": "URL",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "website.menu",
+   "business_meaning": "Website Menu",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_menu.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Menu",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "url",
+     "type": "Char",
+     "label": "Url",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "page_id",
+     "type": "Many2one",
+     "relates_to": "website.page"
+    },
+    {
+     "name": "controller_page_id",
+     "type": "Many2one",
+     "relates_to": "website.controller.page"
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "website.menu"
+    },
+    {
+     "name": "child_id",
+     "type": "One2many",
+     "relates_to": "website.menu",
+     "label": "Child Menus"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Visible Groups"
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "website.page",
+   "business_meaning": "Page",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_page.py",
+   "delegates_to": [
+    "ir.ui.view"
+   ],
+   "key_fields": [
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "View",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "url",
+     "type": "Char",
+     "label": "Page URL",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "view_write_uid",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "menu_ids",
+     "type": "One2many",
+     "relates_to": "website.menu"
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "website.page.properties.base",
+   "business_meaning": "Page Properties Base",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_page_properties.py",
+   "key_fields": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "target_model_id",
+     "type": "Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "menu_ids",
+     "type": "One2many",
+     "relates_to": "website.menu",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "url",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "website.page.properties",
+   "business_meaning": "Page Properties",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_page_properties.py",
+   "key_fields": [
+    {
+     "name": "redirect_type",
+     "type": "Selection",
+     "selection": [
+      "301",
+      "302"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "target_model_id",
+     "type": "Many2one",
+     "relates_to": "website.page"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "website.route",
+   "business_meaning": "All Website Route",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_rewrite.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.rewrite",
+   "business_meaning": "Website rewrite",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_rewrite.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "redirect_type",
+     "type": "Selection",
+     "label": "Action",
+     "selection": [
+      "404",
+      "301",
+      "302",
+      "308"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website"
+    },
+    {
+     "name": "route_id",
+     "type": "Many2one",
+     "relates_to": "website.route"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "website.snippet.filter",
+   "business_meaning": "Website Snippet Filter",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_snippet_filter.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server"
+    },
+    {
+     "name": "field_names",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "filter_id",
+     "type": "Many2one",
+     "relates_to": "ir.filters"
+    },
+    {
+     "name": "limit",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "website.technical.page",
+   "business_meaning": "Website Technical Page",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_technical_page.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Page Name"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "website.track",
+   "business_meaning": "Visited Pages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_visitor.py",
+   "key_fields": [
+    {
+     "name": "visitor_id",
+     "type": "Many2one",
+     "relates_to": "website.visitor",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "page_id",
+     "type": "Many2one",
+     "relates_to": "website.page"
+    },
+    {
+     "name": "visit_datetime",
+     "type": "Datetime",
+     "label": "Visit Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "website.visitor",
+   "business_meaning": "Website Visitor",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/models/website_visitor.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "lang_id",
+     "type": "Many2one",
+     "relates_to": "res.lang",
+     "label": "Language"
+    },
+    {
+     "name": "website_track_ids",
+     "type": "One2many",
+     "relates_to": "website.track",
+     "label": "Visited Pages History"
+    },
+    {
+     "name": "page_ids",
+     "type": "Many2many",
+     "relates_to": "website.page",
+     "label": "Visited Pages",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "last_visited_page_id",
+     "type": "Many2one",
+     "relates_to": "website.page",
+     "label": "Last Visited Page",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 21
+  },
+  {
+   "model": "website.custom_blocked_third_party_domains",
+   "business_meaning": "User list of blocked 3rd-party domains",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/wizard/blocked_third_party_domains.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.robots",
+   "business_meaning": "Robots.txt Editor",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website/wizard/website_robots.py",
+   "total_field_count_declared": 1
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "website"
+    },
+    {
+     "name": "website_company_id",
+     "type": "Many2one",
+     "label": "Website Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "language_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_default_lang_id",
+     "type": "Many2one",
+     "label": "Default language",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_name",
+     "type": "Char",
+     "label": "Website Name",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_domain",
+     "type": "Char",
+     "label": "Website Domain",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_homepage_url",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_logo",
+     "type": "Binary",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_language_count",
+     "type": "Integer",
+     "label": "Number of languages",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_default_lang_code",
+     "type": "Char",
+     "label": "Default language code",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "ir.ui.view",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "visibility",
+     "type": "Selection",
+     "selection": [
+      "",
+      "connected",
+      "restricted_group",
+      "password"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website"
+    },
+    {
+     "name": "page_ids",
+     "type": "One2many",
+     "relates_to": "website.page"
+    },
+    {
+     "name": "controller_page_ids",
+     "type": "One2many",
+     "relates_to": "website.controller.page"
+    },
+    {
+     "name": "first_page_id",
+     "type": "Many2one",
+     "relates_to": "website.page",
+     "label": "Website Page",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "track",
+     "type": "Boolean",
+     "label": "Track"
+    },
+    {
+     "name": "visibility_password",
+     "type": "Char"
+    },
+    {
+     "name": "visibility_password_display",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "theme_template_id",
+     "type": "Many2one",
+     "relates_to": "theme.ir.ui.view"
+    }
+   ],
+   "evidence_files": [
+    "website/models/ir_ui_view.py",
+    "website/models/theme_models.py"
+   ]
+  },
+  {
+   "model": "ir.actions.server",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "xml_id",
+     "type": "Char",
+     "label": "External ID",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "website_path",
+     "type": "Char",
+     "label": "Website Path"
+    },
+    {
+     "name": "website_url",
+     "type": "Char",
+     "label": "Website Url",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "website_published",
+     "type": "Boolean",
+     "label": "Available on the Website"
+    }
+   ],
+   "evidence_files": [
+    "website/models/ir_actions_server.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "key",
+     "type": "Char"
+    },
+    {
+     "name": "theme_template_id",
+     "type": "Many2one",
+     "relates_to": "theme.ir.attachment"
+    },
+    {
+     "name": "key",
+     "type": "Char"
+    }
+   ],
+   "evidence_files": [
+    "website/models/ir_attachment.py",
+    "website/models/theme_models.py"
+   ]
+  },
+  {
+   "model": "ir.model",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_form_default_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields"
+    },
+    {
+     "name": "website_form_access",
+     "type": "Boolean",
+     "label": "Allowed to use in forms"
+    },
+    {
+     "name": "website_form_label",
+     "type": "Char",
+     "label": "Label for form action"
+    },
+    {
+     "name": "website_form_key",
+     "type": "Char"
+    }
+   ],
+   "evidence_files": [
+    "website/models/website_form.py"
+   ]
+  },
+  {
+   "model": "ir.asset",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "key",
+     "type": "Char"
+    },
+    {
+     "name": "theme_template_id",
+     "type": "Many2one",
+     "relates_to": "theme.ir.asset"
+    }
+   ],
+   "evidence_files": [
+    "website/models/ir_asset.py",
+    "website/models/theme_models.py"
+   ]
+  },
+  {
+   "model": "ir.module.module",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "image_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "label": "Screenshots"
+    },
+    {
+     "name": "is_installed_on_current_website",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website/models/ir_module_module.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "visitor_ids",
+     "type": "One2many",
+     "relates_to": "website.visitor",
+     "label": "Visitors"
+    }
+   ],
+   "evidence_files": [
+    "website/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website/models/res_users.py"
+   ]
+  },
+  {
+   "model": "website.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "theme_template_id",
+     "type": "Many2one",
+     "relates_to": "theme.website.menu"
+    }
+   ],
+   "evidence_files": [
+    "website/models/theme_models.py"
+   ]
+  },
+  {
+   "model": "website.page",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "theme_template_id",
+     "type": "Many2one",
+     "relates_to": "theme.website.page"
+    }
+   ],
+   "evidence_files": [
+    "website/models/theme_models.py"
+   ]
+  },
+  {
+   "model": "ir.model.fields",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_form_blacklisted",
+     "type": "Boolean",
+     "label": "Blacklisted in web forms"
+    }
+   ],
+   "evidence_files": [
+    "website/models/website_form.py"
+   ]
+  },
+  {
+   "model": "base.language.install",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_ids",
+     "type": "Many2many",
+     "relates_to": "website",
+     "label": "Websites to translate"
+    }
+   ],
+   "evidence_files": [
+    "website/wizard/base_language_install.py"
+   ]
+  },
+  {
+   "model": "base.partner.merge.automatic.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/base_partner_merge.py"
+   ]
+  },
+  {
+   "model": "ir.binary",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_binary.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "base",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_model.py",
+    "website/models/models.py"
+   ]
+  },
+  {
+   "model": "ir.model.data",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_model_data.py"
+   ]
+  },
+  {
+   "model": "ir.qweb",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_qweb.py"
+   ]
+  },
+  {
+   "model": "ir.qweb.field.contact",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_qweb_fields.py"
+   ]
+  },
+  {
+   "model": "ir.qweb.field.html",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_qweb_fields.py"
+   ]
+  },
+  {
+   "model": "ir.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_rule.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "res.lang",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/res_lang.py"
+   ]
+  },
+  {
+   "model": "website",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/models/website_form.py"
+   ]
+  },
+  {
+   "model": "portal.wizard.user",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website/wizard/portal_wizard.py"
+   ]
+  }
+ ]
+}

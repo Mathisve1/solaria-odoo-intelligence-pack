@@ -1,0 +1,2344 @@
+{
+ "_meta": {
+  "module": "mrp",
+  "display_name": "Manufacturing",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "mrp.bom",
+   "business_meaning": "Bill of Material",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_bom.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "type",
+     "type": "Selection",
+     "selection": [
+      "normal",
+      "phantom"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "ready_to_produce",
+     "type": "Selection",
+     "label": "Manufacturing Readiness",
+     "selection": [
+      "all_available",
+      "asap"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "consumption",
+     "type": "Selection",
+     "label": "Flexible Consumption",
+     "selection": [
+      "flexible",
+      "warning",
+      "strict"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "bom_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom.line"
+    },
+    {
+     "name": "byproduct_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom.byproduct"
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "operation_ids",
+     "type": "One2many",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "possible_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 24
+  },
+  {
+   "model": "mrp.bom.line",
+   "business_meaning": "Bill of Material Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_bom.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "possible_bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Apply on Variants"
+    },
+    {
+     "name": "allowed_operation_ids",
+     "type": "One2many",
+     "relates_to": "mrp.routing.workcenter",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "operation_id",
+     "type": "Many2one",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "child_bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "child_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom.line",
+     "label": "BOM lines of the referred bom",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "mrp.bom.byproduct",
+   "business_meaning": "Byproduct",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_bom.py",
+   "key_fields": [
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom"
+    },
+    {
+     "name": "allowed_operation_ids",
+     "type": "One2many",
+     "relates_to": "mrp.routing.workcenter",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "operation_id",
+     "type": "Many2one",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "possible_bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Apply on Variants"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "mrp.production.group",
+   "business_meaning": "Production Group",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_production.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "production_ids",
+     "type": "One2many",
+     "relates_to": "mrp.production",
+     "label": "Productions"
+    },
+    {
+     "name": "child_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production.group",
+     "label": "Child Manufacturing Orders"
+    },
+    {
+     "name": "parent_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production.group",
+     "label": "Parent Manufacturing Orders"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mrp.production",
+   "business_meaning": "Manufacturing Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_production.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "draft",
+      "confirmed",
+      "progress",
+      "to_close",
+      "done",
+      "cancel"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reservation_state",
+     "type": "Selection",
+     "label": "MO Readiness",
+     "selection": [
+      "confirmed",
+      "assigned",
+      "waiting"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity To Produce",
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_src_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "consumption",
+     "type": "Selection",
+     "selection": [
+      "flexible",
+      "warning",
+      "strict"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference"
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_raw_ids",
+     "type": "One2many",
+     "relates_to": "stock.move",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_finished_ids",
+     "type": "One2many",
+     "relates_to": "stock.move",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "workorder_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workorder",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "production_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "components_availability_state",
+     "type": "Selection",
+     "selection": [
+      "available",
+      "expected",
+      "late",
+      "unavailable"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "search_date_category",
+     "type": "Selection",
+     "label": "Date Category",
+     "selection": [
+      "before",
+      "yesterday",
+      "today",
+      "day_1",
+      "day_2",
+      "after"
+     ]
+    },
+    {
+     "name": "production_group_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.group"
+    },
+    {
+     "name": "product_variant_attributes",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "valid_product_template_attribute_line_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "never_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Never attribute values"
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lot_producing_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "label": "Lot/Serial Number"
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "location_final_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    }
+   ],
+   "total_field_count_declared": 80
+  },
+  {
+   "model": "mrp.routing.workcenter",
+   "business_meaning": "Work Center Usage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_routing.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Operation",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "time_mode",
+     "type": "Selection",
+     "label": "Duration Computation",
+     "selection": [
+      "manual",
+      "auto"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "cost_mode",
+     "type": "Selection",
+     "label": "Cost based on",
+     "selection": [
+      "actual",
+      "estimated"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "time_cycle_manual",
+     "type": "Float",
+     "label": "Manual Duration",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "workorder_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workorder",
+     "label": "Work Orders"
+    },
+    {
+     "name": "possible_bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bom_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Apply on Variants"
+    },
+    {
+     "name": "blocked_by_operation_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.routing.workcenter",
+     "label": "Blocked By"
+    },
+    {
+     "name": "needed_by_operation_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.routing.workcenter",
+     "label": "Blocks"
+    }
+   ],
+   "total_field_count_declared": 23
+  },
+  {
+   "model": "mrp.unbuild",
+   "business_meaning": "Unbuild Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_unbuild.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "done"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference"
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mo_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "mo_bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_producing_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "label": "Lot/Serial Numbers",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot"
+    },
+    {
+     "name": "consume_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move",
+     "label": "Consumed Disassembly Lines"
+    },
+    {
+     "name": "produce_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move",
+     "label": "Processed Disassembly Lines"
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "mrp.workcenter",
+   "business_meaning": "Work Center",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "working_state",
+     "type": "Selection",
+     "selection": [
+      "normal",
+      "blocked",
+      "done"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Work Center",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "label": "Sequence",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "costs_hour",
+     "type": "Float",
+     "label": "Cost per hour",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "routing_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "order_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "time_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workcenter.productivity"
+    },
+    {
+     "name": "alternative_workcenter_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.workcenter",
+     "label": "Alternative Workcenters"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.workcenter.tag"
+    },
+    {
+     "name": "capacity_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workcenter.capacity",
+     "label": "Product Capacities"
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one"
+    }
+   ],
+   "total_field_count_declared": 32
+  },
+  {
+   "model": "mrp.workcenter.tag",
+   "business_meaning": "Add tag for the workcenter",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mrp.workcenter.productivity.loss.type",
+   "business_meaning": "MRP Workorder productivity losses",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "key_fields": [
+    {
+     "name": "loss_type",
+     "type": "Selection",
+     "label": "Category",
+     "selection": [
+      "availability",
+      "performance",
+      "quality",
+      "productive"
+     ],
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "mrp.workcenter.productivity.loss",
+   "business_meaning": "Workcenter Productivity Losses",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Blocking Reason",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "loss_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter.productivity.loss.type",
+     "label": "Category"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "mrp.workcenter.productivity",
+   "business_meaning": "Workcenter Productivity Log",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "key_fields": [
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "loss_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter.productivity.loss",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "label": "Manufacturing Order",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "date_start",
+     "type": "Datetime",
+     "label": "Start Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "duration",
+     "type": "Float",
+     "label": "Duration",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "mrp.workcenter.capacity",
+   "business_meaning": "Work Center Capacity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workcenter.py",
+   "key_fields": [
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "label": "Work Center",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "mrp.workorder",
+   "business_meaning": "Work Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/models/mrp_workorder.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "blocked",
+      "ready",
+      "progress",
+      "done",
+      "cancel"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Work Order",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "cost_mode",
+     "type": "Selection",
+     "selection": [
+      "actual",
+      "estimated"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_variant_attributes",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "production_bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "leave_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar.leaves"
+    },
+    {
+     "name": "operation_id",
+     "type": "Many2one",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "move_raw_ids",
+     "type": "One2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "move_finished_ids",
+     "type": "One2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "finished_lot_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "label": "Lot/Serial Numbers",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "time_ids",
+     "type": "One2many",
+     "relates_to": "mrp.workcenter.productivity"
+    },
+    {
+     "name": "working_user_ids",
+     "type": "One2many",
+     "relates_to": "res.users",
+     "label": "Working user on this work order.",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "last_working_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Last user that worked on this work order.",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "scrap_ids",
+     "type": "One2many",
+     "relates_to": "stock.scrap"
+    },
+    {
+     "name": "blocked_by_workorder_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.workorder",
+     "label": "Blocked By"
+    },
+    {
+     "name": "needed_by_workorder_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.workorder",
+     "label": "Blocks"
+    },
+    {
+     "name": "barcode",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_start",
+     "type": "Datetime",
+     "label": "Start",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_finished",
+     "type": "Datetime",
+     "label": "End",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "duration_expected",
+     "type": "Float",
+     "label": "Expected Duration",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "duration",
+     "type": "Float",
+     "label": "Real Duration",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "duration_unit",
+     "type": "Float",
+     "label": "Duration Per Unit",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 51
+  },
+  {
+   "model": "change.production.qty",
+   "business_meaning": "Change Production Qty",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/change_production_qty.py",
+   "key_fields": [
+    {
+     "name": "mo_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity To Produce",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mrp.consumption.warning",
+   "business_meaning": "Wizard in case of consumption in warning/strict and more component has been used for a MO (related to the bom)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_consumption_warning.py",
+   "key_fields": [
+    {
+     "name": "consumption",
+     "type": "Selection",
+     "selection": [
+      "flexible",
+      "warning",
+      "strict"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "mrp_production_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "mrp_consumption_warning_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.consumption.warning.line"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mrp.consumption.warning.line",
+   "business_meaning": "Line of issue consumption",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_consumption_warning.py",
+   "key_fields": [
+    {
+     "name": "mrp_consumption_warning_id",
+     "type": "Many2one",
+     "relates_to": "mrp.consumption.warning",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mrp_production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "mrp.production.backorder.line",
+   "business_meaning": "Backorder Confirmation Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_backorder.py",
+   "key_fields": [
+    {
+     "name": "mrp_production_backorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.backorder",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mrp_production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mrp.production.backorder",
+   "business_meaning": "Wizard to mark as done or create back order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_backorder.py",
+   "key_fields": [
+    {
+     "name": "mrp_production_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "mrp_production_backorder_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.production.backorder.line",
+     "label": "Backorder Confirmation Lines"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mrp.production.serials",
+   "business_meaning": "Assign serial numbers to production order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_serial_numbers.py",
+   "key_fields": [
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "lot_name",
+     "type": "Char",
+     "label": "First SN",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lot_quantity",
+     "type": "Integer",
+     "label": "Number of SN",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "serial_numbers",
+     "type": "Text",
+     "label": "Produced Serial Numbers",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "mrp.production.split.multi",
+   "business_meaning": "Wizard to Split Multiple Productions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_split.py",
+   "key_fields": [
+    {
+     "name": "production_ids",
+     "type": "One2many",
+     "relates_to": "mrp.production.split"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "mrp.production.split",
+   "business_meaning": "Wizard to Split a Production",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_split.py",
+   "key_fields": [
+    {
+     "name": "production_detailed_vals_ids",
+     "type": "One2many",
+     "relates_to": "mrp.production.split.line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "production_split_multi_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.split.multi"
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mrp.production.split.line",
+   "business_meaning": "Split Production Detail",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/mrp_production_split.py",
+   "key_fields": [
+    {
+     "name": "mrp_production_split_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.split",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity To Produce",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "stock.warn.insufficient.qty.unbuild",
+   "business_meaning": "Warn Insufficient Unbuild Quantity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/wizard/stock_warn_insufficient_qty.py",
+   "key_fields": [
+    {
+     "name": "unbuild_id",
+     "type": "Many2one",
+     "relates_to": "mrp.unbuild"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "report.mrp.report_bom_structure",
+   "business_meaning": "BOM Overview Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/report/mrp_report_bom_structure.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.mrp.report_mo_overview",
+   "business_meaning": "MO Overview Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mrp/report/mrp_report_mo_overview.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "group_mrp_byproducts",
+     "type": "Boolean",
+     "label": "By-Products"
+    },
+    {
+     "name": "module_mrp_mps",
+     "type": "Boolean",
+     "label": "Master Production Schedule"
+    },
+    {
+     "name": "module_mrp_plm",
+     "type": "Boolean",
+     "label": "Product Lifecycle Management (PLM)"
+    },
+    {
+     "name": "module_quality_control",
+     "type": "Boolean",
+     "label": "Quality"
+    },
+    {
+     "name": "module_quality_control_worksheet",
+     "type": "Boolean",
+     "label": "Quality Worksheet"
+    },
+    {
+     "name": "module_mrp_subcontracting",
+     "type": "Boolean",
+     "label": "Subcontracting"
+    },
+    {
+     "name": "group_mrp_routings",
+     "type": "Boolean",
+     "label": "MRP Work Orders"
+    },
+    {
+     "name": "group_unlocked_by_default",
+     "type": "Boolean",
+     "label": "Unlock Manufacturing Orders"
+    },
+    {
+     "name": "group_mrp_reception_report",
+     "type": "Boolean",
+     "label": "Allocation Report for Manufacturing Orders"
+    },
+    {
+     "name": "group_mrp_workorder_dependencies",
+     "type": "Boolean",
+     "label": "Work Order Dependencies"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "stock.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "created_production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "raw_material_production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "production_group_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.group"
+    },
+    {
+     "name": "unbuild_id",
+     "type": "Many2one",
+     "relates_to": "mrp.unbuild"
+    },
+    {
+     "name": "consume_unbuild_id",
+     "type": "Many2one",
+     "relates_to": "mrp.unbuild"
+    },
+    {
+     "name": "allowed_operation_ids",
+     "type": "One2many",
+     "relates_to": "mrp.routing.workcenter",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "operation_id",
+     "type": "Many2one",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "bom_line_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom.line"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_move.py"
+   ]
+  },
+  {
+   "model": "stock.picking.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "mrp_product_label_to_print",
+     "type": "Selection",
+     "selection": [
+      "pdf",
+      "zpl"
+     ]
+    },
+    {
+     "name": "done_mrp_lot_label_to_print",
+     "type": "Selection",
+     "selection": [
+      "pdf",
+      "zpl"
+     ]
+    },
+    {
+     "name": "generated_mrp_lot_label_to_print",
+     "type": "Selection",
+     "selection": [
+      "pdf",
+      "zpl"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Selection"
+    },
+    {
+     "name": "count_mo_todo",
+     "type": "Integer",
+     "label": "Number of Manufacturing Orders to Process",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "count_mo_waiting",
+     "type": "Integer",
+     "label": "Number of Manufacturing Orders Waiting",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "count_mo_late",
+     "type": "Integer",
+     "label": "Number of Manufacturing Orders Late",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "count_mo_in_progress",
+     "type": "Integer",
+     "label": "Number of Manufacturing Orders In Progress",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "count_mo_to_close",
+     "type": "Integer",
+     "label": "Number of Manufacturing Orders To Close",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "use_create_components_lots",
+     "type": "Boolean",
+     "label": "Create New Lots/Serial Numbers for Components"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "stock.warehouse",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "manufacture_steps",
+     "type": "Selection",
+     "selection": [
+      "mrp_one_step",
+      "pbm",
+      "pbm_sam"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "manufacture_pull_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "manufacture_mto_pull_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "pbm_mto_pull_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "sam_rule_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "manu_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "pbm_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "sam_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "pbm_route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "pbm_loc_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_warehouse.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "variant_bom_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom"
+    },
+    {
+     "name": "bom_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom.line"
+    },
+    {
+     "name": "bom_count",
+     "type": "Integer",
+     "label": "# Bill of Material",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "used_in_bom_count",
+     "type": "Integer",
+     "label": "# BoM Where Used",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "mrp_product_qty",
+     "type": "Float",
+     "label": "Manufactured",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_kits",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_catalog_product_is_in_bom",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_catalog_product_is_in_mo",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/product.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bom_line_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom.line"
+    },
+    {
+     "name": "bom_ids",
+     "type": "One2many",
+     "relates_to": "mrp.bom"
+    },
+    {
+     "name": "bom_count",
+     "type": "Integer",
+     "label": "# Bill of Material",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "used_in_bom_count",
+     "type": "Integer",
+     "label": "# of BoM Where is Used",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "mrp_product_qty",
+     "type": "Float",
+     "label": "Manufactured",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_kits",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/product.py"
+   ]
+  },
+  {
+   "model": "stock.scrap",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "product_template",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom"
+    },
+    {
+     "name": "product_is_kit",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_scrap.py"
+   ]
+  },
+  {
+   "model": "stock.warehouse.orderpoint",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "label": "Bill of Materials"
+    },
+    {
+     "name": "effective_bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "label": "Effective Bill of Materials",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "show_bom",
+     "type": "Boolean",
+     "label": "Show BoM column",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "bom_id_placeholder",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_orderpoint.py",
+    "mrp/models/stock_warehouse.py"
+   ]
+  },
+  {
+   "model": "stock.picking",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "production_ids",
+     "type": "One2many",
+     "relates_to": "mrp.production",
+     "label": "Manufacturing Orders",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "production_group_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production.group",
+     "label": "Production Group",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "has_kits",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "production_count",
+     "type": "Integer",
+     "label": "Count of MO generated",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "stock.replenishment.info",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bom_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.bom",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "show_bom_tab",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/wizard/stock_replenishment_info.py"
+   ]
+  },
+  {
+   "model": "stock.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_move_line.py"
+   ]
+  },
+  {
+   "model": "stock.replenish.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "relates_to": "mrp.bom",
+     "label": "Bill of Material"
+    },
+    {
+     "name": "show_bom",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_replenish_mixin.py"
+   ]
+  },
+  {
+   "model": "product.document",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "attached_on_mrp",
+     "type": "Selection",
+     "label": "MRP : Visible at",
+     "selection": [
+      "hidden",
+      "bom"
+     ],
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/product_document.py"
+   ]
+  },
+  {
+   "model": "stock.reference",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "production_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production",
+     "label": "Productions"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_reference.py"
+   ]
+  },
+  {
+   "model": "stock.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "action",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "mrp/models/stock_rule.py"
+   ]
+  },
+  {
+   "model": "picking.label.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "production_ids",
+     "type": "Many2many",
+     "relates_to": "mrp.production"
+    }
+   ],
+   "evidence_files": [
+    "mrp/wizard/stock_label_type.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/res_company.py"
+   ]
+  },
+  {
+   "model": "stock.lot",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/stock_lot.py"
+   ]
+  },
+  {
+   "model": "stock.quant",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/stock_quant.py"
+   ]
+  },
+  {
+   "model": "stock.route",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/stock_rule.py"
+   ]
+  },
+  {
+   "model": "stock.traceability.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/models/stock_traceability.py"
+   ]
+  },
+  {
+   "model": "product.replenish",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/wizard/product_replenish.py"
+   ]
+  },
+  {
+   "model": "report.stock.report_reception",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/report/report_stock_reception.py"
+   ]
+  },
+  {
+   "model": "report.stock.report_stock_rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/report/report_stock_rule.py"
+   ]
+  },
+  {
+   "model": "stock.forecasted_product_product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp/report/stock_forecasted.py"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1139 @@
+{
+ "_meta": {
+  "module": "sign",
+  "display_name": "Sign",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "sign.completed.document",
+   "business_meaning": "Completed Document",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_completed_document.py",
+   "key_fields": [
+    {
+     "name": "sign_request_id",
+     "type": "Many2one",
+     "relates_to": "sign.request",
+     "label": "Sign Request",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_id",
+     "type": "Many2one",
+     "relates_to": "sign.document",
+     "label": "Document",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "sign.document",
+   "business_meaning": "Signature Document",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_document.py",
+   "key_fields": [
+    {
+     "name": "attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Attachment",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sign_item_ids",
+     "type": "One2many",
+     "relates_to": "sign.item",
+     "label": "Signature Items"
+    },
+    {
+     "name": "num_pages",
+     "type": "Integer",
+     "label": "Number of pages",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "sign.item",
+   "business_meaning": "Fields to be sign on Document",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_item.py",
+   "key_fields": [
+    {
+     "name": "document_id",
+     "type": "Many2one",
+     "relates_to": "sign.document",
+     "label": "Document Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type_id",
+     "type": "Many2one",
+     "relates_to": "sign.item.type",
+     "label": "Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Field Name"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "responsible_id",
+     "type": "Many2one",
+     "relates_to": "sign.item.role",
+     "label": "Responsible"
+    },
+    {
+     "name": "option_ids",
+     "type": "Many2many",
+     "relates_to": "sign.item.option",
+     "label": "Selection options"
+    },
+    {
+     "name": "radio_set_id",
+     "type": "Many2one",
+     "relates_to": "sign.item.radio.set",
+     "label": "Radio button options"
+    },
+    {
+     "name": "page",
+     "type": "Integer",
+     "label": "Document Page",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "posX",
+     "type": "Float",
+     "label": "Position X",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "posY",
+     "type": "Float",
+     "label": "Position Y",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "width",
+     "type": "Float",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "height",
+     "type": "Float",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "alignment",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "sign.item.option",
+   "business_meaning": "Option of a selection Field",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_item_option.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "sign.item.radio.set",
+   "business_meaning": "Radio button set for keeping radio button items together",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_item_radio_set.py",
+   "key_fields": [
+    {
+     "name": "radio_items",
+     "type": "One2many",
+     "relates_to": "sign.item"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "sign.item.role",
+   "business_meaning": "Signature Item Role",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_item_role.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "auth_method",
+     "type": "Selection",
+     "label": "Extra Authentication Step",
+     "selection": [
+      "sms"
+     ]
+    },
+    {
+     "name": "default",
+     "type": "Boolean",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "assign_to",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Assign to"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "sign.item.type",
+   "business_meaning": "Signature Item Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_item_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Field Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "item_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "signature",
+      "initial",
+      "text",
+      "textarea",
+      "checkbox",
+      "radio",
+      "selection",
+      "strikethrough",
+      "stamp"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "field_size",
+     "type": "Selection",
+     "label": "Field Size",
+     "selection": [
+      "short_text",
+      "regular_text",
+      "long_text"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tip",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "default_width",
+     "type": "Float",
+     "label": "Default Width",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "default_height",
+     "type": "Float",
+     "label": "Default Height",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Linked to"
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "sign.log",
+   "business_meaning": "Sign requests access history",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_log.py",
+   "key_fields": [
+    {
+     "name": "action",
+     "type": "Selection",
+     "label": "Action Performed",
+     "selection": [
+      "create",
+      "open",
+      "save",
+      "sign",
+      "refuse",
+      "cancel",
+      "update_mail",
+      "update"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "request_state",
+     "type": "Selection",
+     "label": "State of the request on action log",
+     "selection": [
+      "shared",
+      "sent",
+      "signed",
+      "refused",
+      "canceled",
+      "expired"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_request_id",
+     "type": "Many2one",
+     "relates_to": "sign.request",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "log_date",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_request_item_id",
+     "type": "Many2one",
+     "relates_to": "sign.request.item"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "ip",
+     "type": "Char",
+     "label": "IP address of the visitor",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "sign.request",
+   "business_meaning": "Signature Request",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_request.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "shared",
+      "sent",
+      "signed",
+      "canceled",
+      "expired"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "send_channel",
+     "type": "Selection",
+     "label": "Delivery Method",
+     "selection": [
+      "email"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "label": "Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "reference",
+     "type": "Char",
+     "label": "Document Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "label": "Security Token",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "request_item_ids",
+     "type": "One2many",
+     "relates_to": "sign.request.item",
+     "label": "Signers"
+    },
+    {
+     "name": "template_document_ids",
+     "type": "Many2many",
+     "relates_to": "sign.document",
+     "label": "Documents",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "completed_document_ids",
+     "type": "One2many",
+     "relates_to": "sign.completed.document",
+     "label": "Completed Documents Binaries"
+    },
+    {
+     "name": "favorited_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Favorite of"
+    },
+    {
+     "name": "communication_company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company used for communication"
+    },
+    {
+     "name": "sign_log_ids",
+     "type": "One2many",
+     "relates_to": "sign.log",
+     "label": "Logs"
+    },
+    {
+     "name": "template_tags",
+     "type": "Many2many",
+     "relates_to": "sign.template.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "cc_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Copy to",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "completed_document_attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Completed Documents"
+    },
+    {
+     "name": "nb_wait",
+     "type": "Integer",
+     "label": "Sent Requests",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "nb_closed",
+     "type": "Integer",
+     "label": "Completed Signatures",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "nb_total",
+     "type": "Integer",
+     "label": "Requested Signatures",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "completion_date",
+     "type": "Date",
+     "label": "Completion Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 38
+  },
+  {
+   "model": "sign.request.item",
+   "business_meaning": "Signature Request Item",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_request_item.py",
+   "built_in_capabilities": [
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "sent",
+      "completed",
+      "canceled"
+     ]
+    },
+    {
+     "name": "sign_request_id",
+     "type": "Many2one",
+     "relates_to": "sign.request",
+     "label": "Signature Request",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "sign.item.role",
+     "label": "Role",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Signer"
+    },
+    {
+     "name": "sign_item_value_ids",
+     "type": "One2many",
+     "relates_to": "sign.request.item.value",
+     "label": "Value"
+    },
+    {
+     "name": "communication_company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "signer_email",
+     "type": "Char",
+     "label": "Email",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 23
+  },
+  {
+   "model": "sign.request.item.value",
+   "business_meaning": "Signature Item Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_request_item_value.py",
+   "key_fields": [
+    {
+     "name": "sign_request_item_id",
+     "type": "Many2one",
+     "relates_to": "sign.request.item",
+     "label": "Signature Request item",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_item_id",
+     "type": "Many2one",
+     "relates_to": "sign.item",
+     "label": "Signature Item",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_request_id",
+     "type": "Many2one",
+     "label": "Signature Request",
+     "flags": [
+      "required",
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "sign.template",
+   "business_meaning": "Signature Template",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_template.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_item_ids",
+     "type": "One2many",
+     "relates_to": "sign.item",
+     "label": "Signature Items",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "document_ids",
+     "type": "One2many",
+     "relates_to": "sign.document",
+     "label": "Documents"
+    },
+    {
+     "name": "favorited_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Favorited Users"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Responsible"
+    },
+    {
+     "name": "sign_request_ids",
+     "type": "One2many",
+     "relates_to": "sign.request",
+     "label": "Signature Requests"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "sign.template.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "authorized_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Authorized Users"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Authorized Groups"
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model"
+    },
+    {
+     "name": "has_sign_requests",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 22
+  },
+  {
+   "model": "sign.template.tag",
+   "business_meaning": "Sign Template Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/models/sign_template_tag.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "sign.request.share",
+   "business_meaning": "Sign request share wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/wizard/sign_request_share.py",
+   "key_fields": [
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sign_request_id",
+     "type": "Many2one",
+     "relates_to": "sign.request"
+    },
+    {
+     "name": "is_shared",
+     "type": "Boolean",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "sign.send.request",
+   "business_meaning": "Sign send request",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/wizard/sign_send_request.py",
+   "key_fields": [
+    {
+     "name": "signer_ids",
+     "type": "One2many",
+     "relates_to": "sign.send.request.signer",
+     "label": "Signers",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "activity_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity"
+    },
+    {
+     "name": "available_template_ids",
+     "type": "Many2many",
+     "relates_to": "sign.template",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "label": "Sign Template"
+    },
+    {
+     "name": "signer_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Send To"
+    },
+    {
+     "name": "cc_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Copy to"
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "subject",
+     "type": "Char",
+     "label": "Subject",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "body",
+     "type": "Html",
+     "label": "body",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filename",
+     "type": "Char",
+     "label": "Filename",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "validity",
+     "type": "Date",
+     "label": "Valid Until",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 25
+  },
+  {
+   "model": "sign.send.request.signer",
+   "business_meaning": "Sign send request signer",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/wizard/sign_send_request_signer.py",
+   "key_fields": [
+    {
+     "name": "role_id",
+     "type": "Many2one",
+     "relates_to": "sign.item.role"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact"
+    },
+    {
+     "name": "sign_send_request_id",
+     "type": "Many2one",
+     "relates_to": "sign.send.request"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "sign.template.preview",
+   "business_meaning": "Sign Tempate Preview",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/wizard/sign_template_preview.py",
+   "key_fields": [
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template"
+    },
+    {
+     "name": "document_id",
+     "type": "Many2one",
+     "relates_to": "sign.document"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "report.sign.green_savings_report",
+   "business_meaning": "Green Savings Report model",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sign/report/green_saving_reports.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "signing_certificate_id",
+     "type": "Many2one",
+     "relates_to": "certificate.certificate",
+     "label": "Signing certificate",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sign_terms",
+     "type": "Html",
+     "label": "Sign Terms & Conditions",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sign_terms_html",
+     "type": "Html",
+     "label": "Sign Terms & Conditions as a Web page",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sign_terms_type",
+     "type": "Selection",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sign_preview_ready",
+     "type": "Boolean",
+     "label": "Display sign preview button",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "use_sign_terms",
+     "type": "Boolean",
+     "label": "Sign Default Terms & Conditions"
+    },
+    {
+     "name": "group_manage_template_access",
+     "type": "Boolean",
+     "label": "Manage template access"
+    },
+    {
+     "name": "module_sign_itsme",
+     "type": "Boolean",
+     "label": "Identify with itsme®"
+    },
+    {
+     "name": "module_sign_emsigner",
+     "type": "Boolean",
+     "label": "Sign with Aadhaar eSign"
+    }
+   ],
+   "evidence_files": [
+    "sign/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sign_terms_type",
+     "type": "Selection",
+     "label": "Sign Terms & Conditions format",
+     "selection": [
+      "plain",
+      "html"
+     ]
+    },
+    {
+     "name": "signing_certificate_id",
+     "type": "Many2one",
+     "relates_to": "certificate.certificate",
+     "label": "Signing Certificate"
+    },
+    {
+     "name": "sign_terms",
+     "type": "Html",
+     "label": "Sign Default Terms and Conditions"
+    },
+    {
+     "name": "sign_terms_html",
+     "type": "Html",
+     "label": "Sign Default Terms and Conditions as a Web page"
+    }
+   ],
+   "evidence_files": [
+    "sign/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sign_signature",
+     "type": "Binary",
+     "label": "Digital Signature"
+    },
+    {
+     "name": "sign_initials",
+     "type": "Binary",
+     "label": "Digital Initials"
+    },
+    {
+     "name": "sign_signature_frame",
+     "type": "Binary",
+     "label": "Digital Signature Frame"
+    },
+    {
+     "name": "sign_initials_frame",
+     "type": "Binary",
+     "label": "Digital Initials Frame"
+    }
+   ],
+   "evidence_files": [
+    "sign/models/res_users.py"
+   ]
+  },
+  {
+   "model": "mail.activity.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "default_sign_template_id",
+     "type": "Many2one",
+     "relates_to": "sign.template",
+     "label": "Default Signature Template"
+    },
+    {
+     "name": "category",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "sign/models/mail_activity_type.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "signature_count",
+     "type": "Integer",
+     "label": "# Signatures",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sign/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sign/models/ir_http.py"
+   ]
+  }
+ ]
+}

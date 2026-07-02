@@ -1,0 +1,4004 @@
+{
+ "_meta": {
+  "module": "base",
+  "display_name": "Base",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "avatar.mixin",
+   "business_meaning": "Avatar Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/avatar_mixin.py",
+   "built_in_capabilities": [
+    "images"
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "decimal.precision",
+   "business_meaning": "Decimal Precision",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/decimal_precision.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Usage",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "digits",
+     "type": "Integer",
+     "label": "Digits",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "image.mixin",
+   "business_meaning": "Image Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/image_mixin.py",
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.actions.actions",
+   "business_meaning": "Actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Action Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "binding_type",
+     "type": "Selection",
+     "selection": [
+      "action",
+      "report"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Char",
+     "label": "Action Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "binding_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "ir.actions.act_window",
+   "business_meaning": "Action Window",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "target",
+     "type": "Selection",
+     "label": "Target Window",
+     "selection": [
+      "current",
+      "new",
+      "fullscreen",
+      "main"
+     ]
+    },
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "View Ref."
+    },
+    {
+     "name": "context",
+     "type": "Char",
+     "label": "Context Value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "res_model",
+     "type": "Char",
+     "label": "Destination Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "view_mode",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "view_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.act_window.view",
+     "label": "No of Views"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    },
+    {
+     "name": "search_view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Search View Ref."
+    },
+    {
+     "name": "embedded_action_ids",
+     "type": "One2many",
+     "relates_to": "ir.embedded.actions",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 18
+  },
+  {
+   "model": "ir.actions.act_window.view",
+   "business_meaning": "Action Window View",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "View"
+    },
+    {
+     "name": "view_mode",
+     "type": "Selection",
+     "label": "View Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "act_window_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.act_window",
+     "label": "Action"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.actions.act_window_close",
+   "business_meaning": "Action Window Close",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "ir.actions.act_url",
+   "business_meaning": "Action URL",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "target",
+     "type": "Selection",
+     "label": "Action Target",
+     "selection": [
+      "new",
+      "self",
+      "download"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "url",
+     "type": "Text",
+     "label": "Action URL",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "server.action.history.wizard",
+   "business_meaning": "Server Action History Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "revision",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server.history",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "ir.actions.server.history",
+   "business_meaning": "Server Action History",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.actions.server",
+   "business_meaning": "Server Actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "object_write",
+      "object_create",
+      "object_copy",
+      "code",
+      "webhook",
+      "multi"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "usage",
+     "type": "Selection",
+     "label": "Usage",
+     "selection": [
+      "ir_actions_server",
+      "ir_cron"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "crud_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Record to Create",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "update_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Field to Update",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "update_related_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "update_m2m_operation",
+     "type": "Selection",
+     "label": "Many2many Operations",
+     "selection": [
+      "add",
+      "remove",
+      "set",
+      "clear"
+     ]
+    },
+    {
+     "name": "update_boolean_value",
+     "type": "Selection",
+     "label": "Boolean Value",
+     "selection": [
+      "true",
+      "false"
+     ]
+    },
+    {
+     "name": "evaluation_type",
+     "type": "Selection",
+     "selection": [
+      "value",
+      "sequence",
+      "equation"
+     ]
+    },
+    {
+     "name": "value_field_to_show",
+     "type": "Selection",
+     "selection": [
+      "value",
+      "html_value",
+      "sequence_id",
+      "resource_ref",
+      "update_boolean_value",
+      "selection_value"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "available_model_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model",
+     "label": "Available Models",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "ir_cron_ids",
+     "type": "One2many",
+     "relates_to": "ir.cron"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server",
+     "label": "Parent Action"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.server",
+     "label": "Child Actions"
+    },
+    {
+     "name": "link_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Link Field"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Allowed Groups"
+    },
+    {
+     "name": "sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Sequence to use"
+    },
+    {
+     "name": "selection_value",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields.selection",
+     "label": "Custom Value"
+    },
+    {
+     "name": "webhook_field_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model.fields",
+     "label": "Webhook Fields"
+    },
+    {
+     "name": "automated_name",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 36
+  },
+  {
+   "model": "ir.actions.todo",
+   "business_meaning": "Configuration Wizards",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "open",
+      "done"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.actions",
+     "label": "Action",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "ir.actions.client",
+   "business_meaning": "Client Action",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions.py",
+   "key_fields": [
+    {
+     "name": "target",
+     "type": "Selection",
+     "label": "Target Window",
+     "selection": [
+      "current",
+      "new",
+      "fullscreen",
+      "main"
+     ]
+    },
+    {
+     "name": "tag",
+     "type": "Char",
+     "label": "Client action tag",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "context",
+     "type": "Char",
+     "label": "Context Value",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "ir.actions.report",
+   "business_meaning": "Report Action",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_actions_report.py",
+   "key_fields": [
+    {
+     "name": "report_type",
+     "type": "Selection",
+     "selection": [
+      "qweb-html",
+      "qweb-pdf",
+      "qweb-text"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Model Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "report_name",
+     "type": "Char",
+     "label": "Template Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    },
+    {
+     "name": "paperformat_id",
+     "type": "Many2one",
+     "relates_to": "report.paperformat"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "ir.asset",
+   "business_meaning": "Asset",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_asset.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "directive",
+     "type": "Selection",
+     "label": "Directive"
+    },
+    {
+     "name": "bundle",
+     "type": "Char",
+     "label": "Bundle name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "path",
+     "type": "Char",
+     "label": "Path (or glob pattern)",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "label": "Sequence",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "ir.attachment",
+   "business_meaning": "Attachment",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_attachment.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "url",
+      "binary"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 19
+  },
+  {
+   "model": "ir.autovacuum",
+   "business_meaning": "Automatic Vacuum",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_autovacuum.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.binary",
+   "business_meaning": "File streaming helper model for controllers",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_binary.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.config_parameter",
+   "business_meaning": "System Parameter",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_config_parameter.py",
+   "key_fields": [
+    {
+     "name": "key",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "Text",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.cron",
+   "business_meaning": "Scheduled Actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_cron.py",
+   "delegates_to": [
+    "ir.actions.server"
+   ],
+   "key_fields": [
+    {
+     "name": "interval_type",
+     "type": "Selection",
+     "label": "Interval Unit",
+     "selection": [
+      "minutes",
+      "hours",
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "ir_actions_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Scheduler User",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "interval_number",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "nextcall",
+     "type": "Datetime",
+     "label": "Next Execution Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "cron_name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "ir.cron.trigger",
+   "business_meaning": "Triggered actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_cron.py",
+   "key_fields": [
+    {
+     "name": "cron_id",
+     "type": "Many2one",
+     "relates_to": "ir.cron",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "call_at",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.cron.progress",
+   "business_meaning": "Progress of Scheduled Actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_cron.py",
+   "key_fields": [
+    {
+     "name": "cron_id",
+     "type": "Many2one",
+     "relates_to": "ir.cron",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.default",
+   "business_meaning": "Default Values",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_default.py",
+   "key_fields": [
+    {
+     "name": "field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Field",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "json_value",
+     "type": "Char",
+     "label": "Default Value (JSON format)",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.demo",
+   "business_meaning": "Demo",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_demo.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.demo_failure",
+   "business_meaning": "Demo failure",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_demo_failure.py",
+   "key_fields": [
+    {
+     "name": "module_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module",
+     "label": "Module",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "ir.demo_failure.wizard"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "ir.demo_failure.wizard",
+   "business_meaning": "Demo Failure wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_demo_failure.py",
+   "key_fields": [
+    {
+     "name": "failure_ids",
+     "type": "One2many",
+     "relates_to": "ir.demo_failure",
+     "label": "Demo Installation Failures"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.embedded.actions",
+   "business_meaning": "Embedded Actions",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_embedded_actions.py",
+   "key_fields": [
+    {
+     "name": "parent_action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.act_window",
+     "label": "Parent Action",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "parent_res_model",
+     "type": "Char",
+     "label": "Active Parent Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.actions",
+     "label": "Action"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "filter_ids",
+     "type": "One2many",
+     "relates_to": "ir.filters"
+    },
+    {
+     "name": "groups_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups"
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "ir.exports",
+   "business_meaning": "Exports",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_exports.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Export Name"
+    },
+    {
+     "name": "export_fields",
+     "type": "One2many",
+     "relates_to": "ir.exports.line",
+     "label": "Export ID"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "ir.exports.line",
+   "business_meaning": "Exports Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_exports.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Field Name"
+    },
+    {
+     "name": "export_id",
+     "type": "Many2one",
+     "relates_to": "ir.exports",
+     "label": "Export"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.fields.converter",
+   "business_meaning": "Fields Converter",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.filters",
+   "business_meaning": "Filters",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_filters.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Filter Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Users"
+    },
+    {
+     "name": "domain",
+     "type": "Text",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "context",
+     "type": "Text",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sort",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Selection",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.actions",
+     "label": "Action"
+    },
+    {
+     "name": "embedded_action_id",
+     "type": "Many2one",
+     "relates_to": "ir.embedded.actions"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "ir.http",
+   "business_meaning": "HTTP Routing",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_http.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.logging",
+   "business_meaning": "Logging",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_logging.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "selection": [
+      "client",
+      "server"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "message",
+     "type": "Text",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "path",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "func",
+     "type": "Char",
+     "label": "Function",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "line",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "ir.mail_server",
+   "business_meaning": "Mail Server",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_mail_server.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "smtp_authentication",
+     "type": "Selection",
+     "label": "Authenticate with",
+     "selection": [
+      "login",
+      "certificate",
+      "cli"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "smtp_encryption",
+     "type": "Selection",
+     "label": "Connection Encryption",
+     "selection": [
+      "none",
+      "starttls_strict",
+      "starttls",
+      "ssl_strict",
+      "ssl"
+     ],
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "base",
+   "business_meaning": "Base",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "_unknown",
+   "business_meaning": "Unknown",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.model",
+   "business_meaning": "Models",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "manual",
+      "base"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Model Description",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "field_id",
+     "type": "One2many",
+     "relates_to": "ir.model.fields",
+     "label": "Fields",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "order",
+     "type": "Char",
+     "label": "Order",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "inherited_model_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model",
+     "label": "Inherited models",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "access_ids",
+     "type": "One2many",
+     "relates_to": "ir.model.access",
+     "label": "Access"
+    },
+    {
+     "name": "rule_ids",
+     "type": "One2many",
+     "relates_to": "ir.rule",
+     "label": "Record Rules"
+    },
+    {
+     "name": "view_ids",
+     "type": "One2many",
+     "relates_to": "ir.ui.view",
+     "label": "Views",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "ir.model.fields",
+   "business_meaning": "Fields",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "manual",
+      "base"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Field Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "relation_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Relation field",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "related_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Related Field",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "translate",
+     "type": "Selection",
+     "label": "Translatable",
+     "selection": [
+      "standard",
+      "html_translate",
+      "xml_translate"
+     ]
+    },
+    {
+     "name": "on_delete",
+     "type": "Selection",
+     "label": "On Delete",
+     "selection": [
+      "cascade",
+      "set null",
+      "restrict"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Model Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "field_description",
+     "type": "Char",
+     "label": "Field Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "ttype",
+     "type": "Selection",
+     "label": "Field Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "selection_ids",
+     "type": "One2many",
+     "relates_to": "ir.model.fields.selection",
+     "label": "Selection Options"
+    },
+    {
+     "name": "groups",
+     "type": "Many2many",
+     "relates_to": "res.groups"
+    },
+    {
+     "name": "copied",
+     "type": "Boolean",
+     "label": "Copied",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 42
+  },
+  {
+   "model": "ir.model.inherit",
+   "business_meaning": "Model Inheritance Tree",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "ir.model.fields.selection",
+   "business_meaning": "Fields Selection",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "ir.model.constraint",
+   "business_meaning": "Model Constraint",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Constraint",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "module",
+     "type": "Many2one",
+     "relates_to": "ir.module.module",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Char",
+     "label": "Constraint Type",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "ir.model.relation",
+   "business_meaning": "Relation Model",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Relation Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "module",
+     "type": "Many2one",
+     "relates_to": "ir.module.module",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.model.access",
+   "business_meaning": "Model Access",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "group_id",
+     "type": "Many2one",
+     "relates_to": "res.groups",
+     "label": "Group"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "ir.model.data",
+   "business_meaning": "Model Data",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_model.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "External Identifier",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Model Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "module",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "ir.module.category",
+   "business_meaning": "Application",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_module.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.category",
+     "label": "Parent Application"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "ir.module.category",
+     "label": "Child Applications"
+    },
+    {
+     "name": "module_ids",
+     "type": "One2many",
+     "relates_to": "ir.module.module",
+     "label": "Modules"
+    },
+    {
+     "name": "privilege_ids",
+     "type": "One2many",
+     "relates_to": "res.groups.privilege",
+     "label": "Privileges"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "ir.module.module",
+   "business_meaning": "Module",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_module.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Technical Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "license",
+     "type": "Selection",
+     "label": "License",
+     "selection": [
+      "GPL-2",
+      "GPL-2 or any later version",
+      "GPL-3",
+      "GPL-3 or any later version",
+      "AGPL-3",
+      "LGPL-3",
+      "Other OSI approved licence",
+      "OEEL-1",
+      "OPL-1",
+      "Other proprietary"
+     ]
+    },
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.category",
+     "label": "Category"
+    },
+    {
+     "name": "dependencies_id",
+     "type": "One2many",
+     "relates_to": "ir.module.module.dependency",
+     "label": "Dependencies"
+    },
+    {
+     "name": "country_ids",
+     "type": "Many2many",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "exclusion_ids",
+     "type": "One2many",
+     "relates_to": "ir.module.module.exclusion",
+     "label": "Exclusions"
+    },
+    {
+     "name": "menus_by_module",
+     "type": "Text",
+     "label": "Menus",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reports_by_module",
+     "type": "Text",
+     "label": "Reports",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "views_by_module",
+     "type": "Text",
+     "label": "Views",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 31
+  },
+  {
+   "model": "ir.module.module.dependency",
+   "business_meaning": "Module dependency",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_module.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "module_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module"
+    },
+    {
+     "name": "depend_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.module.module.exclusion",
+   "business_meaning": "Module exclusion",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_module.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "module_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module"
+    },
+    {
+     "name": "exclusion_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.module",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "ir.profile",
+   "business_meaning": "Profiling results",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_profile.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description"
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "base.enable.profiling.wizard",
+   "business_meaning": "Enable profiling for some time",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_profile.py",
+   "key_fields": [
+    {
+     "name": "duration",
+     "type": "Selection",
+     "label": "Enable profiling for",
+     "selection": [
+      "minutes_5",
+      "hours_1",
+      "days_1",
+      "months_1"
+     ]
+    },
+    {
+     "name": "expiration",
+     "type": "Datetime",
+     "label": "Enable profiling until",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "ir.qweb",
+   "business_meaning": "Qweb",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field",
+   "business_meaning": "Qweb Field",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.integer",
+   "business_meaning": "Qweb Field Integer",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.float",
+   "business_meaning": "Qweb Field Float",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.date",
+   "business_meaning": "Qweb Field Date",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.datetime",
+   "business_meaning": "Qweb Field Datetime",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.text",
+   "business_meaning": "Qweb Field Text",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.selection",
+   "business_meaning": "Qweb Field Selection",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.many2one",
+   "business_meaning": "Qweb Field Many to One",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.many2many",
+   "business_meaning": "Qweb field many2many",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.one2many",
+   "business_meaning": "Qweb field one2many",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.html",
+   "business_meaning": "Qweb Field HTML",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.image",
+   "business_meaning": "Qweb Field Image",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.image_url",
+   "business_meaning": "Qweb Field Image",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.monetary",
+   "business_meaning": "Qweb Field Monetary",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.float_time",
+   "business_meaning": "Qweb Field Float Time",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.time",
+   "business_meaning": "QWeb Field Time",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.duration",
+   "business_meaning": "Qweb Field Duration",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.relative",
+   "business_meaning": "Qweb Field Relative",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.barcode",
+   "business_meaning": "Qweb Field Barcode",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.contact",
+   "business_meaning": "Qweb Field Contact",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.qweb.field.qweb",
+   "business_meaning": "Qweb Field qweb",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_qweb_fields.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "ir.rule",
+   "business_meaning": "Record Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_rule.py",
+   "key_fields": [
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "groups",
+     "type": "Many2many",
+     "relates_to": "res.groups"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "ir.sequence",
+   "business_meaning": "Sequence",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_sequence.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "implementation",
+     "type": "Selection",
+     "label": "Implementation",
+     "selection": [
+      "standard",
+      "no_gap"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "number_next",
+     "type": "Integer",
+     "label": "Next Number",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "number_increment",
+     "type": "Integer",
+     "label": "Step",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "padding",
+     "type": "Integer",
+     "label": "Sequence Size",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "date_range_ids",
+     "type": "One2many",
+     "relates_to": "ir.sequence.date_range",
+     "label": "Subsequences"
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "ir.sequence.date_range",
+   "business_meaning": "Sequence Date Range",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_sequence.py",
+   "key_fields": [
+    {
+     "name": "sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Main Sequence",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_from",
+     "type": "Date",
+     "label": "From",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_to",
+     "type": "Date",
+     "label": "To",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "number_next",
+     "type": "Integer",
+     "label": "Next Number",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "ir.ui.menu",
+   "business_meaning": "Menu",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_ui_menu.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Menu",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action",
+     "type": "Reference",
+     "selection": [
+      "ir.actions.report",
+      "ir.actions.act_window",
+      "ir.actions.act_url",
+      "ir.actions.server",
+      "ir.actions.client"
+     ]
+    },
+    {
+     "name": "child_id",
+     "type": "One2many",
+     "relates_to": "ir.ui.menu",
+     "label": "Child IDs"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.menu",
+     "label": "Parent Menu"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "ir.ui.view.custom",
+   "business_meaning": "Custom View",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_ui_view.py",
+   "key_fields": [
+    {
+     "name": "ref_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Original View",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "arch",
+     "type": "Text",
+     "label": "View Architecture",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "ir.ui.view",
+   "business_meaning": "View",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_ui_view.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "View Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mode",
+     "type": "Selection",
+     "label": "View inheritance mode",
+     "selection": [
+      "primary",
+      "extension"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "label": "View Type",
+     "selection": [
+      "list",
+      "form",
+      "graph",
+      "pivot",
+      "calendar",
+      "kanban",
+      "search",
+      "qweb"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Integer",
+     "label": "Sequence",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "inherit_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Inherited View"
+    },
+    {
+     "name": "inherit_children_ids",
+     "type": "One2many",
+     "relates_to": "ir.ui.view",
+     "label": "Views which inherit from this one"
+    },
+    {
+     "name": "model_data_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.data",
+     "label": "Model Data",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model of the view",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 21
+  },
+  {
+   "model": "reset.view.arch.wizard",
+   "business_meaning": "Reset View Architecture Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/ir_ui_view.py",
+   "key_fields": [
+    {
+     "name": "reset_mode",
+     "type": "Selection",
+     "label": "Reset Mode",
+     "selection": [
+      "soft",
+      "hard",
+      "other_view"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "View"
+    },
+    {
+     "name": "compare_view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Compare To View"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "properties.base.definition",
+   "business_meaning": "Properties Base Definition",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/properties_base_definition.py",
+   "key_fields": [
+    {
+     "name": "properties_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "properties.base.definition.mixin",
+   "business_meaning": "Properties Base Definition Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/properties_base_definition_mixin.py",
+   "key_fields": [
+    {
+     "name": "properties_base_definition_id",
+     "type": "Many2one",
+     "relates_to": "properties.base.definition",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "report.layout",
+   "business_meaning": "Report Layout",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/report_layout.py",
+   "key_fields": [
+    {
+     "name": "view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "report.paperformat",
+   "business_meaning": "Paper Format Config",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/report_paperformat.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "orientation",
+     "type": "Selection",
+     "selection": [
+      "Landscape",
+      "Portrait"
+     ]
+    },
+    {
+     "name": "dpi",
+     "type": "Integer",
+     "label": "Output DPI",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "report_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.report"
+    }
+   ],
+   "total_field_count_declared": 18
+  },
+  {
+   "model": "res.bank",
+   "business_meaning": "Bank",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_bank.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Many2one",
+     "relates_to": "res.country.state"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "res.partner.bank",
+   "business_meaning": "Bank Accounts",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_bank.py",
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "acc_number",
+     "type": "Char",
+     "label": "Account Number",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "bank_id",
+     "type": "Many2one",
+     "relates_to": "res.bank",
+     "label": "Bank"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sanitized_acc_number",
+     "type": "Char",
+     "label": "Sanitized Account Number",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "acc_holder_name",
+     "type": "Char",
+     "label": "Account Holder Name",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "res.company",
+   "business_meaning": "Companies",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_company.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Company Name",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "layout_background",
+     "type": "Selection",
+     "selection": [
+      "Blank",
+      "Demo logo",
+      "Custom"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "font",
+     "type": "Selection",
+     "selection": [
+      "Lato",
+      "Roboto",
+      "Open_Sans",
+      "Montserrat",
+      "Oswald",
+      "Raleway",
+      "Tajawal",
+      "Fira_Mono"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Parent Company"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "res.company",
+     "label": "Branches"
+    },
+    {
+     "name": "all_child_ids",
+     "type": "One2many",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "parent_ids",
+     "type": "Many2many",
+     "relates_to": "res.company",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "root_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Accepted Users"
+    },
+    {
+     "name": "state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "Fed. State",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "bank_ids",
+     "type": "One2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "paperformat_id",
+     "type": "Many2one",
+     "relates_to": "report.paperformat"
+    },
+    {
+     "name": "external_report_layout_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view"
+    },
+    {
+     "name": "uninstalled_l10n_module_ids",
+     "type": "Many2many",
+     "relates_to": "ir.module.module",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "logo_web",
+     "type": "Binary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "uses_default_logo",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 42
+  },
+  {
+   "model": "res.config",
+   "business_meaning": "Config",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_config.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "res.config.settings",
+   "business_meaning": "Config Settings",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_config.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "res.country",
+   "business_meaning": "Country",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_country.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Country Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name_position",
+     "type": "Selection",
+     "label": "Customer Name Position",
+     "selection": [
+      "before",
+      "after"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Country Code",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "address_view_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.view",
+     "label": "Input View"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    },
+    {
+     "name": "country_group_ids",
+     "type": "Many2many",
+     "relates_to": "res.country.group",
+     "label": "Country Groups"
+    },
+    {
+     "name": "state_ids",
+     "type": "One2many",
+     "relates_to": "res.country.state",
+     "label": "States"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "res.country.group",
+   "business_meaning": "Country Group",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_country.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_ids",
+     "type": "Many2many",
+     "relates_to": "res.country",
+     "label": "Countries"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "res.country.state",
+   "business_meaning": "Country state",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_country.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "State Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "State Code",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "res.currency",
+   "business_meaning": "Currency",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_currency.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Currency",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "position",
+     "type": "Selection",
+     "label": "Symbol Position",
+     "selection": [
+      "after",
+      "before"
+     ]
+    },
+    {
+     "name": "symbol",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rate_ids",
+     "type": "One2many",
+     "relates_to": "res.currency.rate",
+     "label": "Rates"
+    },
+    {
+     "name": "decimal_places",
+     "type": "Integer",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "res.currency.rate",
+   "business_meaning": "Currency Rate",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_currency.py",
+   "key_fields": [
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Date",
+     "label": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "res.device.log",
+   "business_meaning": "Device Log",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_device.py",
+   "key_fields": [
+    {
+     "name": "device_type",
+     "type": "Selection",
+     "selection": [
+      "computer",
+      "mobile"
+     ]
+    },
+    {
+     "name": "session_identifier",
+     "type": "Char",
+     "label": "Session Identifier",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "res.device",
+   "business_meaning": "Devices",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_device.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "res.groups",
+   "business_meaning": "Access Groups",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_groups.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "all_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Users and implied users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "model_access",
+     "type": "One2many",
+     "relates_to": "ir.model.access",
+     "label": "Access Controls"
+    },
+    {
+     "name": "rule_groups",
+     "type": "Many2many",
+     "relates_to": "ir.rule",
+     "label": "Rules"
+    },
+    {
+     "name": "menu_access",
+     "type": "Many2many",
+     "relates_to": "ir.ui.menu",
+     "label": "Access Menu"
+    },
+    {
+     "name": "view_access",
+     "type": "Many2many",
+     "relates_to": "ir.ui.view",
+     "label": "Views"
+    },
+    {
+     "name": "privilege_id",
+     "type": "Many2one",
+     "relates_to": "res.groups.privilege",
+     "label": "Privilege"
+    },
+    {
+     "name": "implied_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Implied Groups"
+    },
+    {
+     "name": "all_implied_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Transitively Implied Groups",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "implied_by_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Implying Groups"
+    },
+    {
+     "name": "all_implied_by_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Transitively Implying Groups",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "disjoint_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Disjoint Groups",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "res.groups.privilege",
+   "business_meaning": "Privileges",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_groups_privilege.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "ir.module.category",
+     "label": "Category"
+    },
+    {
+     "name": "group_ids",
+     "type": "One2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "res.lang",
+   "business_meaning": "Languages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_lang.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "direction",
+     "type": "Selection",
+     "selection": [
+      "ltr",
+      "rtl"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "time_format",
+     "type": "Selection",
+     "label": "Time Format",
+     "selection": [
+      "%H:%M:%S",
+      "%I:%M:%S %p"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "week_start",
+     "type": "Selection",
+     "label": "First Day of Week",
+     "selection": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "grouping",
+     "type": "Selection",
+     "label": "Separator Format",
+     "selection": [
+      "[3,0]",
+      "[3,2,0]"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Locale Code",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "url_code",
+     "type": "Char",
+     "label": "URL Code",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_format",
+     "type": "Selection",
+     "label": "Date Format",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "decimal_point",
+     "type": "Char",
+     "label": "Decimal Separator",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "format.vat.label.mixin",
+   "business_meaning": "Country Specific VAT Label",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_partner.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "format.address.mixin",
+   "business_meaning": "Address Format",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_partner.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "res.partner.category",
+   "business_meaning": "Partner Tags",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_partner.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "res.partner",
+   "business_meaning": "Contact",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_partner.py",
+   "built_in_capabilities": [
+    "avatar"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "label": "Address Type",
+     "selection": [
+      "contact",
+      "invoice",
+      "delivery",
+      "other"
+     ]
+    },
+    {
+     "name": "company_type",
+     "type": "Selection",
+     "label": "Company Type",
+     "selection": [
+      "person",
+      "company"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "complete_name",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lang",
+     "type": "Selection",
+     "label": "Language",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_registry",
+     "type": "Char",
+     "label": "Company ID",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_share",
+     "type": "Boolean",
+     "label": "Share Partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "commercial_company_name",
+     "type": "Char",
+     "label": "Company Name Entity",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 40
+  },
+  {
+   "model": "res.partner.industry",
+   "business_meaning": "Industry",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_partner.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "res.users.log",
+   "business_meaning": "Users Log",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "create_uid",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Created by"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "res.users",
+   "business_meaning": "User",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "delegates_to": [
+    "res.partner"
+   ],
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Related Partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "role",
+     "type": "Selection",
+     "label": "Role",
+     "selection": [
+      "group_user",
+      "group_system"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "login",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "api_key_ids",
+     "type": "One2many",
+     "relates_to": "res.users.apikeys",
+     "label": "API Keys"
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.actions",
+     "label": "Home Action"
+    },
+    {
+     "name": "log_ids",
+     "type": "One2many",
+     "relates_to": "res.users.log",
+     "label": "User log entries"
+    },
+    {
+     "name": "device_ids",
+     "type": "One2many",
+     "relates_to": "res.device",
+     "label": "User devices"
+    },
+    {
+     "name": "res_users_settings_ids",
+     "type": "One2many",
+     "relates_to": "res.users.settings"
+    },
+    {
+     "name": "res_users_settings_id",
+     "type": "Many2one",
+     "relates_to": "res.users.settings",
+     "label": "Settings",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_ids",
+     "type": "Many2many",
+     "relates_to": "res.company",
+     "label": "Companies"
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups"
+    },
+    {
+     "name": "all_group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Groups and implied groups",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "signature",
+     "type": "Html",
+     "label": "Email Signature",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "share",
+     "type": "Boolean",
+     "label": "Share User",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 30
+  },
+  {
+   "model": "res.users.identitycheck",
+   "business_meaning": "Password Check Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "auth_method",
+     "type": "Selection",
+     "selection": [
+      "password"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "change.password.wizard",
+   "business_meaning": "Change Password Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "user_ids",
+     "type": "One2many",
+     "relates_to": "change.password.user",
+     "label": "Users"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "change.password.user",
+   "business_meaning": "User, Change Password Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "change.password.wizard",
+     "label": "Wizard",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "change.password.own",
+   "business_meaning": "User, change own password wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "res.users.apikeys",
+   "business_meaning": "Users API Keys",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "res.users.apikeys.description",
+   "business_meaning": "API Key Description",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "duration",
+     "type": "Selection",
+     "label": "Duration",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "expiration_date",
+     "type": "Datetime",
+     "label": "Expiration Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "res.users.apikeys.show",
+   "business_meaning": "Show API Key",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users.py",
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "res.users.deletion",
+   "business_meaning": "Users Deletion Request",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users_deletion.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "todo",
+      "done",
+      "fail"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "user_id_int",
+     "type": "Integer",
+     "label": "User Id",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "res.users.settings",
+   "business_meaning": "User Settings",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/models/res_users_settings.py",
+   "key_fields": [
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "base.language.export",
+   "business_meaning": "Language Export",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_export_language.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "choose",
+      "get"
+     ]
+    },
+    {
+     "name": "format",
+     "type": "Selection",
+     "label": "File Format",
+     "selection": [
+      "csv",
+      "po",
+      "tgz"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "export_type",
+     "type": "Selection",
+     "label": "Export Type",
+     "selection": [
+      "module",
+      "model"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "File Name"
+    },
+    {
+     "name": "lang",
+     "type": "Selection",
+     "label": "Language",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "modules",
+     "type": "Many2many",
+     "relates_to": "ir.module.module",
+     "label": "Apps To Export"
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model to Export"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "base.language.import",
+   "business_meaning": "Language Import",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_import_language.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Language Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "ISO Code",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "data",
+     "type": "Binary",
+     "label": "File",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "filename",
+     "type": "Char",
+     "label": "File Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "base.language.install",
+   "business_meaning": "Install Language",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_language_install.py",
+   "key_fields": [
+    {
+     "name": "lang_ids",
+     "type": "Many2many",
+     "relates_to": "res.lang",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "first_lang_id",
+     "type": "Many2one",
+     "relates_to": "res.lang",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "base.module.uninstall",
+   "business_meaning": "Module Uninstall",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_module_uninstall.py",
+   "key_fields": [
+    {
+     "name": "module_ids",
+     "type": "Many2many",
+     "relates_to": "ir.module.module",
+     "label": "Module(s)",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "impacted_module_ids",
+     "type": "Many2many",
+     "relates_to": "ir.module.module",
+     "label": "Impacted modules",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "model_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model",
+     "label": "Impacted data models",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "base.module.update",
+   "business_meaning": "Update Module",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_module_update.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "init",
+      "done"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "base.module.upgrade",
+   "business_meaning": "Upgrade Module",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_module_upgrade.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "base.partner.merge.line",
+   "business_meaning": "Merge Partner Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_partner_merge.py",
+   "key_fields": [
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "base.partner.merge.automatic.wizard"
+    },
+    {
+     "name": "aggr_ids",
+     "type": "Char",
+     "label": "Ids",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "base.partner.merge.automatic.wizard",
+   "business_meaning": "Merge Partner Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/base_partner_merge.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "option",
+      "selection",
+      "finished"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "current_line_id",
+     "type": "Many2one",
+     "relates_to": "base.partner.merge.line",
+     "label": "Current Line"
+    },
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "base.partner.merge.line",
+     "label": "Lines"
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Contacts"
+    },
+    {
+     "name": "dst_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Destination Contact"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "wizard.ir.model.menu.create",
+   "business_meaning": "Create Menu Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/wizard/wizard_ir_model_menu_create.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Menu Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "menu_id",
+     "type": "Many2one",
+     "relates_to": "ir.ui.menu",
+     "label": "Parent Menu",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "report.base.report_irmodulereference",
+   "business_meaning": "Module Reference Report (base)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base/report/report_base_report_irmodulereference.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "base",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "base/models/ir_ui_view.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "base/models/res_users.py"
+   ]
+  }
+ ]
+}

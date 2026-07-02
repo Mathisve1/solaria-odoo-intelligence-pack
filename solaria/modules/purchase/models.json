@@ -1,0 +1,1084 @@
+{
+ "_meta": {
+  "module": "purchase",
+  "display_name": "Purchase",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "purchase.bill.line.match",
+   "business_meaning": "Purchase Line and Vendor Bill line matching view",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/models/purchase_bill_line_match.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Char"
+    },
+    {
+     "name": "pol_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order.line"
+    },
+    {
+     "name": "aml_id",
+     "type": "Many2one",
+     "relates_to": "account.move.line"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "line_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom"
+    },
+    {
+     "name": "purchase_order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order"
+    },
+    {
+     "name": "account_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "line_amount_untaxed",
+     "type": "Monetary"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "billed_amount_untaxed",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "purchase_amount_untaxed",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "purchase.order",
+   "business_meaning": "Purchase Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/models/purchase_order.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log",
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "sent",
+      "to approve",
+      "purchase",
+      "cancel"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Vendor",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Order Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_untaxed",
+     "type": "Monetary",
+     "label": "Untaxed Amount",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "invoice_status",
+     "type": "Selection",
+     "label": "Billing Status",
+     "selection": [
+      "no",
+      "to invoice",
+      "invoiced"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Buyer",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "selection": [
+      "0",
+      "1"
+     ]
+    },
+    {
+     "name": "invoice_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Bills",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_tax",
+     "type": "Monetary",
+     "label": "Taxes",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total_cc",
+     "type": "Monetary",
+     "label": "Total in currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_order",
+     "type": "Datetime",
+     "label": "Order Deadline",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "dest_address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Dropship Address"
+    },
+    {
+     "name": "locked",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "order_line",
+     "type": "One2many",
+     "relates_to": "purchase.order.line",
+     "label": "Order Lines"
+    },
+    {
+     "name": "acknowledged",
+     "type": "Boolean",
+     "label": "Acknowledged",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position"
+    },
+    {
+     "name": "tax_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "payment_term_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.term"
+    },
+    {
+     "name": "incoterm_id",
+     "type": "Many2one",
+     "relates_to": "account.incoterms"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "duplicated_order_ids",
+     "type": "Many2many",
+     "relates_to": "purchase.order",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invoice_count",
+     "type": "Integer",
+     "label": "Bill Count",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_planned",
+     "type": "Datetime",
+     "label": "Expected Arrival",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_calendar_start",
+     "type": "Datetime",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 44
+  },
+  {
+   "model": "purchase.order.line",
+   "business_meaning": "Purchase Order Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/models/purchase_order_line.py",
+   "built_in_capabilities": [
+    "analytic accounting"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Text",
+     "label": "Description",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "state",
+     "type": "Selection",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order",
+     "label": "Order Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "qty_received_method",
+     "type": "Selection",
+     "label": "Received Qty Method",
+     "selection": [
+      "manual"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_unit",
+     "type": "Float",
+     "label": "Unit Price",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_subtotal",
+     "type": "Monetary",
+     "label": "Subtotal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "display_type",
+     "type": "Selection",
+     "selection": [
+      "line_section",
+      "line_subsection",
+      "line_note"
+     ]
+    },
+    {
+     "name": "product_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes"
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "invoice_lines",
+     "type": "One2many",
+     "relates_to": "account.move.line",
+     "label": "Bill Lines"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "selected_seller_id",
+     "type": "Many2one",
+     "relates_to": "product.supplierinfo",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_template_attribute_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_no_variant_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Product attribute values that do not create variants"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order.line",
+     "label": "Parent Section Line",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_uom_qty",
+     "type": "Float",
+     "label": "Total Quantity",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_planned",
+     "type": "Datetime",
+     "label": "Expected Arrival",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "discount",
+     "type": "Float",
+     "label": "Discount (%)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_tax",
+     "type": "Float",
+     "label": "Tax",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "qty_invoiced",
+     "type": "Float",
+     "label": "Billed Qty",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "qty_received",
+     "type": "Float",
+     "label": "Received Qty",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "qty_to_invoice",
+     "type": "Float",
+     "label": "To Invoice Quantity",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 43
+  },
+  {
+   "model": "bill.to.po.wizard",
+   "business_meaning": "Bill to Purchase Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/wizard/bill_to_po_wizard.py",
+   "key_fields": [
+    {
+     "name": "purchase_order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "purchase.bill.union",
+   "business_meaning": "Purchases & Bills Union",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/report/purchase_bill.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Vendor"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "vendor_bill_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Vendor Bill"
+    },
+    {
+     "name": "purchase_order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order",
+     "label": "Purchase Order"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "purchase.report",
+   "business_meaning": "Purchase Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "purchase/report/purchase_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "draft",
+      "sent",
+      "to approve",
+      "purchase",
+      "cancel"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "price_total",
+     "type": "Monetary",
+     "label": "Total"
+    },
+    {
+     "name": "price_average",
+     "type": "Monetary",
+     "label": "Average Cost"
+    },
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "product.category"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position"
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order"
+    },
+    {
+     "name": "untaxed_total",
+     "type": "Monetary",
+     "label": "Untaxed Total"
+    }
+   ],
+   "total_field_count_declared": 27
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "po_double_validation_amount",
+     "type": "Monetary",
+     "label": "Minimum Amount",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lock_confirmed_po",
+     "type": "Boolean",
+     "label": "Lock Confirmed Orders"
+    },
+    {
+     "name": "po_lock",
+     "type": "Selection",
+     "label": "Purchase Order Modification *",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "po_order_approval",
+     "type": "Boolean",
+     "label": "Purchase Order Approval"
+    },
+    {
+     "name": "po_double_validation",
+     "type": "Selection",
+     "label": "Levels of Approvals *",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "group_warning_purchase",
+     "type": "Boolean",
+     "label": "Purchase Warnings"
+    },
+    {
+     "name": "module_account_3way_match",
+     "type": "Boolean",
+     "label": "3-way matching: purchases, receptions and bills"
+    },
+    {
+     "name": "module_purchase_requisition",
+     "type": "Boolean",
+     "label": "Purchase Agreements"
+    },
+    {
+     "name": "module_purchase_product_matrix",
+     "type": "Boolean",
+     "label": "Purchase Grid Entry"
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "purchase_vendor_bill_id",
+     "type": "Many2one",
+     "relates_to": "purchase.bill.union",
+     "label": "Auto-complete"
+    },
+    {
+     "name": "purchase_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order",
+     "label": "Purchase Order"
+    },
+    {
+     "name": "purchase_order_count",
+     "type": "Integer",
+     "label": "Purchase Order Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "purchase_order_name",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_purchase_matched",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "purchase_warning_text",
+     "type": "Text",
+     "label": "Purchase Warning",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/account_invoice.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "property_purchase_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Supplier Currency"
+    },
+    {
+     "name": "buyer_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Buyer"
+    },
+    {
+     "name": "purchase_order_count",
+     "type": "Integer",
+     "label": "Purchase Order Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "purchase_warn_msg",
+     "type": "Text",
+     "label": "Message for Purchase Order"
+    },
+    {
+     "name": "receipt_reminder_email",
+     "type": "Boolean",
+     "label": "Receipt Reminder"
+    },
+    {
+     "name": "reminder_date_before_receipt",
+     "type": "Integer",
+     "label": "Days Before Receipt"
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "purchase_line_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order.line"
+    },
+    {
+     "name": "purchase_order_id",
+     "type": "Many2one",
+     "relates_to": "purchase.order",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "is_downpayment",
+     "type": "Boolean"
+    },
+    {
+     "name": "purchase_line_warn_msg",
+     "type": "Text",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/account_invoice.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "purchase_method",
+     "type": "Selection",
+     "label": "Control Policy",
+     "selection": [
+      "purchase",
+      "receive"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "purchased_product_qty",
+     "type": "Float",
+     "label": "Purchased",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "purchase_line_warn_msg",
+     "type": "Text",
+     "label": "Message for Purchase Order Line"
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/product.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "po_lock",
+     "type": "Selection",
+     "label": "Purchase Order Modification",
+     "selection": [
+      "edit",
+      "lock"
+     ]
+    },
+    {
+     "name": "po_double_validation",
+     "type": "Selection",
+     "label": "Levels of Approvals",
+     "selection": [
+      "one_step",
+      "two_step"
+     ]
+    },
+    {
+     "name": "po_double_validation_amount",
+     "type": "Monetary",
+     "label": "Double validation amount"
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/res_company.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "purchased_product_qty",
+     "type": "Float",
+     "label": "Purchased",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_in_purchase_order",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/product.py"
+   ]
+  },
+  {
+   "model": "account.analytic.account",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "purchase_order_count",
+     "type": "Integer",
+     "label": "Purchase Order Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/analytic_account.py"
+   ]
+  },
+  {
+   "model": "account.analytic.applicability",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "business_domain",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "purchase/models/analytic_applicability.py"
+   ]
+  },
+  {
+   "model": "account.tax",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "purchase/models/account_tax.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "purchase/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "product.supplierinfo",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "purchase/models/product.py"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,2115 @@
+{
+ "_meta": {
+  "module": "point_of_sale",
+  "display_name": "Point of Sale",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "pos.bill",
+   "business_meaning": "Coins/Bills",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_bill.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name"
+    },
+    {
+     "name": "value",
+     "type": "Float",
+     "label": "Value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pos_config_ids",
+     "type": "Many2many",
+     "relates_to": "pos.config",
+     "label": "Point of Sales"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "pos.bus.mixin",
+   "business_meaning": "Bus Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_bus_mixin.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "pos.category",
+   "business_meaning": "Point of Sale Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Category Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "pos.category",
+     "label": "Parent Category"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "pos.category",
+     "label": "Children Categories"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "pos.config",
+   "business_meaning": "Point of Sale Configuration",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_config.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Point of Sale",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "iface_tax_included",
+     "type": "Selection",
+     "label": "Tax Display",
+     "selection": [
+      "subtotal",
+      "total"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_policy",
+     "type": "Selection",
+     "label": "Shipping Policy",
+     "selection": [
+      "direct",
+      "one"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "label": "Operation Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "fast_payment_method_ids",
+     "type": "Many2many",
+     "relates_to": "pos.payment.method",
+     "label": "Fast Payment Methods",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "printer_ids",
+     "type": "Many2many",
+     "relates_to": "pos.printer",
+     "label": "Order Printers"
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Point of Sale Journal"
+    },
+    {
+     "name": "invoice_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Invoice Journal"
+    },
+    {
+     "name": "order_seq_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Order Sequence"
+    },
+    {
+     "name": "order_backend_seq_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Order Backend Sequence"
+    },
+    {
+     "name": "order_line_seq_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Order Line Sequence"
+    },
+    {
+     "name": "device_seq_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence",
+     "label": "Device Sequence"
+    },
+    {
+     "name": "iface_available_categ_ids",
+     "type": "Many2many",
+     "relates_to": "pos.category",
+     "label": "Available PoS Product Categories"
+    },
+    {
+     "name": "session_ids",
+     "type": "One2many",
+     "relates_to": "pos.session",
+     "label": "Sessions"
+    },
+    {
+     "name": "current_session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "label": "Current Session",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Default Pricelist"
+    },
+    {
+     "name": "available_pricelist_ids",
+     "type": "Many2many",
+     "relates_to": "product.pricelist",
+     "label": "Available Pricelists"
+    },
+    {
+     "name": "group_pos_manager_id",
+     "type": "Many2one",
+     "relates_to": "res.groups",
+     "label": "Point of Sale Manager Group"
+    },
+    {
+     "name": "group_pos_user_id",
+     "type": "Many2one",
+     "relates_to": "res.groups",
+     "label": "Point of Sale User Group"
+    },
+    {
+     "name": "tip_product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Tip Product"
+    },
+    {
+     "name": "fiscal_position_ids",
+     "type": "Many2many",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Positions"
+    },
+    {
+     "name": "default_fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Default Fiscal Position"
+    },
+    {
+     "name": "default_bill_ids",
+     "type": "Many2many",
+     "relates_to": "pos.bill",
+     "label": "Coins/Bills"
+    },
+    {
+     "name": "default_preset_id",
+     "type": "Many2one",
+     "relates_to": "pos.preset",
+     "label": "Default Preset"
+    },
+    {
+     "name": "available_preset_ids",
+     "type": "Many2many",
+     "relates_to": "pos.preset",
+     "label": "Available Presets"
+    }
+   ],
+   "total_field_count_declared": 95
+  },
+  {
+   "model": "pos.load.mixin",
+   "business_meaning": "PoS data loading mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_load_mixin.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "pos.note",
+   "business_meaning": "PoS Note",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_note.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "pos.order",
+   "business_meaning": "Point of Sale Orders",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_order.py",
+   "built_in_capabilities": [
+    "chatter/log",
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "draft",
+      "cancel",
+      "paid",
+      "done"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Order Ref",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount_tax",
+     "type": "Monetary",
+     "label": "Taxes",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount_paid",
+     "type": "Monetary",
+     "label": "Paid",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount_return",
+     "type": "Monetary",
+     "label": "Returned",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "config_id",
+     "type": "Many2one",
+     "relates_to": "pos.config",
+     "label": "Point of Sale",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "invoice_status",
+     "type": "Selection",
+     "label": "Invoice Status",
+     "selection": [
+      "invoiced",
+      "to_invoice"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "source",
+     "type": "Selection",
+     "label": "Origin",
+     "selection": [
+      "pos"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Employee"
+    },
+    {
+     "name": "amount_difference",
+     "type": "Monetary",
+     "label": "Difference"
+    },
+    {
+     "name": "margin",
+     "type": "Monetary",
+     "label": "Margin",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lines",
+     "type": "One2many",
+     "relates_to": "pos.order.line",
+     "label": "Order Lines"
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "label": "Session"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_move",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Invoice"
+    },
+    {
+     "name": "picking_ids",
+     "type": "One2many",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "label": "Operation Type",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "stock_reference_ids",
+     "type": "Many2many",
+     "relates_to": "stock.reference",
+     "label": "Reference"
+    },
+    {
+     "name": "preset_id",
+     "type": "Many2one",
+     "relates_to": "pos.preset",
+     "label": "Preset"
+    },
+    {
+     "name": "sale_journal",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Sales Journal",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position"
+    },
+    {
+     "name": "payment_ids",
+     "type": "One2many",
+     "relates_to": "pos.payment",
+     "label": "Payments"
+    },
+    {
+     "name": "session_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Session Journal Entry",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "tip_amount",
+     "type": "Monetary",
+     "label": "Tip Amount"
+    }
+   ],
+   "total_field_count_declared": 61
+  },
+  {
+   "model": "pos.order.line",
+   "business_meaning": "Point of Sale Order Lines",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_order.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Line No",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "price_subtotal",
+     "type": "Monetary",
+     "label": "Tax Excl.",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "price_subtotal_incl",
+     "type": "Monetary",
+     "label": "Tax Incl.",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order",
+     "label": "Order Ref",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "price_type",
+     "type": "Selection",
+     "label": "Price Type",
+     "selection": [
+      "original",
+      "manual",
+      "automatic"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Selected Attributes"
+    },
+    {
+     "name": "custom_attribute_value_ids",
+     "type": "One2many",
+     "relates_to": "product.attribute.custom.value",
+     "label": "Custom Values"
+    },
+    {
+     "name": "margin",
+     "type": "Monetary",
+     "label": "Margin",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes"
+    },
+    {
+     "name": "tax_ids_after_fiscal_position",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes to Apply",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pack_lot_ids",
+     "type": "One2many",
+     "relates_to": "pos.pack.operation.lot",
+     "label": "Lot/serial Number"
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Product Unit",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "refund_orderline_ids",
+     "type": "One2many",
+     "relates_to": "pos.order.line"
+    },
+    {
+     "name": "refunded_orderline_id",
+     "type": "Many2one",
+     "relates_to": "pos.order.line"
+    },
+    {
+     "name": "combo_parent_id",
+     "type": "Many2one",
+     "relates_to": "pos.order.line",
+     "label": "Combo Parent"
+    },
+    {
+     "name": "combo_line_ids",
+     "type": "One2many",
+     "relates_to": "pos.order.line",
+     "label": "Combo Lines"
+    },
+    {
+     "name": "combo_item_id",
+     "type": "Many2one",
+     "relates_to": "product.combo.item",
+     "label": "Combo Item"
+    }
+   ],
+   "total_field_count_declared": 35
+  },
+  {
+   "model": "pos.pack.operation.lot",
+   "business_meaning": "Specify product lot/serial number in pos order line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_order.py",
+   "key_fields": [
+    {
+     "name": "pos_order_line_id",
+     "type": "Many2one",
+     "relates_to": "pos.order.line"
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "pos.payment",
+   "business_meaning": "Point of Sale Payments",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_payment.py",
+   "key_fields": [
+    {
+     "name": "pos_order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order",
+     "label": "Order",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary",
+     "label": "Amount",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_method_id",
+     "type": "Many2one",
+     "relates_to": "pos.payment.method",
+     "label": "Payment Method",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Label"
+    },
+    {
+     "name": "payment_date",
+     "type": "Datetime",
+     "label": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "label": "Session",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Employee",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move"
+    }
+   ],
+   "total_field_count_declared": 25
+  },
+  {
+   "model": "pos.payment.method",
+   "business_meaning": "Point of Sale Payment Methods",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_payment_method.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Method",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "selection": [
+      "cash",
+      "bank",
+      "pay_later"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "outstanding_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Outstanding Account"
+    },
+    {
+     "name": "receivable_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Intermediary Account"
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal"
+    },
+    {
+     "name": "open_session_ids",
+     "type": "Many2many",
+     "relates_to": "pos.session",
+     "label": "Pos Sessions",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "config_ids",
+     "type": "Many2many",
+     "relates_to": "pos.config",
+     "label": "Point of Sale"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "payment_method_type",
+     "type": "Selection",
+     "label": "Integration",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "is_cash_count",
+     "type": "Boolean",
+     "label": "Cash",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "pos.preset",
+   "business_meaning": "Easily load a set of configuration options",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_preset.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "identification",
+     "type": "Selection",
+     "label": "Identification",
+     "selection": [
+      "none",
+      "address",
+      "name"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist"
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position"
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar"
+    },
+    {
+     "name": "attendance_ids",
+     "type": "One2many",
+     "label": "Attendances",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "pos.printer",
+   "business_meaning": "Point of Sale Printer",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_printer.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Printer Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "printer_type",
+     "type": "Selection",
+     "label": "Printer Type",
+     "selection": [
+      "iot",
+      "epson_epos"
+     ]
+    },
+    {
+     "name": "product_categories_ids",
+     "type": "Many2many",
+     "relates_to": "pos.category",
+     "label": "Printed Product Categories"
+    },
+    {
+     "name": "pos_config_ids",
+     "type": "Many2many",
+     "relates_to": "pos.config"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "pos.session",
+   "business_meaning": "Point of Sale Session",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/pos_session.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "config_id",
+     "type": "Many2one",
+     "relates_to": "pos.config",
+     "label": "Point of Sale",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Opened By",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Session ID"
+    },
+    {
+     "name": "cash_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Cash Journal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "cash_register_balance_end_real",
+     "type": "Monetary",
+     "label": "Ending Balance"
+    },
+    {
+     "name": "cash_register_balance_start",
+     "type": "Monetary",
+     "label": "Starting Balance"
+    },
+    {
+     "name": "cash_register_balance_end",
+     "type": "Monetary",
+     "label": "Theoretical Closing Balance",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "cash_register_difference",
+     "type": "Monetary",
+     "label": "Before Closing Difference",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "cash_real_transaction",
+     "type": "Monetary",
+     "label": "Transaction"
+    },
+    {
+     "name": "order_ids",
+     "type": "One2many",
+     "relates_to": "pos.order",
+     "label": "Orders"
+    },
+    {
+     "name": "statement_line_ids",
+     "type": "One2many",
+     "relates_to": "account.bank.statement.line",
+     "label": "Cash Lines"
+    },
+    {
+     "name": "picking_ids",
+     "type": "One2many",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Journal Entry"
+    },
+    {
+     "name": "payment_method_ids",
+     "type": "Many2many",
+     "relates_to": "pos.payment.method",
+     "label": "Payment Methods",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_payment_ids",
+     "type": "One2many",
+     "relates_to": "account.payment"
+    }
+   ],
+   "total_field_count_declared": 30
+  },
+  {
+   "model": "report.point_of_sale.report_saledetails",
+   "business_meaning": "Point of Sale Details",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/models/report_sale_details.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "pos.close.session.wizard",
+   "business_meaning": "Close Session Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_close_session_wizard.py",
+   "key_fields": [
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "pos.confirmation.wizard",
+   "business_meaning": "Confirmation Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_confirmation_wizard.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "pos.daily.sales.reports.wizard",
+   "business_meaning": "Point of Sale Daily Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_daily_sales_reports.py",
+   "key_fields": [
+    {
+     "name": "pos_session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "pos.details.wizard",
+   "business_meaning": "Point of Sale Details Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_details.py",
+   "key_fields": [
+    {
+     "name": "start_date",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "end_date",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pos_config_ids",
+     "type": "Many2many",
+     "relates_to": "pos.config"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "pos.make.invoice",
+   "business_meaning": "Multiple order invoice creation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_make_invoice.py",
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "pos.make.payment",
+   "business_meaning": "Point of Sale Make Payment Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/wizard/pos_payment.py",
+   "key_fields": [
+    {
+     "name": "config_id",
+     "type": "Many2one",
+     "relates_to": "pos.config",
+     "label": "Point of Sale Configuration",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_method_id",
+     "type": "Many2one",
+     "relates_to": "pos.payment.method",
+     "label": "Payment Method",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Float",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_date",
+     "type": "Datetime",
+     "label": "Payment Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "report.point_of_sale.report_invoice",
+   "business_meaning": "Point of Sale Invoice Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/report/pos_invoice.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.pos.order",
+   "business_meaning": "Point of Sale Orders Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "point_of_sale/report/pos_order_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "paid",
+      "done",
+      "cancel"
+     ]
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order",
+     "label": "Order"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal"
+    },
+    {
+     "name": "product_categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category"
+    },
+    {
+     "name": "pos_categ_id",
+     "type": "Many2one",
+     "relates_to": "pos.category",
+     "label": "Point of Sale Category"
+    },
+    {
+     "name": "config_id",
+     "type": "Many2one",
+     "relates_to": "pos.config",
+     "label": "Point of Sale"
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist"
+    },
+    {
+     "name": "session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "label": "Session"
+    },
+    {
+     "name": "payment_method_id",
+     "type": "Many2one",
+     "relates_to": "pos.payment.method",
+     "label": "Payment Method"
+    }
+   ],
+   "total_field_count_declared": 25
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_available_pricelist_ids",
+     "type": "Many2many",
+     "relates_to": "product.pricelist",
+     "label": "Available Pricelists",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_default_fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Default Fiscal Position",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_fiscal_position_ids",
+     "type": "Many2many",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Positions",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_iface_available_categ_ids",
+     "type": "Many2many",
+     "relates_to": "pos.category",
+     "label": "Available PoS Product Categories",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Default Pricelist",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_tip_product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Tip Product",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pos_config_id",
+     "type": "Many2one",
+     "relates_to": "pos.config",
+     "label": "Point of Sale"
+    },
+    {
+     "name": "sale_tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax",
+     "label": "Default Sale Tax",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_default_pos_receivable_account_id",
+     "type": "Many2one",
+     "label": "Default Account Receivable (PoS)",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "barcode_nomenclature_id",
+     "type": "Many2one",
+     "relates_to": "barcode.nomenclature",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_categ_ids",
+     "type": "Many2many",
+     "relates_to": "pos.category",
+     "label": "Point of Sale Category"
+    },
+    {
+     "name": "pos_optional_product_ids",
+     "type": "Many2many",
+     "relates_to": "product.template",
+     "label": "POS Optional Products"
+    },
+    {
+     "name": "color",
+     "type": "Integer",
+     "label": "Color Index",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "available_in_pos",
+     "type": "Boolean",
+     "label": "Available in POS"
+    },
+    {
+     "name": "to_weight",
+     "type": "Boolean",
+     "label": "To Weigh With Scale"
+    },
+    {
+     "name": "public_description",
+     "type": "Html",
+     "label": "Product Description"
+    },
+    {
+     "name": "pos_sequence",
+     "type": "Integer",
+     "label": "POS Sequence"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/product_template.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_order_ids",
+     "type": "One2many",
+     "relates_to": "pos.order"
+    },
+    {
+     "name": "pos_payment_ids",
+     "type": "One2many",
+     "relates_to": "pos.payment"
+    },
+    {
+     "name": "pos_refunded_invoice_ids",
+     "type": "Many2many",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "reversed_pos_order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order",
+     "label": "Reversed POS Order"
+    },
+    {
+     "name": "pos_session_ids",
+     "type": "One2many",
+     "relates_to": "pos.session"
+    },
+    {
+     "name": "pos_order_count",
+     "type": "Integer",
+     "label": "POS Order Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/account_move.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_order_ids",
+     "type": "One2many",
+     "relates_to": "pos.order"
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Automatic Fiscal Position",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pos_order_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pos_contact_address",
+     "type": "Char",
+     "label": "PoS Address",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invoice_emails",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "point_of_sale_ticket_portal_url_display_mode",
+     "type": "Selection",
+     "label": "Print",
+     "selection": [
+      "qr_code",
+      "url",
+      "qr_code_and_url"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "point_of_sale_update_stock_quantities",
+     "type": "Selection",
+     "label": "Update quantities in stock",
+     "selection": [
+      "closing",
+      "real"
+     ]
+    },
+    {
+     "name": "point_of_sale_use_ticket_qr_code",
+     "type": "Boolean",
+     "label": "Self-service invoicing"
+    },
+    {
+     "name": "point_of_sale_ticket_unique_code",
+     "type": "Boolean",
+     "label": "Generate a code on ticket"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/res_company.py"
+   ]
+  },
+  {
+   "model": "account.payment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_payment_method_id",
+     "type": "Many2one",
+     "relates_to": "pos.payment.method"
+    },
+    {
+     "name": "force_outstanding_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account"
+    },
+    {
+     "name": "pos_session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/account_payment.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_pos_total_value",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kpi_pos_total",
+     "type": "Boolean",
+     "label": "POS Sales"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/digest.py"
+   ]
+  },
+  {
+   "model": "product.combo",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "qty_max",
+     "type": "Integer",
+     "label": "Maximum quantity"
+    },
+    {
+     "name": "qty_free",
+     "type": "Integer",
+     "label": "Free quantity"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/product_combo.py"
+   ]
+  },
+  {
+   "model": "product.tag",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_description",
+     "type": "Html",
+     "label": "Description"
+    },
+    {
+     "name": "has_image",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/product_tag.py"
+   ]
+  },
+  {
+   "model": "stock.picking",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session"
+    },
+    {
+     "name": "pos_order_id",
+     "type": "Many2one",
+     "relates_to": "pos.order"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "account.bank.statement.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_session_id",
+     "type": "Many2one",
+     "relates_to": "pos.session",
+     "label": "Session"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/account_bank_statement.py"
+   ]
+  },
+  {
+   "model": "account.journal",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_payment_method_ids",
+     "type": "One2many",
+     "relates_to": "pos.payment.method",
+     "label": "Point of Sale Payment Methods"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/account_journal.py"
+   ]
+  },
+  {
+   "model": "barcode.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "type",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/barcode_rule.py"
+   ]
+  },
+  {
+   "model": "product.attribute.custom.value",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_order_line_id",
+     "type": "Many2one",
+     "relates_to": "pos.order.line",
+     "label": "PoS Order Line"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "stock.picking.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "has_stock_reports_to_print",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "stock.reference",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_order_ids",
+     "type": "Many2many",
+     "relates_to": "pos.order",
+     "label": "PoS Orders"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/stock_reference.py"
+   ]
+  },
+  {
+   "model": "stock.warehouse",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pos_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "label": "Point of Sale Operation Type"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/stock_warehouse.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "is_pos_groupable",
+     "type": "Boolean",
+     "label": "Group Products in POS"
+    }
+   ],
+   "evidence_files": [
+    "point_of_sale/models/uom.py"
+   ]
+  },
+  {
+   "model": "account.account",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_account.py"
+   ]
+  },
+  {
+   "model": "account.cash.rounding",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_cash_rounding.py",
+    "point_of_sale/models/pos_order.py"
+   ]
+  },
+  {
+   "model": "account.fiscal.position",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_fiscal_position.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_move.py"
+   ]
+  },
+  {
+   "model": "account.tax",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_tax.py"
+   ]
+  },
+  {
+   "model": "account.tax.group",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/account_tax_group.py"
+   ]
+  },
+  {
+   "model": "decimal.precision",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/decimal_precision.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "ir.module.module",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/ir_module_module.py"
+   ]
+  },
+  {
+   "model": "ir.sequence",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/ir_sequence.py"
+   ]
+  },
+  {
+   "model": "stock.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/pos_session.py"
+   ]
+  },
+  {
+   "model": "product.attribute",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "product.template.attribute.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "product.template.attribute.value",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "product.template.attribute.exclusion",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "product.category",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_category.py"
+   ]
+  },
+  {
+   "model": "product.combo.item",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_combo_item.py"
+   ]
+  },
+  {
+   "model": "product.pricelist",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_pricelist.py"
+   ]
+  },
+  {
+   "model": "product.pricelist.item",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_pricelist.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_product.py"
+   ]
+  },
+  {
+   "model": "product.removal",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_removal.py"
+   ]
+  },
+  {
+   "model": "product.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/product_uom.py"
+   ]
+  },
+  {
+   "model": "resource.calendar.attendance",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/resource_calendar_attendance.py"
+   ]
+  },
+  {
+   "model": "res.country",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/res_country.py"
+   ]
+  },
+  {
+   "model": "res.country.state",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/res_country_state.py"
+   ]
+  },
+  {
+   "model": "res.currency",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/res_currency.py"
+   ]
+  },
+  {
+   "model": "res.lang",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/res_lang.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/res_users.py"
+   ]
+  },
+  {
+   "model": "stock.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "point_of_sale/models/stock_picking.py"
+   ]
+  }
+ ]
+}

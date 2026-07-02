@@ -1,0 +1,1386 @@
+{
+ "_meta": {
+  "module": "sale",
+  "display_name": "Sales",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "sale.order",
+   "business_meaning": "Sales Order",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/models/sale_order.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "campaign tracking",
+    "chatter/log",
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Order Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_invoice_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Invoice Address",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_shipping_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Delivery Address",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_untaxed",
+     "type": "Monetary",
+     "label": "Untaxed Amount",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Invoicing Journal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_term_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.term",
+     "label": "Payment Terms",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "preferred_payment_method_line_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.method.line",
+     "label": "Payment Method",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_tax",
+     "type": "Monetary",
+     "label": "Taxes",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "locked",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "date_order",
+     "type": "Datetime",
+     "label": "Order Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pending_email_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Pending Email Template"
+    },
+    {
+     "name": "order_line",
+     "type": "One2many",
+     "relates_to": "sale.order.line",
+     "label": "Order Lines"
+    },
+    {
+     "name": "amount_to_invoice",
+     "type": "Monetary",
+     "label": "Un-invoiced Balance",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "amount_invoiced",
+     "type": "Monetary",
+     "label": "Already invoiced",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invoice_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Invoices",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "transaction_ids",
+     "type": "Many2many",
+     "relates_to": "payment.transaction",
+     "label": "Transactions"
+    },
+    {
+     "name": "authorized_transaction_ids",
+     "type": "Many2many",
+     "relates_to": "payment.transaction",
+     "label": "Authorized Transactions",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "medium_id",
+     "type": "Many2one"
+    }
+   ],
+   "total_field_count_declared": 65
+  },
+  {
+   "model": "sale.order.line",
+   "business_meaning": "Sales Order Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/models/sale_order_line.py",
+   "built_in_capabilities": [
+    "analytic accounting"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Order Status",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Text",
+     "label": "Description",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "label": "Order Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "qty_delivered_method",
+     "type": "Selection",
+     "label": "Method to update delivered qty",
+     "selection": [
+      "manual",
+      "analytic"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "invoice_status",
+     "type": "Selection",
+     "label": "Invoice Status",
+     "selection": [
+      "upselling",
+      "invoiced",
+      "to invoice",
+      "no"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "display_type",
+     "type": "Selection",
+     "selection": [
+      "line_section",
+      "line_subsection",
+      "line_note"
+     ]
+    },
+    {
+     "name": "product_custom_attribute_value_ids",
+     "type": "One2many",
+     "relates_to": "product.attribute.custom.value",
+     "label": "Custom Values",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_no_variant_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Extra Values",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_unit",
+     "type": "Float",
+     "label": "Unit Price",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_subtotal",
+     "type": "Monetary",
+     "label": "Subtotal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_reduce_taxexcl",
+     "type": "Monetary",
+     "label": "Price Reduce Tax excl",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_reduce_taxinc",
+     "type": "Monetary",
+     "label": "Price Reduce Tax incl",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "customer_lead",
+     "type": "Float",
+     "label": "Lead Time",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "untaxed_amount_invoiced",
+     "type": "Monetary",
+     "label": "Untaxed Invoiced Amount",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "untaxed_amount_to_invoice",
+     "type": "Monetary",
+     "label": "Untaxed Amount To Invoice",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "order_partner_id",
+     "type": "Many2one",
+     "label": "Customer",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "salesman_id",
+     "type": "Many2one",
+     "label": "Salesperson",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "tax_country_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "product_template_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_template_attribute_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 67
+  },
+  {
+   "model": "sale.mass.cancel.orders",
+   "business_meaning": "Cancel multiple quotations",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/wizard/mass_cancel_orders.py",
+   "key_fields": [
+    {
+     "name": "sale_order_ids",
+     "type": "Many2many",
+     "relates_to": "sale.order",
+     "label": "Sale orders to cancel"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "sale.advance.payment.inv",
+   "business_meaning": "Sales Advance Payment Invoice",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/wizard/sale_make_invoice_advance.py",
+   "key_fields": [
+    {
+     "name": "advance_payment_method",
+     "type": "Selection",
+     "label": "Create Invoice",
+     "selection": [
+      "delivered",
+      "percentage",
+      "fixed"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sale_order_ids",
+     "type": "Many2many",
+     "relates_to": "sale.order"
+    },
+    {
+     "name": "fixed_amount",
+     "type": "Monetary",
+     "label": "Down Payment Amount (Fixed)"
+    },
+    {
+     "name": "amount_invoiced",
+     "type": "Monetary",
+     "label": "Already invoiced",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "sale.order.discount",
+   "business_meaning": "Discount Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/wizard/sale_order_discount.py",
+   "key_fields": [
+    {
+     "name": "sale_order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "discount_type",
+     "type": "Selection",
+     "selection": [
+      "sol_discount",
+      "so_discount",
+      "amount"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "discount_amount",
+     "type": "Monetary",
+     "label": "Amount"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "sale.report",
+   "business_meaning": "Sales Analysis Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "sale/report/sale_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status"
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Order Reference"
+    },
+    {
+     "name": "invoice_status",
+     "type": "Selection",
+     "label": "Order Invoice Status",
+     "selection": [
+      "upselling",
+      "invoiced",
+      "to invoice",
+      "no"
+     ]
+    },
+    {
+     "name": "order_reference",
+     "type": "Reference",
+     "label": "Order",
+     "selection": [
+      "sale.order"
+     ]
+    },
+    {
+     "name": "line_invoice_status",
+     "type": "Selection",
+     "label": "Invoice Status",
+     "selection": [
+      "upselling",
+      "invoiced",
+      "to invoice",
+      "no"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist"
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson"
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "utm.campaign",
+     "label": "Campaign"
+    },
+    {
+     "name": "medium_id",
+     "type": "Many2one",
+     "relates_to": "utm.medium",
+     "label": "Medium"
+    },
+    {
+     "name": "source_id",
+     "type": "Many2one",
+     "relates_to": "utm.source",
+     "label": "Source"
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer Entity"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Customer Country"
+    },
+    {
+     "name": "industry_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.industry",
+     "label": "Customer Industry"
+    },
+    {
+     "name": "state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "Customer State"
+    },
+    {
+     "name": "categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product Variant"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product"
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit"
+    },
+    {
+     "name": "price_subtotal",
+     "type": "Monetary",
+     "label": "Untaxed Total"
+    },
+    {
+     "name": "price_total",
+     "type": "Monetary",
+     "label": "Total"
+    },
+    {
+     "name": "untaxed_amount_to_invoice",
+     "type": "Monetary",
+     "label": "Untaxed Amount To Invoice"
+    },
+    {
+     "name": "untaxed_amount_invoiced",
+     "type": "Monetary",
+     "label": "Untaxed Amount Invoiced"
+    },
+    {
+     "name": "discount_amount",
+     "type": "Monetary",
+     "label": "Discount Amount"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    }
+   ],
+   "total_field_count_declared": 39
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "default_invoice_policy",
+     "type": "Selection",
+     "label": "Invoicing Policy",
+     "selection": [
+      "order",
+      "delivery"
+     ]
+    },
+    {
+     "name": "invoice_mail_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template"
+    },
+    {
+     "name": "downpayment_account_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "group_auto_done_setting",
+     "type": "Boolean",
+     "label": "Lock Confirmed Sales"
+    },
+    {
+     "name": "group_discount_per_so_line",
+     "type": "Boolean",
+     "label": "Discounts"
+    },
+    {
+     "name": "group_proforma_sales",
+     "type": "Boolean",
+     "label": "Pro-Forma Invoice"
+    },
+    {
+     "name": "group_warning_sale",
+     "type": "Boolean",
+     "label": "Sale Order Warnings"
+    },
+    {
+     "name": "automatic_invoice",
+     "type": "Boolean",
+     "label": "Automatic Invoice"
+    },
+    {
+     "name": "quotation_validity_days",
+     "type": "Integer",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "portal_confirmation_sign",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/wizard/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "invoice_policy",
+     "type": "Selection",
+     "label": "Invoicing Policy",
+     "selection": [
+      "order",
+      "delivery"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "service_type",
+     "type": "Selection",
+     "label": "Track Service",
+     "selection": [
+      "manual"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "expense_policy",
+     "type": "Selection",
+     "label": "Re-Invoice Costs",
+     "selection": [
+      "no",
+      "cost",
+      "sales_price"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "optional_product_ids",
+     "type": "Many2many",
+     "relates_to": "product.template",
+     "label": "Optional Products"
+    },
+    {
+     "name": "sale_line_warn_msg",
+     "type": "Text",
+     "label": "Sales Order Line Warning"
+    },
+    {
+     "name": "visible_expense_policy",
+     "type": "Boolean",
+     "label": "Re-Invoice Policy visible",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "sales_count",
+     "type": "Float",
+     "label": "Sold",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/product_template.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "downpayment_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Downpayment Account",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "sale_onboarding_payment_method",
+     "type": "Selection",
+     "label": "Sale onboarding selected payment method",
+     "selection": [
+      "digital_signature",
+      "paypal",
+      "stripe",
+      "other",
+      "manual"
+     ]
+    },
+    {
+     "name": "sale_discount_product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Discount Product"
+    },
+    {
+     "name": "portal_confirmation_sign",
+     "type": "Boolean",
+     "label": "Online Signature"
+    },
+    {
+     "name": "portal_confirmation_pay",
+     "type": "Boolean",
+     "label": "Online Payment"
+    },
+    {
+     "name": "prepayment_percent",
+     "type": "Float",
+     "label": "Prepayment percentage"
+    },
+    {
+     "name": "quotation_validity_days",
+     "type": "Integer",
+     "label": "Default Quotation Validity"
+    }
+   ],
+   "evidence_files": [
+    "sale/models/res_company.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "medium_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "source_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "sale_order_count",
+     "type": "Integer",
+     "label": "Sale Order Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "sale_warning_text",
+     "type": "Text",
+     "label": "Sale Warning",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/account_move.py"
+   ]
+  },
+  {
+   "model": "utm.campaign",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "quotation_count",
+     "type": "Integer",
+     "label": "Quotation Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invoiced_amount",
+     "type": "Integer",
+     "label": "Revenues generated by the campaign",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/utm_campaign.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sale_line_ids",
+     "type": "Many2many",
+     "relates_to": "sale.order.line",
+     "label": "Sales Order Lines"
+    },
+    {
+     "name": "is_downpayment",
+     "type": "Boolean"
+    },
+    {
+     "name": "sale_line_warn_msg",
+     "type": "Text",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/account_move_line.py"
+   ]
+  },
+  {
+   "model": "crm.team",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "invoiced",
+     "type": "Float",
+     "label": "Invoiced This Month",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invoiced_target",
+     "type": "Float",
+     "label": "Invoicing Target"
+    },
+    {
+     "name": "sale_order_count",
+     "type": "Integer",
+     "label": "# Sale Orders",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/crm_team.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sale_order_ids",
+     "type": "One2many",
+     "relates_to": "sale.order"
+    },
+    {
+     "name": "sale_order_count",
+     "type": "Integer",
+     "label": "Sale Order Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "sale_warn_msg",
+     "type": "Text",
+     "label": "Message for Sales Order"
+    }
+   ],
+   "evidence_files": [
+    "sale/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "payment.link.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "amount_paid",
+     "type": "Monetary",
+     "label": "Already Paid"
+    },
+    {
+     "name": "prepayment_amount",
+     "type": "Monetary",
+     "label": "Prepayment Amount"
+    },
+    {
+     "name": "confirmation_message",
+     "type": "Char",
+     "label": "Confirmation Message",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/wizard/payment_link_wizard.py"
+   ]
+  },
+  {
+   "model": "payment.transaction",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sale_order_ids",
+     "type": "Many2many",
+     "relates_to": "sale.order",
+     "label": "Sales Orders"
+    },
+    {
+     "name": "sale_order_ids_nbr",
+     "type": "Integer",
+     "label": "# of Sales Orders",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/payment_transaction.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sales_count",
+     "type": "Float",
+     "label": "Sold",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_catalog_product_is_in_sale_order",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/product_product.py"
+   ]
+  },
+  {
+   "model": "account.analytic.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "so_line",
+     "type": "Many2one",
+     "relates_to": "sale.order.line",
+     "label": "Sales Order Item"
+    }
+   ],
+   "evidence_files": [
+    "sale/models/analytic.py"
+   ]
+  },
+  {
+   "model": "account.analytic.applicability",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "business_domain",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "sale/models/analytic.py"
+   ]
+  },
+  {
+   "model": "payment.provider",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "so_reference_type",
+     "type": "Selection",
+     "label": "Communication",
+     "selection": [
+      "so_name",
+      "partner"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/payment_provider.py"
+   ]
+  },
+  {
+   "model": "product.document",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "attached_on_sale",
+     "type": "Selection",
+     "label": "Sale : Visible at",
+     "selection": [
+      "hidden",
+      "quotation",
+      "sale_order"
+     ],
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale/models/product_document.py"
+   ]
+  },
+  {
+   "model": "product.attribute.custom.value",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "sale_order_line_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.line",
+     "label": "Sales Order Line"
+    }
+   ],
+   "evidence_files": [
+    "sale/models/product_product.py"
+   ]
+  },
+  {
+   "model": "account.invoice.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team"
+    }
+   ],
+   "evidence_files": [
+    "sale/report/account_invoice_report.py"
+   ]
+  },
+  {
+   "model": "account.chart.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale/models/chart_template.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "ir.config_parameter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale/models/ir_config_parameter.py"
+   ]
+  },
+  {
+   "model": "product.pricelist.item",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale/models/product_pricelist_item.py"
+   ]
+  },
+  {
+   "model": "base.document.layout",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale/wizard/base_document_layout.py"
+   ]
+  }
+ ]
+}

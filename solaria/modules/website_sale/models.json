@@ -1,0 +1,1127 @@
+{
+ "_meta": {
+  "module": "website_sale",
+  "display_name": "eCommerce",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "product.feed",
+   "business_meaning": "Product Feed",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/product_feed.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "lang_id",
+     "type": "Many2one",
+     "relates_to": "res.lang",
+     "label": "Language",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "target",
+     "type": "Selection",
+     "selection": [
+      "gmc"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist"
+    },
+    {
+     "name": "website_lang_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_category_ids",
+     "type": "Many2many",
+     "relates_to": "product.public.category",
+     "label": "Categories"
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "cache_expiry",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "feed_cache",
+     "type": "Binary",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "product.image",
+   "business_meaning": "Product Image",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/product_image.py",
+   "built_in_capabilities": [
+    "images"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template"
+    },
+    {
+     "name": "product_variant_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product Variant"
+    },
+    {
+     "name": "can_image_1024_be_zoomed",
+     "type": "Boolean",
+     "label": "Can Image 1024 be zoomed",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "product.public.category",
+   "business_meaning": "Website Product Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/product_public_category.py",
+   "built_in_capabilities": [
+    "SEO metadata",
+    "images"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "product.public.category",
+     "label": "Parent"
+    },
+    {
+     "name": "child_id",
+     "type": "One2many",
+     "relates_to": "product.public.category",
+     "label": "Children Categories"
+    },
+    {
+     "name": "parents_and_self",
+     "type": "Many2many",
+     "relates_to": "product.public.category",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_tmpl_ids",
+     "type": "Many2many",
+     "relates_to": "product.template"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "product.ribbon",
+   "business_meaning": "Product ribbon",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/product_ribbon.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Ribbon Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "position",
+     "type": "Selection",
+     "label": "Position",
+     "selection": [
+      "left",
+      "right"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "style",
+     "type": "Selection",
+     "label": "Style",
+     "selection": [
+      "ribbon",
+      "tag"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "assign",
+     "type": "Selection",
+     "label": "Assign",
+     "selection": [
+      "manual",
+      "sale",
+      "new"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "bg_color",
+     "type": "Char",
+     "label": "Background Color",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "text_color",
+     "type": "Char",
+     "label": "Text Color",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "website.base.unit",
+   "business_meaning": "Unit of Measure for price per unit on eCommerce products.",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/website_base_unit.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "website.checkout.step",
+   "business_meaning": "Website Checkout Step",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/website_checkout_step.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "step_href",
+     "type": "Char",
+     "label": "Href",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "website.sale.extra.field",
+   "business_meaning": "E-Commerce Extra Info Shown on product page",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "website_sale/models/website_sale_extra_field.py",
+   "key_fields": [
+    {
+     "name": "field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    }
+   ],
+   "total_field_count_declared": 5
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "publish_date",
+     "type": "Datetime",
+     "label": "Publish Date",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "base_unit_count",
+     "type": "Float",
+     "label": "Base Unit Count",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "base_unit_id",
+     "type": "Many2one",
+     "relates_to": "website.base.unit",
+     "label": "Custom Unit of Measure",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "alternative_product_ids",
+     "type": "Many2many",
+     "relates_to": "product.template",
+     "label": "Alternative Products"
+    },
+    {
+     "name": "accessory_product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "Accessory Products"
+    },
+    {
+     "name": "website_ribbon_id",
+     "type": "Many2one",
+     "relates_to": "product.ribbon",
+     "label": "Ribbon"
+    },
+    {
+     "name": "public_categ_ids",
+     "type": "Many2many",
+     "relates_to": "product.public.category",
+     "label": "Website Product Category"
+    },
+    {
+     "name": "product_template_image_ids",
+     "type": "One2many",
+     "relates_to": "product.image",
+     "label": "Extra Product Media"
+    },
+    {
+     "name": "base_unit_price",
+     "type": "Monetary",
+     "label": "Price Per Unit",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "compare_list_price",
+     "type": "Monetary",
+     "label": "Compare to Price"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/product_template.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "account_on_checkout",
+     "type": "Selection",
+     "label": "Customer Accounts",
+     "selection": [
+      "optional",
+      "disabled",
+      "mandatory"
+     ],
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "cart_recovery_mail_template",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "salesperson_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "salesteam_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "confirmation_email_template_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "group_show_uom_price",
+     "type": "Boolean",
+     "label": "Base Unit Price"
+    },
+    {
+     "name": "group_product_price_comparison",
+     "type": "Boolean",
+     "label": "Comparison Price"
+    },
+    {
+     "name": "group_gmc_feed",
+     "type": "Boolean",
+     "label": "Google Merchant Center",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "module_website_sale_autocomplete",
+     "type": "Boolean",
+     "label": "Address Autocomplete"
+    },
+    {
+     "name": "module_website_sale_collect",
+     "type": "Boolean",
+     "label": "Click & Collect"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "website",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_page_image_layout",
+     "type": "Selection",
+     "selection": [
+      "carousel",
+      "grid"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_page_image_width",
+     "type": "Selection",
+     "selection": [
+      "none",
+      "33_pc",
+      "50_pc",
+      "66_pc",
+      "100_pc"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_page_image_spacing",
+     "type": "Selection",
+     "selection": [
+      "none",
+      "small",
+      "medium",
+      "big"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_page_image_roundness",
+     "type": "Selection",
+     "selection": [
+      "none",
+      "small",
+      "medium",
+      "big"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_page_image_ratio",
+     "type": "Selection",
+     "selection": [
+      "auto",
+      "21_9",
+      "16_9",
+      "4_3",
+      "6_5",
+      "1_1",
+      "4_5",
+      "2_3"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_page_image_ratio_mobile",
+     "type": "Selection",
+     "selection": [
+      "auto",
+      "21_9",
+      "16_9",
+      "4_3",
+      "6_5",
+      "1_1",
+      "4_5",
+      "2_3"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "ecommerce_access",
+     "type": "Selection",
+     "selection": [
+      "everyone",
+      "logged_in"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "show_line_subtotals_tax_selection",
+     "type": "Selection",
+     "label": "Line Subtotals Tax Display",
+     "selection": [
+      "tax_excluded",
+      "tax_included"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "add_to_cart_action",
+     "type": "Selection",
+     "selection": [
+      "stay",
+      "go_to_cart"
+     ]
+    },
+    {
+     "name": "account_on_checkout",
+     "type": "Selection",
+     "label": "Customer Accounts",
+     "selection": [
+      "optional",
+      "disabled",
+      "mandatory"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/website.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "variant_ribbon_id",
+     "type": "Many2one",
+     "relates_to": "product.ribbon",
+     "label": "Variant Ribbon"
+    },
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_variant_image_ids",
+     "type": "One2many",
+     "relates_to": "product.image",
+     "label": "Extra Variant Images"
+    },
+    {
+     "name": "base_unit_count",
+     "type": "Float",
+     "label": "Base Unit Count",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "base_unit_id",
+     "type": "Many2one",
+     "relates_to": "website.base.unit",
+     "label": "Custom Unit of Measure"
+    },
+    {
+     "name": "base_unit_price",
+     "type": "Monetary",
+     "label": "Price Per Unit",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "base_unit_name",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "website_url",
+     "type": "Char",
+     "label": "Website URL",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/product_product.py"
+   ]
+  },
+  {
+   "model": "sale.order",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "website_order_line",
+     "type": "One2many",
+     "relates_to": "sale.order.line",
+     "label": "Order Lines displayed on Website",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "amount_delivery",
+     "type": "Monetary",
+     "label": "Delivery Amount",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "cart_recovery_email_sent",
+     "type": "Boolean",
+     "label": "Cart recovery email already sent"
+    },
+    {
+     "name": "shop_warning",
+     "type": "Char",
+     "label": "Warning"
+    },
+    {
+     "name": "cart_quantity",
+     "type": "Integer",
+     "label": "Cart Quantity",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "only_services",
+     "type": "Boolean",
+     "label": "Only Services",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_abandoned_cart",
+     "type": "Boolean",
+     "label": "Abandoned Cart",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/sale_order.py"
+   ]
+  },
+  {
+   "model": "crm.team",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_ids",
+     "type": "One2many",
+     "relates_to": "website",
+     "label": "Websites"
+    },
+    {
+     "name": "abandoned_carts_amount",
+     "type": "Integer",
+     "label": "Amount of Abandoned Carts",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "abandoned_carts_count",
+     "type": "Integer",
+     "label": "Number of Abandoned Carts",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/crm_team.py"
+   ]
+  },
+  {
+   "model": "product.attribute",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "visibility",
+     "type": "Selection",
+     "selection": [
+      "visible",
+      "hidden"
+     ]
+    },
+    {
+     "name": "preview_variants",
+     "type": "Selection",
+     "label": "On Product Cards",
+     "selection": [
+      "visible",
+      "hidden",
+      "hover"
+     ]
+    },
+    {
+     "name": "is_thumbnail_visible",
+     "type": "Boolean",
+     "label": "Show Thumbnails"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/product_attribute.py"
+   ]
+  },
+  {
+   "model": "product.pricelist",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "E-commerce Promotional Code"
+    },
+    {
+     "name": "selectable",
+     "type": "Boolean"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/product_pricelist.py"
+   ]
+  },
+  {
+   "model": "website.visitor",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "Visited Products",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "visitor_product_count",
+     "type": "Integer",
+     "label": "Product Views",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_count",
+     "type": "Integer",
+     "label": "Products Views",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/website_visitor.py"
+   ]
+  },
+  {
+   "model": "sale.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website"
+    },
+    {
+     "name": "public_categ_ids",
+     "type": "Many2many",
+     "label": "eCommerce Categories",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "is_abandoned_cart",
+     "type": "Boolean",
+     "label": "Abandoned Cart"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/report/sale_report.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_website_sale_total_value",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kpi_website_sale_total",
+     "type": "Boolean",
+     "label": "eCommerce Sales"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/digest.py"
+   ]
+  },
+  {
+   "model": "sale.order.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "name_short",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "shop_warning",
+     "type": "Char",
+     "label": "Warning"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/sale_order_line.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_id",
+     "type": "Many2one",
+     "relates_to": "website",
+     "label": "Website",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/account_move.py"
+   ]
+  },
+  {
+   "model": "delivery.carrier",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "website_description",
+     "type": "Text",
+     "label": "Description for Online Quotations",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/delivery_carrier.py"
+   ]
+  },
+  {
+   "model": "product.document",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "shown_on_product_page",
+     "type": "Boolean",
+     "label": "Publish on website"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/product_document.py"
+   ]
+  },
+  {
+   "model": "website.snippet.filter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_cross_selling",
+     "type": "Boolean",
+     "label": "About cross selling products"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/website_snippet_filter.py"
+   ]
+  },
+  {
+   "model": "website.track",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    }
+   ],
+   "evidence_files": [
+    "website_sale/models/website_track.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "ir.module.module",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/ir_module_module.py"
+   ]
+  },
+  {
+   "model": "payment.token",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/payment_token.py"
+   ]
+  },
+  {
+   "model": "product.pricelist.item",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/product_pricelist_item.py"
+   ]
+  },
+  {
+   "model": "product.tag",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/product_tag.py"
+   ]
+  },
+  {
+   "model": "product.template.attribute.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/product_template_attribute_line.py"
+   ]
+  },
+  {
+   "model": "product.template.attribute.value",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/product_template_attribute_value.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "theme.utils",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/theme_utils.py"
+   ]
+  },
+  {
+   "model": "website.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/website_menu.py"
+   ]
+  },
+  {
+   "model": "website.page",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "website_sale/models/website_page.py"
+   ]
+  }
+ ]
+}
