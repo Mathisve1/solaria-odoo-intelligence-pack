@@ -1,0 +1,818 @@
+{
+ "_meta": {
+  "module": "account_accountant",
+  "display_name": "Invoicing",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "account.fiscal.year",
+   "business_meaning": "Fiscal Year",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "account_accountant/models/account_fiscal_year.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_from",
+     "type": "Date",
+     "label": "Start Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_to",
+     "type": "Date",
+     "label": "End Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "account.auto.reconcile.wizard",
+   "business_meaning": "Account automatic reconciliation wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "account_accountant/wizard/account_auto_reconcile_wizard.py",
+   "key_fields": [
+    {
+     "name": "search_mode",
+     "type": "Selection",
+     "label": "Reconcile",
+     "selection": [
+      "one_to_one",
+      "zero_balance"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "line_ids",
+     "type": "Many2many",
+     "relates_to": "account.move.line"
+    },
+    {
+     "name": "to_date",
+     "type": "Date",
+     "label": "To",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_ids",
+     "type": "Many2many",
+     "relates_to": "account.account",
+     "label": "Accounts"
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Partners"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "account.change.lock.date",
+   "business_meaning": "Change Lock Date",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "account_accountant/wizard/account_change_lock_date.py",
+   "key_fields": [
+    {
+     "name": "exception_applies_to",
+     "type": "Selection",
+     "label": "Exception applies",
+     "selection": [
+      "me",
+      "everyone"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "exception_duration",
+     "type": "Selection",
+     "label": "Exception Duration",
+     "selection": [
+      "5min",
+      "15min",
+      "1h",
+      "24h",
+      "forever"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "min_fiscalyear_lock_date_exception_for_me_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_fiscalyear_lock_date_exception_for_everyone_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_tax_lock_date_exception_for_me_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_tax_lock_date_exception_for_everyone_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_sale_lock_date_exception_for_me_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_sale_lock_date_exception_for_everyone_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_purchase_lock_date_exception_for_me_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "min_purchase_lock_date_exception_for_everyone_id",
+     "type": "Many2one",
+     "relates_to": "account.lock_exception",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 29
+  },
+  {
+   "model": "account.reconcile.wizard",
+   "business_meaning": "Account reconciliation wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "account_accountant/wizard/account_reconcile_wizard.py",
+   "key_fields": [
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "Many2many",
+     "relates_to": "account.move.line",
+     "label": "Move lines to reconcile",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "edit_mode_amount_currency",
+     "type": "Monetary",
+     "label": "Edit mode amount",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "to_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reco_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Reconcile Account",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary",
+     "label": "Amount in company currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Company currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "amount_currency",
+     "type": "Monetary",
+     "label": "Amount",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "reco_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency to use for reconciliation",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "edit_mode_amount",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "edit_mode_reco_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account"
+    },
+    {
+     "name": "tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax",
+     "label": "Tax"
+    },
+    {
+     "name": "transfer_from_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account Transfer From",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "reco_model_id",
+     "type": "Many2one",
+     "relates_to": "account.reconcile.model",
+     "label": "Reconciliation model"
+    },
+    {
+     "name": "reco_model_autocomplete_ids",
+     "type": "Many2many",
+     "relates_to": "account.reconcile.model",
+     "label": "All reconciliation models",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "allow_partials",
+     "type": "Boolean",
+     "label": "Allow partials",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "label": "Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 30
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "generate_deferred_expense_entries_method",
+     "type": "Selection",
+     "label": "Generate Deferred Expense Entries",
+     "selection": [
+      "on_validation",
+      "manual"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "deferred_expense_amount_computation_method",
+     "type": "Selection",
+     "label": "Deferred Expense Based on",
+     "selection": [
+      "day",
+      "month",
+      "full_months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "generate_deferred_revenue_entries_method",
+     "type": "Selection",
+     "label": "Generate Deferred Revenue Entries",
+     "selection": [
+      "on_validation",
+      "manual"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "deferred_revenue_amount_computation_method",
+     "type": "Selection",
+     "label": "Deferred Revenue Based on",
+     "selection": [
+      "day",
+      "month",
+      "full_months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "signing_user",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "deferred_expense_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Deferred Expense Journal"
+    },
+    {
+     "name": "deferred_expense_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Deferred Expense Account"
+    },
+    {
+     "name": "deferred_revenue_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Deferred Revenue Journal"
+    },
+    {
+     "name": "deferred_revenue_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Deferred Revenue Account"
+    },
+    {
+     "name": "invoicing_switch_threshold",
+     "type": "Date",
+     "label": "Invoicing Switch Threshold"
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "fiscalyear_last_day",
+     "type": "Integer",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "fiscalyear_last_month",
+     "type": "Selection",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "signing_user",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Signature used to sign all the invoice",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "deferred_expense_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "deferred_expense_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "generate_deferred_expense_entries_method",
+     "type": "Selection",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "deferred_expense_amount_computation_method",
+     "type": "Selection",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "deferred_revenue_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "deferred_revenue_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "generate_deferred_revenue_entries_method",
+     "type": "Selection",
+     "flags": [
+      "required",
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "deferred_entry_type",
+     "type": "Selection",
+     "label": "Deferred Entry Type",
+     "selection": [
+      "expense",
+      "revenue",
+      "misc"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "signing_user",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Signer",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "deferred_move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Deferred Entries"
+    },
+    {
+     "name": "deferred_original_move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Original Invoices"
+    },
+    {
+     "name": "payment_state_before_switch",
+     "type": "Char",
+     "label": "Payment State Before Switch"
+    },
+    {
+     "name": "show_signature_area",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "signature",
+     "type": "Binary",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/account_move.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "move_attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "deferred_start_date",
+     "type": "Date",
+     "label": "Start Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "deferred_end_date",
+     "type": "Date",
+     "label": "End Date"
+    },
+    {
+     "name": "has_deferred_moves",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "has_abnormal_deferred_dates",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "full_amount_switch_html",
+     "type": "Html",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/account_move.py"
+   ]
+  },
+  {
+   "model": "account.bank.statement.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bank_statement_attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "One2many",
+     "relates_to": "ir.attachment",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "cron_last_check",
+     "type": "Datetime"
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/account_bank_statement.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_account_bank_cash_value",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kpi_account_bank_cash",
+     "type": "Boolean",
+     "label": "Bank & Cash Moves"
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/digest.py"
+   ]
+  },
+  {
+   "model": "account.reconcile.model",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "created_automatically",
+     "type": "Boolean"
+    }
+   ],
+   "evidence_files": [
+    "account_accountant/models/account_reconcile_model.py"
+   ]
+  },
+  {
+   "model": "account.account",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_account.py"
+   ]
+  },
+  {
+   "model": "account.bank.statement",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_bank_statement.py"
+   ]
+  },
+  {
+   "model": "account.chart.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_chart_template.py"
+   ]
+  },
+  {
+   "model": "account.journal",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_journal_dashboard.py"
+   ]
+  },
+  {
+   "model": "account.payment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_payment.py"
+   ]
+  },
+  {
+   "model": "account.reconcile.model.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_reconcile_model_line.py"
+   ]
+  },
+  {
+   "model": "account.tax",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/account_tax.py"
+   ]
+  },
+  {
+   "model": "analytic.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/analytic_mixin.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account_accountant/models/ir_ui_menu.py"
+   ]
+  }
+ ]
+}

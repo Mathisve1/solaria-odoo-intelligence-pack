@@ -1,0 +1,3289 @@
+{
+ "_meta": {
+  "module": "mail",
+  "display_name": "Discuss",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "fetchmail.server",
+   "business_meaning": "Incoming Mail Server",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/fetchmail.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "done"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "server_type",
+     "type": "Selection",
+     "label": "Server Type",
+     "selection": [
+      "imap",
+      "pop",
+      "local"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "object_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Create a New Record"
+    },
+    {
+     "name": "message_ids",
+     "type": "One2many",
+     "relates_to": "mail.mail",
+     "label": "Messages"
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "mail.activity",
+   "business_meaning": "Activity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_activity.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "overdue",
+      "today",
+      "planned",
+      "done"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "res_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model"
+    },
+    {
+     "name": "activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Activity Type"
+    },
+    {
+     "name": "date_deadline",
+     "type": "Date",
+     "label": "Due Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "recommended_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Recommended Activity Type"
+    },
+    {
+     "name": "previous_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Previous Activity Type"
+    },
+    {
+     "name": "mail_template_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "res_name",
+     "type": "Char",
+     "label": "Document Name",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_done",
+     "type": "Date",
+     "label": "Done Date",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 25
+  },
+  {
+   "model": "mail.activity.mixin",
+   "business_meaning": "Activity Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_activity_mixin.py",
+   "key_fields": [
+    {
+     "name": "activity_state",
+     "type": "Selection",
+     "label": "Activity State",
+     "selection": [
+      "overdue",
+      "today",
+      "planned"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "activity_exception_decoration",
+     "type": "Selection",
+     "selection": [
+      "warning",
+      "danger"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "activity_ids",
+     "type": "One2many",
+     "relates_to": "mail.activity"
+    },
+    {
+     "name": "activity_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mail.activity.plan",
+   "business_meaning": "Activity Plan",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_activity_plan.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "res_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Applies to",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "template_ids",
+     "type": "One2many",
+     "relates_to": "mail.activity.plan.template",
+     "label": "Activities"
+    },
+    {
+     "name": "res_model",
+     "type": "Selection",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "mail.activity.plan.template",
+   "business_meaning": "Activity plan template",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_activity_plan_template.py",
+   "key_fields": [
+    {
+     "name": "responsible_type",
+     "type": "Selection",
+     "label": "Assignment",
+     "selection": [
+      "on_demand",
+      "other"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "delay_unit",
+     "type": "Selection",
+     "label": "Delay units",
+     "selection": [
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "delay_from",
+     "type": "Selection",
+     "label": "Trigger",
+     "selection": [
+      "before_plan_date",
+      "after_plan_date"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.plan",
+     "label": "Plan",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "responsible_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "next_activity_ids",
+     "type": "Many2many",
+     "relates_to": "mail.activity.type",
+     "label": "Next Activities",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "summary",
+     "type": "Char",
+     "label": "Summary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "Html",
+     "label": "Note",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "mail.activity.type",
+   "business_meaning": "Activity Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_activity_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "delay_unit",
+     "type": "Selection",
+     "label": "Delay units",
+     "selection": [
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "delay_from",
+     "type": "Selection",
+     "label": "Delay Type",
+     "selection": [
+      "current_date",
+      "previous_activity"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "chaining_type",
+     "type": "Selection",
+     "label": "Chaining Type",
+     "selection": [
+      "suggest",
+      "trigger"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "decoration_type",
+     "type": "Selection",
+     "label": "Decoration Type",
+     "selection": [
+      "warning",
+      "danger"
+     ]
+    },
+    {
+     "name": "triggered_next_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Trigger",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "suggested_next_type_ids",
+     "type": "Many2many",
+     "relates_to": "mail.activity.type",
+     "label": "Suggest",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "category",
+     "type": "Selection",
+     "label": "Action",
+     "selection": [
+      "default",
+      "upload_file",
+      "phonecall"
+     ]
+    },
+    {
+     "name": "create_uid",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "previous_type_ids",
+     "type": "Many2many",
+     "relates_to": "mail.activity.type",
+     "label": "Preceding Activities"
+    },
+    {
+     "name": "mail_template_ids",
+     "type": "Many2many",
+     "relates_to": "mail.template",
+     "label": "Email templates"
+    },
+    {
+     "name": "default_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Default User"
+    }
+   ],
+   "total_field_count_declared": 22
+  },
+  {
+   "model": "mail.alias",
+   "business_meaning": "Email Aliases",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_alias.py",
+   "key_fields": [
+    {
+     "name": "alias_contact",
+     "type": "Selection",
+     "label": "Alias Contact Security",
+     "selection": [
+      "everyone",
+      "partners",
+      "followers"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "alias_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "alias_status",
+     "type": "Selection",
+     "selection": [
+      "not_tested",
+      "valid",
+      "invalid"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "label": "Alias Domain"
+    },
+    {
+     "name": "alias_defaults",
+     "type": "Text",
+     "label": "Default Values",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "alias_parent_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model"
+    },
+    {
+     "name": "alias_full_name",
+     "type": "Char",
+     "label": "Alias Email",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "mail.alias.domain",
+   "business_meaning": "Email Domain",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_alias_domain.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_ids",
+     "type": "One2many",
+     "relates_to": "res.company",
+     "label": "Companies"
+    },
+    {
+     "name": "bounce_alias",
+     "type": "Char",
+     "label": "Bounce Alias",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "catchall_alias",
+     "type": "Char",
+     "label": "Catchall Alias",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "mail.alias.mixin",
+   "business_meaning": "Email Aliases Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_alias_mixin.py",
+   "delegates_to": [
+    "mail.alias"
+   ],
+   "key_fields": [
+    {
+     "name": "alias_id",
+     "type": "Many2one",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mail.alias.mixin.optional",
+   "business_meaning": "Email Aliases Mixin (light)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_alias_mixin_optional.py",
+   "key_fields": [
+    {
+     "name": "alias_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias",
+     "label": "Alias"
+    },
+    {
+     "name": "alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "label": "Alias Domain",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "mail.blacklist",
+   "business_meaning": "Mail Blacklist",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_blacklist.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "email",
+     "type": "Char",
+     "label": "Email Address",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mail.canned.response",
+   "business_meaning": "Canned Response",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_canned_response.py",
+   "key_fields": [
+    {
+     "name": "source",
+     "type": "Char",
+     "label": "Shortcut",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "substitution",
+     "type": "Text",
+     "label": "Substitution",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Authorized Groups"
+    },
+    {
+     "name": "is_shared",
+     "type": "Boolean",
+     "label": "Determines if the canned_response is currently shared with other users",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "mail.composer.mixin",
+   "business_meaning": "Mail Composer Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_composer_mixin.py",
+   "key_fields": [
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template"
+    },
+    {
+     "name": "subject",
+     "type": "Char",
+     "label": "Subject",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "body",
+     "type": "Html",
+     "label": "Contents",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lang",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "mail.followers",
+   "business_meaning": "Document Followers",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_followers.py",
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Related Partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "res_model",
+     "type": "Char",
+     "label": "Related Document Model Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "subtype_ids",
+     "type": "Many2many",
+     "relates_to": "mail.message.subtype",
+     "label": "Subtype"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "mail.gateway.allowed",
+   "business_meaning": "Mail Gateway Allowed",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_gateway_allowed.py",
+   "key_fields": [
+    {
+     "name": "email",
+     "type": "Char",
+     "label": "Email Address",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "email_normalized",
+     "type": "Char",
+     "label": "Normalized Email",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mail.ice.server",
+   "business_meaning": "ICE Server",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_ice_server.py",
+   "key_fields": [
+    {
+     "name": "server_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "stun",
+      "turn"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "uri",
+     "type": "Char",
+     "label": "URI",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mail.link.preview",
+   "business_meaning": "Store link preview data",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_link_preview.py",
+   "key_fields": [
+    {
+     "name": "source_url",
+     "type": "Char",
+     "label": "URL",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "message_link_preview_ids",
+     "type": "One2many",
+     "relates_to": "mail.message.link.preview"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mail.mail",
+   "business_meaning": "Outgoing Mails",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_mail.py",
+   "delegates_to": [
+    "mail.message"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "outgoing",
+      "sent",
+      "received",
+      "exception",
+      "cancel"
+     ]
+    },
+    {
+     "name": "mail_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "failure_type",
+     "type": "Selection",
+     "label": "Failure type",
+     "selection": [
+      "unknown",
+      "mail_spam",
+      "mail_email_invalid",
+      "mail_email_missing",
+      "mail_from_invalid",
+      "mail_from_missing",
+      "mail_smtp",
+      "mail_bl",
+      "mail_optout",
+      "mail_dup"
+     ]
+    },
+    {
+     "name": "unrestricted_attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Unrestricted Attachments",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "recipient_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "To (Partners)"
+    },
+    {
+     "name": "fetchmail_server_id",
+     "type": "Many2one",
+     "relates_to": "fetchmail.server"
+    }
+   ],
+   "total_field_count_declared": 19
+  },
+  {
+   "model": "mail.message",
+   "business_meaning": "Message",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message.py",
+   "key_fields": [
+    {
+     "name": "message_type",
+     "type": "Selection",
+     "selection": [
+      "email",
+      "comment",
+      "email_outgoing",
+      "notification",
+      "auto_comment",
+      "out_of_office",
+      "user_notification"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "linked_message_ids",
+     "type": "Many2many",
+     "relates_to": "mail.message",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "message_link_preview_ids",
+     "type": "One2many",
+     "relates_to": "mail.message.link.preview"
+    },
+    {
+     "name": "reaction_ids",
+     "type": "One2many",
+     "relates_to": "mail.message.reaction",
+     "label": "Reactions"
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "mail.message"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "mail.message"
+    },
+    {
+     "name": "record_alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain"
+    },
+    {
+     "name": "record_company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "subtype_id",
+     "type": "Many2one",
+     "relates_to": "mail.message.subtype"
+    },
+    {
+     "name": "mail_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type"
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "author_guest_id",
+     "type": "Many2one",
+     "relates_to": "mail.guest",
+     "label": "Guest"
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Recipients"
+    },
+    {
+     "name": "notified_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Partners with Need Action"
+    },
+    {
+     "name": "notification_ids",
+     "type": "One2many",
+     "relates_to": "mail.notification"
+    },
+    {
+     "name": "starred_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Favorited By"
+    },
+    {
+     "name": "tracking_value_ids",
+     "type": "One2many",
+     "relates_to": "mail.tracking.value",
+     "label": "Tracking values"
+    },
+    {
+     "name": "mail_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.mail_server"
+    },
+    {
+     "name": "mail_ids",
+     "type": "One2many",
+     "relates_to": "mail.mail",
+     "label": "Mails"
+    }
+   ],
+   "total_field_count_declared": 43
+  },
+  {
+   "model": "mail.message.link.preview",
+   "business_meaning": "Link between link previews and messages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message_link_preview.py",
+   "key_fields": [
+    {
+     "name": "message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "link_preview_id",
+     "type": "Many2one",
+     "relates_to": "mail.link.preview",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "mail.message.reaction",
+   "business_meaning": "Message Reaction",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message_reaction.py",
+   "key_fields": [
+    {
+     "name": "message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "label": "Message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "content",
+     "type": "Char",
+     "label": "Content",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Reacting Partner"
+    },
+    {
+     "name": "guest_id",
+     "type": "Many2one",
+     "relates_to": "mail.guest",
+     "label": "Reacting Guest"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mail.message.schedule",
+   "business_meaning": "Scheduled Messages",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message_schedule.py",
+   "key_fields": [
+    {
+     "name": "mail_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "label": "Message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "scheduled_datetime",
+     "type": "Datetime",
+     "label": "Scheduled Send Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mail.message.subtype",
+   "business_meaning": "Message subtypes",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message_subtype.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Message Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "mail.message.subtype",
+     "label": "Parent"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mail.message.translation",
+   "business_meaning": "Message Translation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_message_translation.py",
+   "key_fields": [
+    {
+     "name": "message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "source_lang",
+     "type": "Char",
+     "label": "Source Language",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "target_lang",
+     "type": "Char",
+     "label": "Target Language",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "body",
+     "type": "Html",
+     "label": "Translation Body",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "mail.notification",
+   "business_meaning": "Message Notifications",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_notification.py",
+   "key_fields": [
+    {
+     "name": "notification_type",
+     "type": "Selection",
+     "label": "Notification Type",
+     "selection": [
+      "inbox",
+      "email"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mail_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "notification_status",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "ready",
+      "process",
+      "pending",
+      "sent",
+      "bounce",
+      "exception",
+      "canceled"
+     ]
+    },
+    {
+     "name": "failure_type",
+     "type": "Selection",
+     "label": "Failure type",
+     "selection": [
+      "unknown",
+      "mail_bounce",
+      "mail_spam",
+      "mail_email_invalid",
+      "mail_email_missing",
+      "mail_from_invalid",
+      "mail_from_missing",
+      "mail_smtp",
+      "mail_bl",
+      "mail_optout",
+      "mail_dup"
+     ]
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "mail_mail_id",
+     "type": "Many2one",
+     "relates_to": "mail.mail"
+    },
+    {
+     "name": "res_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "mail.presence",
+   "business_meaning": "User/Guest Presence",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_presence.py",
+   "key_fields": [
+    {
+     "name": "status",
+     "type": "Selection",
+     "selection": [
+      "online",
+      "away",
+      "offline"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "guest_id",
+     "type": "Many2one",
+     "relates_to": "mail.guest"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "mail.push",
+   "business_meaning": "Push Notifications",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_push.py",
+   "key_fields": [
+    {
+     "name": "mail_push_device_id",
+     "type": "Many2one",
+     "relates_to": "mail.push.device",
+     "label": "devices",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mail.push.device",
+   "business_meaning": "Push Notification Device",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_push_device.py",
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "endpoint",
+     "type": "Char",
+     "label": "Browser endpoint",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "keys",
+     "type": "Char",
+     "label": "Browser keys",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mail.render.mixin",
+   "business_meaning": "Mail Render Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_render_mixin.py",
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mail.scheduled.message",
+   "business_meaning": "Scheduled Message",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_scheduled_message.py",
+   "key_fields": [
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "composition_comment_option",
+     "type": "Selection",
+     "label": "Comment Options",
+     "selection": [
+      "reply_all",
+      "forward"
+     ]
+    },
+    {
+     "name": "scheduled_date",
+     "type": "Datetime",
+     "label": "Scheduled Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Related Document Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "res_id",
+     "type": "Many2oneReference",
+     "label": "Related Document Id",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Recipients"
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "mail.template",
+   "business_meaning": "Email Templates",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_template.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name"
+    },
+    {
+     "name": "template_category",
+     "type": "Selection",
+     "selection": [
+      "base_template",
+      "hidden_template",
+      "custom_template"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Owner"
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "report_template_ids",
+     "type": "Many2many",
+     "relates_to": "ir.actions.report",
+     "label": "Dynamic Reports"
+    },
+    {
+     "name": "mail_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.mail_server"
+    },
+    {
+     "name": "ref_ir_act_window",
+     "type": "Many2one",
+     "relates_to": "ir.actions.act_window"
+    }
+   ],
+   "total_field_count_declared": 26
+  },
+  {
+   "model": "mail.thread",
+   "business_meaning": "Email Thread",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_thread.py",
+   "key_fields": [
+    {
+     "name": "message_follower_ids",
+     "type": "One2many",
+     "relates_to": "mail.followers",
+     "label": "Followers"
+    },
+    {
+     "name": "message_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Followers (Partners)",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "message_ids",
+     "type": "One2many",
+     "relates_to": "mail.message",
+     "label": "Messages"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mail.thread.blacklist",
+   "business_meaning": "Mail Blacklist mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_thread_blacklist.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "email_normalized",
+     "type": "Char",
+     "label": "Normalized Email",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mail.thread.cc",
+   "business_meaning": "Email CC management",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_thread_cc.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "mail.thread.main.attachment",
+   "business_meaning": "Mail Main Attachment management",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_thread_main_attachment.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "message_main_attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Main Attachment"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "mail.tracking.duration.mixin",
+   "business_meaning": "Mixin to compute the time a record has spent in each value a many2one field can take",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_tracking_duration_mixin.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "mail.tracking.value",
+   "business_meaning": "Mail Tracking Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/mail_tracking_value.py",
+   "key_fields": [
+    {
+     "name": "mail_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "res.role",
+   "business_meaning": "Represents a role in the system used to categorize users. Each role has a unique name and can be associated with multiple users. Roles can be mentioned in messages to notify all associated users.",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/res_role.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Users"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "res.users.settings.volumes",
+   "business_meaning": "User Settings Volumes",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/res_users_settings_volumes.py",
+   "key_fields": [
+    {
+     "name": "user_setting_id",
+     "type": "Many2one",
+     "relates_to": "res.users.settings",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "guest_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "template.reset.mixin",
+   "business_meaning": "Template Reset Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/template_reset_mixin.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "publisher_warranty.contract",
+   "business_meaning": "Publisher Warranty Contract",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/update.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "discuss.call.history",
+   "business_meaning": "Keep the call history",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_call_history.py",
+   "key_fields": [
+    {
+     "name": "channel_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "start_dt",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "start_call_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "discuss.channel",
+   "business_meaning": "Discussion Channel",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_channel.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "channel_type",
+     "type": "Selection",
+     "label": "Channel Type",
+     "selection": [
+      "chat",
+      "channel",
+      "group"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "default_display_mode",
+     "type": "Selection",
+     "label": "Default Display Mode",
+     "selection": [
+      "video_full_screen"
+     ]
+    },
+    {
+     "name": "group_public_id",
+     "type": "Many2one",
+     "relates_to": "res.groups",
+     "label": "Authorized Group",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "channel_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Partners",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "channel_member_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.member",
+     "label": "Members"
+    },
+    {
+     "name": "parent_channel_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel"
+    },
+    {
+     "name": "sub_channel_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel",
+     "label": "Sub Channels"
+    },
+    {
+     "name": "from_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message"
+    },
+    {
+     "name": "pinned_message_ids",
+     "type": "One2many",
+     "relates_to": "mail.message",
+     "label": "Pinned Messages"
+    },
+    {
+     "name": "rtc_session_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.rtc.session"
+    },
+    {
+     "name": "call_history_ids",
+     "type": "One2many",
+     "relates_to": "discuss.call.history"
+    },
+    {
+     "name": "self_member_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel.member",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "invited_member_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.member",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "group_ids",
+     "type": "Many2many",
+     "relates_to": "res.groups",
+     "label": "Auto Subscription"
+    },
+    {
+     "name": "channel_name_member_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.member",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 30
+  },
+  {
+   "model": "discuss.channel.member",
+   "business_meaning": "Channel Member",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_channel_member.py",
+   "key_fields": [
+    {
+     "name": "channel_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "custom_notifications",
+     "type": "Selection",
+     "selection": [
+      "all",
+      "mentions",
+      "no_notif"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "guest_id",
+     "type": "Many2one",
+     "relates_to": "mail.guest"
+    },
+    {
+     "name": "fetched_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "label": "Last Fetched"
+    },
+    {
+     "name": "seen_message_id",
+     "type": "Many2one",
+     "relates_to": "mail.message",
+     "label": "Last Seen"
+    },
+    {
+     "name": "new_message_separator",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rtc_session_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.rtc.session",
+     "label": "RTC Sessions"
+    },
+    {
+     "name": "rtc_inviting_session_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel.rtc.session",
+     "label": "Ringing session"
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "discuss.channel.rtc.session",
+   "business_meaning": "Mail RTC session",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_channel_rtc_session.py",
+   "key_fields": [
+    {
+     "name": "channel_member_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel.member",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "channel_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "guest_id",
+     "type": "Many2one",
+     "relates_to": "mail.guest",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "discuss.gif.favorite",
+   "business_meaning": "Save favorite GIF from Tenor API",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_gif_favorite.py",
+   "key_fields": [
+    {
+     "name": "tenor_gif_id",
+     "type": "Char",
+     "label": "GIF id from Tenor",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "discuss.voice.metadata",
+   "business_meaning": "Metadata for voice attachments",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/discuss_voice_metadata.py",
+   "key_fields": [
+    {
+     "name": "attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "mail.guest",
+   "business_meaning": "Guest",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/models/discuss/mail_guest.py",
+   "built_in_capabilities": [
+    "avatar"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_token",
+     "type": "Char",
+     "label": "Access Token",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "channel_ids",
+     "type": "Many2many",
+     "relates_to": "discuss.channel",
+     "label": "Channels"
+    },
+    {
+     "name": "presence_ids",
+     "type": "One2many",
+     "relates_to": "mail.presence"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "mail.activity.schedule",
+   "business_meaning": "Activity schedule plan Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_activity_schedule.py",
+   "key_fields": [
+    {
+     "name": "res_model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Applies to",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "plan_available_ids",
+     "type": "Many2many",
+     "relates_to": "mail.activity.plan",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.plan",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Activity Type",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "activity_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "plan_schedule_line_ids",
+     "type": "One2many",
+     "relates_to": "mail.activity.schedule.line",
+     "label": "Schedule Lines",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "plan_on_demand_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "res_ids",
+     "type": "Text",
+     "label": "Document IDs",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "plan_date",
+     "type": "Date",
+     "label": "Plan Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date_deadline",
+     "type": "Date",
+     "label": "Due Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "summary",
+     "type": "Char",
+     "label": "Summary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "Html",
+     "label": "Note",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 22
+  },
+  {
+   "model": "mail.activity.schedule.line",
+   "business_meaning": "Mail Activity Schedule Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_activity_schedule_summary.py",
+   "key_fields": [
+    {
+     "name": "activity_schedule_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.schedule",
+     "label": "Activity Schedule",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "responsible_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Responsible User"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "mail.blacklist.remove",
+   "business_meaning": "Remove email from blacklist wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_blacklist_remove.py",
+   "key_fields": [
+    {
+     "name": "email",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "mail.compose.message",
+   "business_meaning": "Email composition wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_compose_message.py",
+   "key_fields": [
+    {
+     "name": "message_type",
+     "type": "Selection",
+     "selection": [
+      "auto_comment",
+      "comment",
+      "notification"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Author",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "composition_mode",
+     "type": "Selection",
+     "label": "Composition mode",
+     "selection": [
+      "comment",
+      "mass_mail"
+     ]
+    },
+    {
+     "name": "composition_comment_option",
+     "type": "Selection",
+     "label": "Comment Options",
+     "selection": [
+      "reply_all",
+      "forward"
+     ]
+    },
+    {
+     "name": "record_alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "record_company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "subtype_id",
+     "type": "Many2one",
+     "relates_to": "mail.message.subtype",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reply_to_mode",
+     "type": "Selection",
+     "label": "Replies",
+     "selection": [
+      "update",
+      "new"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mail_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.mail_server",
+     "label": "Outgoing mail server",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "mail.message"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template"
+    },
+    {
+     "name": "res_domain_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Responsible"
+    },
+    {
+     "name": "mail_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type"
+    },
+    {
+     "name": "subject",
+     "type": "Char",
+     "label": "Subject",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "body",
+     "type": "Html",
+     "label": "Contents",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "email_layout_xmlid",
+     "type": "Char",
+     "label": "Email Notification Layout",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "email_add_signature",
+     "type": "Boolean",
+     "label": "Add signature",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "email_from",
+     "type": "Char",
+     "label": "From",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Related Document Model",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "res_ids",
+     "type": "Text",
+     "label": "Related Document IDs",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reply_to",
+     "type": "Char",
+     "label": "Reply To",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reply_to_force_new",
+     "type": "Boolean",
+     "label": "Considers answers as new thread",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "auto_delete",
+     "type": "Boolean",
+     "label": "Delete Emails",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "auto_delete_keep_log",
+     "type": "Boolean",
+     "label": "Keep Message Copy",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "force_send",
+     "type": "Boolean",
+     "label": "Send mailing or notifications directly",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "notify_author",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 39
+  },
+  {
+   "model": "mail.followers.edit",
+   "business_meaning": "Followers edit wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_followers_edit.py",
+   "key_fields": [
+    {
+     "name": "operation",
+     "type": "Selection",
+     "label": "Operation",
+     "selection": [
+      "add",
+      "remove"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Followers",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "res_model",
+     "type": "Char",
+     "label": "Related Document Model",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "mail.template.preview",
+   "business_meaning": "Email Template Preview",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_template_preview.py",
+   "key_fields": [
+    {
+     "name": "mail_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Related Mail Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Targeted model",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Recipients",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "resource_ref",
+     "type": "Reference",
+     "label": "Record",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "mail.template.reset",
+   "business_meaning": "Mail Template Reset",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "mail/wizard/mail_template_reset.py",
+   "key_fields": [
+    {
+     "name": "template_ids",
+     "type": "Many2many",
+     "relates_to": "mail.template"
+    }
+   ],
+   "total_field_count_declared": 1
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "email",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "phone",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "vat",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "contact_address_inline",
+     "type": "Char",
+     "label": "Inlined Complete Address",
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "im_status",
+     "type": "Char",
+     "label": "IM Status",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "offline_since",
+     "type": "Datetime",
+     "label": "Offline since",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "channel_ids",
+     "type": "Many2many",
+     "relates_to": "discuss.channel",
+     "label": "Channels"
+    },
+    {
+     "name": "channel_member_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.member"
+    },
+    {
+     "name": "rtc_session_ids",
+     "type": "One2many",
+     "relates_to": "discuss.channel.rtc.session"
+    },
+    {
+     "name": "is_in_call",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mail/models/res_partner.py",
+    "mail/models/discuss/res_partner.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "notification_type",
+     "type": "Selection",
+     "selection": [
+      "email",
+      "inbox"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "outgoing_mail_server_type",
+     "type": "Selection",
+     "selection": [
+      "default"
+     ],
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "manual_im_status",
+     "type": "Selection",
+     "label": "IM status manually set by the user",
+     "selection": [
+      "away",
+      "busy",
+      "offline"
+     ]
+    },
+    {
+     "name": "role_ids",
+     "type": "Many2many",
+     "relates_to": "res.role",
+     "label": "User Roles"
+    },
+    {
+     "name": "presence_ids",
+     "type": "One2many",
+     "relates_to": "mail.presence"
+    },
+    {
+     "name": "outgoing_mail_server_id",
+     "type": "Many2one",
+     "relates_to": "ir.mail_server",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "can_edit_role",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "out_of_office_from",
+     "type": "Datetime"
+    },
+    {
+     "name": "out_of_office_to",
+     "type": "Datetime"
+    },
+    {
+     "name": "out_of_office_message",
+     "type": "Html",
+     "label": "Vacation Responder"
+    },
+    {
+     "name": "is_in_call",
+     "type": "Boolean",
+     "label": "Is in call",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mail/models/res_users.py",
+    "mail/models/discuss/res_users.py"
+   ]
+  },
+  {
+   "model": "ir.actions.server",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "crud_model_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "link_field_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "followers_type",
+     "type": "Selection",
+     "label": "Followers Type",
+     "selection": [
+      "specific",
+      "generic"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mail_post_method",
+     "type": "Selection",
+     "label": "Send Email As",
+     "selection": [
+      "email",
+      "comment",
+      "note"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "activity_date_deadline_range_type",
+     "type": "Selection",
+     "label": "Due type",
+     "selection": [
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "activity_user_type",
+     "type": "Selection",
+     "label": "User Type",
+     "selection": [
+      "specific",
+      "generic"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_actions_server.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "external_email_server_default",
+     "type": "Boolean",
+     "label": "Use Custom Email Servers"
+    },
+    {
+     "name": "fail_counter",
+     "type": "Integer",
+     "label": "Fail Mail",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "module_google_gmail",
+     "type": "Boolean",
+     "label": "Support Gmail Authentication"
+    },
+    {
+     "name": "module_microsoft_outlook",
+     "type": "Boolean",
+     "label": "Support Outlook Authentication"
+    },
+    {
+     "name": "restrict_template_rendering",
+     "type": "Boolean",
+     "label": "Restrict Template Rendering"
+    },
+    {
+     "name": "use_twilio_rtc_servers",
+     "type": "Boolean",
+     "label": "Use Twilio ICE servers"
+    },
+    {
+     "name": "twilio_account_sid",
+     "type": "Char",
+     "label": "Account SID"
+    },
+    {
+     "name": "twilio_account_token",
+     "type": "Char",
+     "label": "Account Auth Token"
+    },
+    {
+     "name": "use_sfu_server",
+     "type": "Boolean",
+     "label": "Use SFU server"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "alias_domain_id",
+     "type": "Many2one",
+     "relates_to": "mail.alias.domain",
+     "label": "Email Domain"
+    },
+    {
+     "name": "bounce_email",
+     "type": "Char",
+     "label": "Bounce Email",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "bounce_formatted",
+     "type": "Char",
+     "label": "Bounce",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "catchall_email",
+     "type": "Char",
+     "label": "Catchall Email",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "catchall_formatted",
+     "type": "Char",
+     "label": "Catchall",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "default_from_email",
+     "type": "Char",
+     "label": "Default From",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "email_formatted",
+     "type": "Char",
+     "label": "Formatted Email",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "email_primary_color",
+     "type": "Char",
+     "label": "Email Button Text"
+    },
+    {
+     "name": "email_secondary_color",
+     "type": "Char",
+     "label": "Email Button Color"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.users.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "channel_notifications",
+     "type": "Selection",
+     "selection": [
+      "all",
+      "no_notif"
+     ]
+    },
+    {
+     "name": "volume_settings_ids",
+     "type": "One2many",
+     "relates_to": "res.users.settings.volumes",
+     "label": "Volumes of other partners"
+    },
+    {
+     "name": "is_discuss_sidebar_category_channel_open",
+     "type": "Boolean",
+     "label": "Is discuss sidebar category channel open?"
+    },
+    {
+     "name": "is_discuss_sidebar_category_chat_open",
+     "type": "Boolean",
+     "label": "Is discuss sidebar category chat open?"
+    },
+    {
+     "name": "push_to_talk_key",
+     "type": "Char",
+     "label": "Push-To-Talk shortcut"
+    },
+    {
+     "name": "use_push_to_talk",
+     "type": "Boolean",
+     "label": "Use the push to talk feature"
+    },
+    {
+     "name": "voice_active_duration",
+     "type": "Integer",
+     "label": "Duration of voice activity in ms"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/res_users_settings.py"
+   ]
+  },
+  {
+   "model": "ir.cron",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "interval_number",
+     "type": "Integer",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "interval_type",
+     "type": "Selection",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "priority",
+     "type": "Integer",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_cron.py"
+   ]
+  },
+  {
+   "model": "ir.mail_server",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "mail_template_ids",
+     "type": "One2many",
+     "relates_to": "mail.template",
+     "label": "Mail template using this mail server"
+    },
+    {
+     "name": "owner_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "owner_limit_time",
+     "type": "Datetime",
+     "label": "Owner Limit Time"
+    },
+    {
+     "name": "owner_limit_count",
+     "type": "Integer",
+     "label": "Owner Limit Count"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_mail_server.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "thumbnail",
+     "type": "Image"
+    },
+    {
+     "name": "has_thumbnail",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "voice_ids",
+     "type": "One2many",
+     "relates_to": "discuss.voice.metadata"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_attachment.py",
+    "mail/models/discuss/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "ir.model",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "is_mail_thread",
+     "type": "Boolean",
+     "label": "Has Mail Thread"
+    },
+    {
+     "name": "is_mail_activity",
+     "type": "Boolean",
+     "label": "Has Mail Activity"
+    },
+    {
+     "name": "is_mail_blacklist",
+     "type": "Boolean",
+     "label": "Has Mail Blacklist"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_model.py"
+   ]
+  },
+  {
+   "model": "mail.message",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "call_history_ids",
+     "type": "One2many",
+     "relates_to": "discuss.call.history"
+    },
+    {
+     "name": "channel_id",
+     "type": "Many2one",
+     "relates_to": "discuss.channel",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mail/models/discuss/mail_message.py"
+   ]
+  },
+  {
+   "model": "ir.actions.act_window.view",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "view_mode",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_action_act_window.py"
+   ]
+  },
+  {
+   "model": "ir.model.fields",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "tracking",
+     "type": "Integer",
+     "label": "Enable Ordered Tracking"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_model_fields.py"
+   ]
+  },
+  {
+   "model": "ir.ui.view",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "type",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "mail/models/ir_ui_view.py"
+   ]
+  },
+  {
+   "model": "ir.config_parameter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/ir_config_parameter.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "ir.qweb",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/ir_qweb.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "ir.websocket",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/ir_websocket.py",
+    "mail/models/discuss/ir_websocket.py"
+   ]
+  },
+  {
+   "model": "base",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/models.py"
+   ]
+  },
+  {
+   "model": "bus.listener.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/discuss/bus_listener_mixin.py"
+   ]
+  },
+  {
+   "model": "res.groups",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/models/discuss/res_groups.py"
+   ]
+  },
+  {
+   "model": "base.module.uninstall",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/wizard/base_module_uninstall.py"
+   ]
+  },
+  {
+   "model": "base.partner.merge.automatic.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mail/wizard/base_partner_merge_automatic_wizard.py"
+   ]
+  }
+ ]
+}

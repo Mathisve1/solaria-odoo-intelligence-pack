@@ -1,0 +1,1318 @@
+{
+ "_meta": {
+  "module": "product",
+  "display_name": "Products & Pricelists",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "product.attribute",
+   "business_meaning": "Product Attribute",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_attribute.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Attribute",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "create_variant",
+     "type": "Selection",
+     "label": "Variant Creation",
+     "selection": [
+      "always",
+      "dynamic",
+      "no_variant"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "display_type",
+     "type": "Selection",
+     "selection": [
+      "radio",
+      "pills",
+      "select",
+      "color",
+      "multi",
+      "image"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_ids",
+     "type": "Many2many",
+     "relates_to": "product.template",
+     "label": "Related Products",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "value_ids",
+     "type": "One2many",
+     "relates_to": "product.attribute.value",
+     "label": "Values"
+    },
+    {
+     "name": "template_value_ids",
+     "type": "One2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Template Values"
+    },
+    {
+     "name": "attribute_line_ids",
+     "type": "One2many",
+     "relates_to": "product.template.attribute.line",
+     "label": "Lines"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "product.attribute.custom.value",
+   "business_meaning": "Product Attribute Custom Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_attribute_custom_value.py",
+   "key_fields": [
+    {
+     "name": "custom_product_template_attribute_value_id",
+     "type": "Many2one",
+     "relates_to": "product.template.attribute.value",
+     "label": "Attribute Value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "product.attribute.value",
+   "business_meaning": "Attribute Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_attribute_value.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attribute_id",
+     "type": "Many2one",
+     "relates_to": "product.attribute",
+     "label": "Attribute",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pav_attribute_line_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.line",
+     "label": "Lines"
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "product.catalog.mixin",
+   "business_meaning": "Product Catalog Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_catalog_mixin.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "product.category",
+   "business_meaning": "Product Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_category.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "product.category"
+    },
+    {
+     "name": "child_id",
+     "type": "One2many",
+     "relates_to": "product.category"
+    },
+    {
+     "name": "complete_name",
+     "type": "Char",
+     "label": "Complete Name",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "product.combo",
+   "business_meaning": "Product Combo",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_combo.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "combo_item_ids",
+     "type": "One2many",
+     "relates_to": "product.combo.item"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "product.combo.item",
+   "business_meaning": "Product Combo Item",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_combo_item.py",
+   "key_fields": [
+    {
+     "name": "combo_id",
+     "type": "Many2one",
+     "relates_to": "product.combo",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Options",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "product.document",
+   "business_meaning": "Product Document",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_document.py",
+   "delegates_to": [
+    "ir.attachment"
+   ],
+   "key_fields": [
+    {
+     "name": "ir_attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Related attachment",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "product.pricelist",
+   "business_meaning": "Pricelist",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_pricelist.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Pricelist Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "country_group_ids",
+     "type": "Many2many",
+     "relates_to": "res.country.group",
+     "label": "Country Groups",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "item_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Pricelist Rules"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "product.pricelist.item",
+   "business_meaning": "Pricelist Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_pricelist_item.py",
+   "key_fields": [
+    {
+     "name": "applied_on",
+     "type": "Selection",
+     "label": "Apply On",
+     "selection": [
+      "3_global",
+      "2_product_category",
+      "1_product",
+      "0_product_variant"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "display_applied_on",
+     "type": "Selection",
+     "selection": [
+      "1_product",
+      "2_product_category"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "base",
+     "type": "Selection",
+     "label": "Based on",
+     "selection": [
+      "list_price",
+      "standard_price",
+      "pricelist"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "compute_price",
+     "type": "Selection",
+     "selection": [
+      "percentage",
+      "formula",
+      "fixed"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist"
+    },
+    {
+     "name": "categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Category"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Variant"
+    },
+    {
+     "name": "base_pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist"
+    },
+    {
+     "name": "price_markup",
+     "type": "Float",
+     "label": "Markup",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 28
+  },
+  {
+   "model": "product.product",
+   "business_meaning": "Product Variant",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_product.py",
+   "delegates_to": [
+    "product.template"
+   ],
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_ids",
+     "type": "One2many",
+     "relates_to": "product.uom"
+    },
+    {
+     "name": "product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Attribute Values"
+    },
+    {
+     "name": "product_template_variant_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Variant Values"
+    },
+    {
+     "name": "pricelist_rule_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Pricelist Rules",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_document_ids",
+     "type": "One2many",
+     "relates_to": "product.document",
+     "label": "Documents"
+    },
+    {
+     "name": "additional_product_tag_ids",
+     "type": "Many2many",
+     "relates_to": "product.tag",
+     "label": "Variant Tags"
+    },
+    {
+     "name": "all_product_tag_ids",
+     "type": "Many2many",
+     "relates_to": "product.tag",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "combination_indices",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "can_image_variant_1024_be_zoomed",
+     "type": "Boolean",
+     "label": "Can Variant Image 1024 be zoomed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "write_date",
+     "type": "Datetime",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 37
+  },
+  {
+   "model": "product.supplierinfo",
+   "business_meaning": "Supplier Pricelist",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_supplierinfo.py",
+   "key_fields": [
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "min_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "delay",
+     "type": "Integer",
+     "label": "Lead Time",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "product.tag",
+   "business_meaning": "Product Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_tag.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_template_ids",
+     "type": "Many2many",
+     "relates_to": "product.template",
+     "label": "Product Templates"
+    },
+    {
+     "name": "product_product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "Product Variants"
+    },
+    {
+     "name": "product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "All Product Variants using this Tag",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "product.template",
+   "business_meaning": "Product",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_template.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log",
+    "images"
+   ],
+   "key_fields": [
+    {
+     "name": "service_tracking",
+     "type": "Selection",
+     "label": "Create on Order",
+     "selection": [
+      "no"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "label": "Product Type",
+     "selection": [
+      "consu",
+      "service",
+      "combo"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "product_variant_ids",
+     "type": "One2many",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "combo_ids",
+     "type": "Many2many",
+     "relates_to": "product.combo",
+     "label": "Combo Choices"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "cost_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "list_price",
+     "type": "Float",
+     "label": "Sales Price",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "label": "Packagings"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "seller_ids",
+     "type": "One2many",
+     "relates_to": "product.supplierinfo"
+    },
+    {
+     "name": "variant_seller_ids",
+     "type": "One2many",
+     "relates_to": "product.supplierinfo"
+    },
+    {
+     "name": "attribute_line_ids",
+     "type": "One2many",
+     "relates_to": "product.template.attribute.line"
+    },
+    {
+     "name": "valid_product_template_attribute_line_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.line",
+     "label": "Valid Product Attribute Lines",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_variant_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pricelist_rule_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Pricelist Rules"
+    },
+    {
+     "name": "product_document_ids",
+     "type": "One2many",
+     "relates_to": "product.document",
+     "label": "Documents"
+    },
+    {
+     "name": "product_tag_ids",
+     "type": "Many2many",
+     "relates_to": "product.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "volume",
+     "type": "Float",
+     "label": "Volume",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "weight",
+     "type": "Float",
+     "label": "Weight",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "purchase_ok",
+     "type": "Boolean",
+     "label": "Purchase",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "default_code",
+     "type": "Char",
+     "label": "Internal Reference",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "can_image_1024_be_zoomed",
+     "type": "Boolean",
+     "label": "Can Image 1024 be zoomed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "has_configurable_attributes",
+     "type": "Boolean",
+     "label": "Is a configurable product",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 46
+  },
+  {
+   "model": "product.template.attribute.exclusion",
+   "business_meaning": "Product Template Attribute Exclusion",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_template_attribute_exclusion.py",
+   "key_fields": [
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_template_attribute_value_id",
+     "type": "Many2one",
+     "relates_to": "product.template.attribute.value",
+     "label": "Attribute Value"
+    },
+    {
+     "name": "value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Attribute Values"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "product.template.attribute.line",
+   "business_meaning": "Product Template Attribute Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_template_attribute_line.py",
+   "key_fields": [
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attribute_id",
+     "type": "Many2one",
+     "relates_to": "product.attribute",
+     "label": "Attribute",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "value_ids",
+     "type": "Many2many",
+     "relates_to": "product.attribute.value",
+     "label": "Values"
+    },
+    {
+     "name": "product_template_value_ids",
+     "type": "One2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Product Attribute Values"
+    },
+    {
+     "name": "value_count",
+     "type": "Integer",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "product.template.attribute.value",
+   "business_meaning": "Product Template Attribute Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_template_attribute_value.py",
+   "key_fields": [
+    {
+     "name": "product_attribute_value_id",
+     "type": "Many2one",
+     "relates_to": "product.attribute.value",
+     "label": "Attribute Value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "attribute_line_id",
+     "type": "Many2one",
+     "relates_to": "product.template.attribute.line",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Value",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "exclude_for",
+     "type": "One2many",
+     "relates_to": "product.template.attribute.exclusion",
+     "label": "Exclude for"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "attribute_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "ptav_product_variant_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "Related Variants"
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "product.uom",
+   "business_meaning": "Link between products and their UoMs",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/models/product_uom.py",
+   "key_fields": [
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "barcode",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "product.label.layout",
+   "business_meaning": "Choose the sheet layout to print the labels",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/wizard/product_label_layout.py",
+   "key_fields": [
+    {
+     "name": "print_format",
+     "type": "Selection",
+     "label": "Format",
+     "selection": [
+      "dymo",
+      "2x7xprice",
+      "4x7xprice",
+      "4x12",
+      "4x12xprice"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "custom_quantity",
+     "type": "Integer",
+     "label": "Copies",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "product_tmpl_ids",
+     "type": "Many2many",
+     "relates_to": "product.template"
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "update.product.attribute.value",
+   "business_meaning": "Update product attribute value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/wizard/update_product_attribute_value.py",
+   "key_fields": [
+    {
+     "name": "attribute_value_id",
+     "type": "Many2one",
+     "relates_to": "product.attribute.value",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mode",
+     "type": "Selection",
+     "selection": [
+      "add",
+      "update_extra_price"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "report.product.report_producttemplatelabel2x7",
+   "business_meaning": "Product Label Report 2x7",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.product.report_producttemplatelabel4x7",
+   "business_meaning": "Product Label Report 4x7",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.product.report_producttemplatelabel4x12",
+   "business_meaning": "Product Label Report 4x12",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.product.report_producttemplatelabel4x12noprice",
+   "business_meaning": "Product Label Report 4x12 No Price",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.product.report_producttemplatelabel_dymo",
+   "business_meaning": "Product Label Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.product.report_pricelist",
+   "business_meaning": "Pricelist Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "product/report/product_pricelist_report.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_weight_in_lbs",
+     "type": "Selection",
+     "selection": [
+      "0",
+      "1"
+     ]
+    },
+    {
+     "name": "product_volume_volume_in_cubic_feet",
+     "type": "Selection",
+     "selection": [
+      "0",
+      "1"
+     ]
+    },
+    {
+     "name": "group_uom",
+     "type": "Boolean",
+     "label": "Units of Measure & Packagings"
+    },
+    {
+     "name": "group_product_variant",
+     "type": "Boolean",
+     "label": "Variants"
+    },
+    {
+     "name": "module_loyalty",
+     "type": "Boolean",
+     "label": "Promotions, Coupons, Gift Card & Loyalty Program"
+    },
+    {
+     "name": "group_product_pricelist",
+     "type": "Boolean",
+     "label": "Pricelists"
+    }
+   ],
+   "evidence_files": [
+    "product/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "property_product_pricelist",
+     "type": "Many2one",
+     "relates_to": "product.pricelist",
+     "label": "Pricelist",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "specific_property_product_pricelist",
+     "type": "Many2one",
+     "relates_to": "product.pricelist"
+    }
+   ],
+   "evidence_files": [
+    "product/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "res.country.group",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "pricelist_ids",
+     "type": "Many2many",
+     "relates_to": "product.pricelist",
+     "label": "Pricelists"
+    }
+   ],
+   "evidence_files": [
+    "product/models/res_country_group.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_uom_ids",
+     "type": "One2many",
+     "relates_to": "product.uom",
+     "label": "Barcodes"
+    }
+   ],
+   "evidence_files": [
+    "product/models/uom_uom.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "product/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "product/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.currency",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "product/models/res_currency.py"
+   ]
+  }
+ ]
+}

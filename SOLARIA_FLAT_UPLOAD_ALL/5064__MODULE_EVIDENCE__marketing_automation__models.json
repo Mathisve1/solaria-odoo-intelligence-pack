@@ -1,0 +1,479 @@
+{
+ "_meta": {
+  "module": "marketing_automation",
+  "display_name": "Marketing Automation",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "marketing.activity",
+   "business_meaning": "Marketing Activity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "marketing_automation/models/marketing_activity.py",
+   "key_fields": [
+    {
+     "name": "activity_type",
+     "type": "Selection",
+     "label": "Activity Type",
+     "selection": [
+      "email",
+      "action"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "interval_type",
+     "type": "Selection",
+     "label": "Delay Type",
+     "selection": [
+      "hours",
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "validity_duration_type",
+     "type": "Selection",
+     "selection": [
+      "hours",
+      "days",
+      "weeks",
+      "months"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "trigger_type",
+     "type": "Selection",
+     "selection": [
+      "begin",
+      "activity",
+      "mail_open",
+      "mail_not_open",
+      "mail_reply",
+      "mail_not_reply",
+      "mail_click",
+      "mail_not_click",
+      "mail_bounce"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mass_mailing_id_mailing_type",
+     "type": "Selection",
+     "label": "Mailing Type",
+     "selection": [
+      "mail"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "marketing.campaign",
+     "label": "Campaign",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mass_mailing_id",
+     "type": "Many2one",
+     "relates_to": "mailing.mailing",
+     "label": "Marketing Template",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "server_action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.server",
+     "label": "Server Action",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "marketing.activity",
+     "label": "Activity",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trigger_category",
+     "type": "Selection",
+     "selection": [
+      "email"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "utm_campaign_id",
+     "type": "Many2one",
+     "relates_to": "utm.campaign",
+     "label": "UTM Campaign",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "allowed_parent_ids",
+     "type": "Many2many",
+     "relates_to": "marketing.activity",
+     "label": "Allowed parents",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "marketing.activity",
+     "label": "Child Activities"
+    },
+    {
+     "name": "trace_ids",
+     "type": "One2many",
+     "relates_to": "marketing.trace",
+     "label": "Traces"
+    },
+    {
+     "name": "interval_standardized",
+     "type": "Integer",
+     "label": "Send after (in hours)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "domain",
+     "type": "Char",
+     "label": "Applied Filter",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 32
+  },
+  {
+   "model": "marketing.campaign",
+   "business_meaning": "Marketing Campaign",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "marketing_automation/models/marketing_campaign.py",
+   "delegates_to": [
+    "utm.campaign"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "draft",
+      "running",
+      "stopped"
+     ]
+    },
+    {
+     "name": "utm_campaign_id",
+     "type": "Many2one",
+     "relates_to": "utm.campaign",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "unique_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Unique Field",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mailing_filter_id",
+     "type": "Many2one",
+     "relates_to": "mailing.filter",
+     "label": "Favorite Filter",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "marketing_activity_ids",
+     "type": "One2many",
+     "relates_to": "marketing.activity",
+     "label": "Activities"
+    },
+    {
+     "name": "participant_ids",
+     "type": "One2many",
+     "relates_to": "marketing.participant",
+     "label": "Participants"
+    },
+    {
+     "name": "domain",
+     "type": "Char",
+     "label": "Filter",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "marketing.participant",
+   "business_meaning": "Marketing Participant",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "marketing_automation/models/marketing_participant.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "running",
+      "completed",
+      "unlinked"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "marketing.campaign",
+     "label": "Campaign",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "trace_ids",
+     "type": "One2many",
+     "relates_to": "marketing.trace",
+     "label": "Actions"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "marketing.trace",
+   "business_meaning": "Marketing Trace",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "marketing_automation/models/marketing_trace.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "scheduled",
+      "processed",
+      "rejected",
+      "canceled",
+      "error"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "participant_id",
+     "type": "Many2one",
+     "relates_to": "marketing.participant",
+     "label": "Participant",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "activity_id",
+     "type": "Many2one",
+     "relates_to": "marketing.activity",
+     "label": "Activity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "marketing.trace",
+     "label": "Parent"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "marketing.trace",
+     "label": "Direct child traces"
+    },
+    {
+     "name": "mailing_trace_ids",
+     "type": "One2many",
+     "relates_to": "mailing.trace",
+     "label": "Mass mailing statistics"
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "marketing.campaign.test",
+   "business_meaning": "Marketing Campaign: Launch a Test",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "marketing_automation/wizard/marketing_campaign_test.py",
+   "key_fields": [
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "marketing.campaign",
+     "label": "Campaign",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "mailing.mailing",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "marketing_activity_ids",
+     "type": "One2many",
+     "relates_to": "marketing.activity",
+     "label": "Marketing Activities"
+    },
+    {
+     "name": "use_in_marketing_automation",
+     "type": "Boolean",
+     "label": "Specific mailing used in marketing campaign"
+    }
+   ],
+   "evidence_files": [
+    "marketing_automation/models/mailing_mailing.py"
+   ]
+  },
+  {
+   "model": "mailing.trace",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "marketing_trace_id",
+     "type": "Many2one",
+     "relates_to": "marketing.trace",
+     "label": "Marketing Trace"
+    }
+   ],
+   "evidence_files": [
+    "marketing_automation/models/mailing_trace.py"
+   ]
+  },
+  {
+   "model": "mail.compose.message",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "marketing_activity_id",
+     "type": "Many2one",
+     "relates_to": "marketing.activity",
+     "label": "Marketing Activity"
+    }
+   ],
+   "evidence_files": [
+    "marketing_automation/wizard/mail_compose_message.py"
+   ]
+  },
+  {
+   "model": "utm.campaign",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "marketing_automation/models/utm_campaign.py"
+   ]
+  },
+  {
+   "model": "utm.source",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "marketing_automation/models/utm_source.py"
+   ]
+  },
+  {
+   "model": "mailing.trace.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "marketing_automation/report/mailing_trace_report.py"
+   ]
+  }
+ ]
+}

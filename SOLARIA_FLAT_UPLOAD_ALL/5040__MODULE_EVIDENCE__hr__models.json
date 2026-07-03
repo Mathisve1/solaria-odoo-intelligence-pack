@@ -1,0 +1,1584 @@
+{
+ "_meta": {
+  "module": "hr",
+  "display_name": "Employees",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "hr.contract.type",
+   "business_meaning": "Contract Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_contract_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "hr.department",
+   "business_meaning": "Department",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_department.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Department Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Manager",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "master_department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "label": "Parent Department"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "hr.department",
+     "label": "Child Departments"
+    },
+    {
+     "name": "member_ids",
+     "type": "One2many",
+     "relates_to": "hr.employee",
+     "label": "Members"
+    },
+    {
+     "name": "jobs_ids",
+     "type": "One2many",
+     "relates_to": "hr.job",
+     "label": "Jobs"
+    },
+    {
+     "name": "plan_ids",
+     "type": "One2many",
+     "relates_to": "mail.activity.plan"
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "hr.departure.reason",
+   "business_meaning": "Departure Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_departure_reason.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reason",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "hr.employee",
+   "business_meaning": "Employee",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_employee.py",
+   "delegates_to": [
+    "hr.version"
+   ],
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "avatar"
+   ],
+   "key_fields": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Employee Name",
+     "flags": [
+      "tracked",
+      "related"
+     ]
+    },
+    {
+     "name": "work_location_type",
+     "type": "Selection",
+     "selection": [
+      "home",
+      "office",
+      "other"
+     ],
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "version_id",
+     "type": "Many2one",
+     "relates_to": "hr.version",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "version_ids",
+     "type": "One2many",
+     "relates_to": "hr.version",
+     "label": "Employee Versions",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "resource_id",
+     "type": "Many2one",
+     "relates_to": "resource.resource",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_of_birth",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country of Birth",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "bank_account_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner.bank",
+     "label": "Bank Accounts",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "current_version_id",
+     "type": "Many2one",
+     "relates_to": "hr.version",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "hr_presence_state",
+     "type": "Selection",
+     "selection": [
+      "present",
+      "absent",
+      "archive",
+      "out_of_working_hour"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "hr_icon_display",
+     "type": "Selection",
+     "selection": [
+      "presence_present",
+      "presence_out_of_working_hour",
+      "presence_absent",
+      "presence_archive",
+      "presence_undetermined"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "work_phone",
+     "type": "Char",
+     "label": "Work Phone",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "coach_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_partner_id",
+     "type": "Many2one",
+     "label": "User's partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "work_contact_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "place_of_birth",
+     "type": "Char",
+     "label": "Place of Birth",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "birthday",
+     "type": "Date",
+     "label": "Birthday",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "primary_bank_account_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "permit_no",
+     "type": "Char",
+     "label": "Work Permit No",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "visa_no",
+     "type": "Char",
+     "label": "Visa No",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "visa_expire",
+     "type": "Date",
+     "label": "Visa Expiration Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "work_permit_expiration_date",
+     "type": "Date",
+     "label": "Work Permit Expiration Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "certificate",
+     "type": "Selection",
+     "label": "Certificate Level",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "study_field",
+     "type": "Char",
+     "label": "Field of Study",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "total_field_count_declared": 105
+  },
+  {
+   "model": "hr.employee.category",
+   "business_meaning": "Employee Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_employee_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employees"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "hr.employee.public",
+   "business_meaning": "Public Employee",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_employee_public.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char"
+    },
+    {
+     "name": "hr_presence_state",
+     "type": "Selection",
+     "selection": [
+      "present",
+      "absent",
+      "archive",
+      "out_of_working_hour"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department"
+    },
+    {
+     "name": "job_id",
+     "type": "Many2one",
+     "relates_to": "hr.job"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "work_contact_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "work_location_id",
+     "type": "Many2one",
+     "relates_to": "hr.work.location"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "resource_id",
+     "type": "Many2one",
+     "relates_to": "resource.resource"
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar"
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "hr.employee.public",
+     "label": "Direct subordinates"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee.public"
+    },
+    {
+     "name": "coach_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee.public"
+    },
+    {
+     "name": "user_partner_id",
+     "type": "Many2one",
+     "label": "User's partner",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 50
+  },
+  {
+   "model": "hr.job",
+   "business_meaning": "Job Position",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_job.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Job Position",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "label": "Department",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "contract_type_id",
+     "type": "Many2one",
+     "relates_to": "hr.contract.type",
+     "label": "Employment Type",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "employee_ids",
+     "type": "One2many",
+     "relates_to": "hr.employee",
+     "label": "Employees"
+    },
+    {
+     "name": "allowed_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "hr.payroll.structure.type",
+   "business_meaning": "Salary Structure Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_payroll_structure_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Salary Structure Type"
+    },
+    {
+     "name": "default_resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "hr.version",
+   "business_meaning": "Version",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_version.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "distance_home_work_unit",
+     "type": "Selection",
+     "selection": [
+      "kilometers",
+      "miles"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "employee_type",
+     "type": "Selection",
+     "label": "Employee Type",
+     "selection": [
+      "employee",
+      "worker",
+      "student",
+      "trainee",
+      "contractor",
+      "freelance"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "hr_responsible_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "sex",
+     "type": "Selection",
+     "label": "Gender",
+     "selection": [
+      "male",
+      "female",
+      "other"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "structure_type_id",
+     "type": "Many2one",
+     "relates_to": "hr.payroll.structure.type",
+     "label": "Salary Structure Type",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "date_version",
+     "type": "Date",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "last_modified_uid",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Last Modified by",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "private_state_id",
+     "type": "Many2one",
+     "relates_to": "res.country.state",
+     "label": "Private State",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "private_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Private Country",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "marital",
+     "type": "Selection",
+     "label": "Marital Status",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "job_id",
+     "type": "Many2one",
+     "relates_to": "hr.job",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Work Address",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "work_location_id",
+     "type": "Many2one",
+     "relates_to": "hr.work.location",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "departure_reason_id",
+     "type": "Many2one",
+     "relates_to": "hr.departure.reason",
+     "label": "Departure Reason",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar",
+     "label": "Working Hours",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "contract_template_id",
+     "type": "Many2one",
+     "relates_to": "hr.version",
+     "label": "Contract Template",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "wage",
+     "type": "Monetary",
+     "label": "Wage",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "contract_type_id",
+     "type": "Many2one",
+     "relates_to": "hr.contract.type",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "km_home_work",
+     "type": "Integer",
+     "label": "Home-Work Distance in Km",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "job_title",
+     "type": "Char",
+     "label": "Job Title",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "last_modified_date",
+     "type": "Datetime",
+     "label": "Last Modified on",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "identification_id",
+     "type": "Char",
+     "label": "Identification No",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "total_field_count_declared": 63
+  },
+  {
+   "model": "hr.work.location",
+   "business_meaning": "Work Location",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/models/hr_work_location.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Work Location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_type",
+     "type": "Selection",
+     "label": "Cover Image",
+     "selection": [
+      "home",
+      "office",
+      "other"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Work Address",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "hr.bank.account.allocation.wizard.line",
+   "business_meaning": "Bank Account Allocation Line (Wizard)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/wizard/hr_bank_account_allocation_wizard_line.py",
+   "key_fields": [
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "hr.bank.account.allocation.wizard",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "bank_account_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "hr.bank.account.allocation.wizard",
+   "business_meaning": "Bank Account Allocation Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/wizard/hr_bank_account_wizard.py",
+   "key_fields": [
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "allocation_ids",
+     "type": "One2many",
+     "relates_to": "hr.bank.account.allocation.wizard.line",
+     "label": "Allocations"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "hr.version.wizard",
+   "business_meaning": "Contract Template Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/wizard/hr_contract_template_wizard.py",
+   "key_fields": [
+    {
+     "name": "contract_template_id",
+     "type": "Many2one",
+     "relates_to": "hr.version",
+     "label": "Contract Template",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "hr.departure.wizard",
+   "business_meaning": "Departure Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/wizard/hr_departure_wizard.py",
+   "key_fields": [
+    {
+     "name": "departure_reason_id",
+     "type": "Many2one",
+     "relates_to": "hr.departure.reason",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employees",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "departure_date",
+     "type": "Date",
+     "label": "Contract End Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "hr.manager.department.report",
+   "business_meaning": "Hr Manager Department Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr/report/hr_manager_department_report.py",
+   "key_fields": [
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee"
+    }
+   ],
+   "total_field_count_declared": 2
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "resource.resource",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "user_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "employee_id",
+     "type": "One2many",
+     "relates_to": "hr.employee"
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "work_location_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "calendar_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "job_title",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "work_email",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "work_phone",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "show_hr_icon_display",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "hr_icon_display",
+     "type": "Selection",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/resource.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "resource_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "module_hr_presence",
+     "type": "Boolean",
+     "label": "Advanced Presence Control"
+    },
+    {
+     "name": "module_hr_skills",
+     "type": "Boolean",
+     "label": "Skills Management"
+    },
+    {
+     "name": "hr_presence_control_login",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "hr_presence_control_email",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "hr_presence_control_ip",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "module_hr_attendance",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "hr_presence_control_email_amount",
+     "type": "Integer",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "hr_presence_control_ip_list",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "contract_expiration_notice_period",
+     "type": "Integer",
+     "label": "Contract Expiry Notice Period",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.partner.bank",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bank_state",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_country",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "bank_street",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_street2",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_zip",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_city",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_email",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_phone",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_salary_amount",
+     "type": "Float",
+     "label": "Salary Allocation",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/res_partner_bank.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "employee_ids",
+     "type": "One2many",
+     "relates_to": "hr.employee",
+     "label": "Related employee"
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Company employee",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "category_ids",
+     "type": "Many2many",
+     "label": "Employee Tags",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "work_contact_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "work_location_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "private_state_id",
+     "type": "Many2one",
+     "label": "Private State",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "private_country_id",
+     "type": "Many2one",
+     "label": "Private Country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_bank_account_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner.bank",
+     "label": "Employee's Bank Accounts",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_resource_calendar_id",
+     "type": "Many2one",
+     "label": "Employee's Working Hours",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_account_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/res_users.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "hr_presence_control_email_amount",
+     "type": "Integer",
+     "label": "# emails to send"
+    },
+    {
+     "name": "hr_presence_control_ip_list",
+     "type": "Char",
+     "label": "Valid IP addresses"
+    },
+    {
+     "name": "employee_properties_definition",
+     "type": "PropertiesDefinition",
+     "label": "Employee Properties"
+    },
+    {
+     "name": "hr_presence_control_login",
+     "type": "Boolean",
+     "label": "Based on user status in system"
+    },
+    {
+     "name": "hr_presence_control_email",
+     "type": "Boolean",
+     "label": "Based on number of emails sent"
+    },
+    {
+     "name": "hr_presence_control_ip",
+     "type": "Boolean",
+     "label": "Based on IP Address"
+    },
+    {
+     "name": "hr_presence_control_attendance",
+     "type": "Boolean",
+     "label": "Based on attendances"
+    },
+    {
+     "name": "contract_expiration_notice_period",
+     "type": "Integer",
+     "label": "Contract Expiry Notice Period"
+    },
+    {
+     "name": "work_permit_expiration_notice_period",
+     "type": "Integer",
+     "label": "Work Permit Expiry Notice Period"
+    }
+   ],
+   "evidence_files": [
+    "hr/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "employee_ids",
+     "type": "One2many",
+     "relates_to": "hr.employee",
+     "label": "Employees"
+    },
+    {
+     "name": "employee",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "employees_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "mail.activity.plan",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "department_assignable",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/models/mail_activity_plan.py"
+   ]
+  },
+  {
+   "model": "mail.activity.schedule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "plan_department_filterable",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr/wizard/mail_activity_schedule.py"
+   ]
+  },
+  {
+   "model": "discuss.channel",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_department_ids",
+     "type": "Many2many",
+     "relates_to": "hr.department",
+     "label": "HR Departments"
+    }
+   ],
+   "evidence_files": [
+    "hr/models/discuss_channel.py"
+   ]
+  },
+  {
+   "model": "mail.activity.plan.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "responsible_type",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "hr/models/mail_activity_plan_template.py"
+   ]
+  },
+  {
+   "model": "mail.alias",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "alias_contact",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "hr/models/mail_alias.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "base",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr/models/models.py"
+   ]
+  },
+  {
+   "model": "resource.calendar",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr/models/resource_calendar.py"
+   ]
+  },
+  {
+   "model": "resource.calendar.leaves",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr/models/resource_calendar_leaves.py"
+   ]
+  }
+ ]
+}

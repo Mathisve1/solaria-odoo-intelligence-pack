@@ -1,0 +1,434 @@
+{
+ "_meta": {
+  "module": "knowledge",
+  "display_name": "Knowledge",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "knowledge.article",
+   "business_meaning": "Knowledge Article",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article.stage",
+     "label": "Item Stage",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "root_article_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "label": "Menu Article",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "inherited_permission",
+     "type": "Selection",
+     "label": "Inherited Permission",
+     "selection": [
+      "write",
+      "read",
+      "none"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "label": "Parent Article",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "category",
+     "type": "Selection",
+     "label": "Section",
+     "selection": [
+      "workspace",
+      "private",
+      "shared"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "internal_permission",
+     "type": "Selection",
+     "label": "Internal Permission",
+     "selection": [
+      "write",
+      "read",
+      "none"
+     ]
+    },
+    {
+     "name": "inherited_permission_parent_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "label": "Inherited Permission Parent Article",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_permission",
+     "type": "Selection",
+     "label": "User permission",
+     "selection": [
+      "write",
+      "read",
+      "none"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "template_category_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article.template.category",
+     "label": "Template Category",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "cover_image_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.cover",
+     "label": "Article cover"
+    },
+    {
+     "name": "article_member_ids",
+     "type": "One2many",
+     "relates_to": "knowledge.article.member",
+     "label": "Members Information"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "knowledge.article",
+     "label": "Child Articles and Items"
+    },
+    {
+     "name": "last_edition_uid",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Last Edited by"
+    },
+    {
+     "name": "favorite_ids",
+     "type": "One2many",
+     "relates_to": "knowledge.article.favorite",
+     "label": "Favorite Articles"
+    },
+    {
+     "name": "to_delete",
+     "type": "Boolean",
+     "label": "Trashed",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "origin_template_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "label": "Template used to generate the article"
+    },
+    {
+     "name": "favorite_count",
+     "type": "Integer",
+     "label": "#Is Favorite",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_article_visible_by_everyone",
+     "type": "Boolean",
+     "label": "Can everyone see the Article?",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 56
+  },
+  {
+   "model": "knowledge.article.favorite",
+   "business_meaning": "Favorite Article",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article_favorite.py",
+   "key_fields": [
+    {
+     "name": "article_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "knowledge.article.member",
+   "business_meaning": "Article Member",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article_member.py",
+   "key_fields": [
+    {
+     "name": "permission",
+     "type": "Selection",
+     "selection": [
+      "write",
+      "read",
+      "none"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "article_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "knowledge.article.stage",
+   "business_meaning": "Knowledge Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article_stage.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "label": "Owner Article",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "knowledge.article.template.category",
+   "business_meaning": "Article Template Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article_template_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "label": "Category Sequence",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "knowledge.article.thread",
+   "business_meaning": "Article Discussion Thread",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_article_thread.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "article_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "is_resolved",
+     "type": "Boolean",
+     "label": "Thread Closed",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "knowledge.cover",
+   "business_meaning": "Knowledge Cover",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/models/knowledge_cover.py",
+   "key_fields": [
+    {
+     "name": "attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Cover attachment",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "article_ids",
+     "type": "One2many",
+     "relates_to": "knowledge.article",
+     "label": "Articles using cover"
+    },
+    {
+     "name": "attachment_url",
+     "type": "Char",
+     "label": "Cover URL",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "knowledge.invite",
+   "business_meaning": "Knowledge Invite Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "knowledge/wizard/knowledge_invite.py",
+   "key_fields": [
+    {
+     "name": "permission",
+     "type": "Selection",
+     "selection": [
+      "write",
+      "read",
+      "none"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "article_id",
+     "type": "Many2one",
+     "relates_to": "knowledge.article",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Recipients",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "knowledge/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "knowledge/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "knowledge/models/res_users.py"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "_meta": {
+  "module": "spreadsheet_edition",
+  "display_name": "Spreadsheet",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "spreadsheet.cell.thread",
+   "business_meaning": "Spreadsheet discussion thread",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "spreadsheet_edition/models/spreadsheet_cell_thread.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "spreadsheet.revision",
+   "business_meaning": "Collaborative spreadsheet revision",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "spreadsheet_edition/models/spreadsheet_revision.py",
+   "key_fields": [
+    {
+     "name": "author_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Revision name"
+    },
+    {
+     "name": "res_model",
+     "type": "Char",
+     "label": "Model",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "res_id",
+     "type": "Many2oneReference",
+     "label": "Record id",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "commands",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "revision_uuid",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_revision_id",
+     "type": "Many2one",
+     "relates_to": "spreadsheet.revision"
+    },
+    {
+     "name": "revision_date",
+     "type": "Datetime",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "spreadsheet.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "spreadsheet_revision_ids",
+     "type": "One2many",
+     "relates_to": "spreadsheet.revision"
+    },
+    {
+     "name": "spreadsheet_snapshot",
+     "type": "Binary"
+    },
+    {
+     "name": "display_thumbnail",
+     "type": "Binary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "current_revision_uuid",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "spreadsheet_edition/models/spreadsheet_mixin.py"
+   ]
+  },
+  {
+   "model": "ir.websocket",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "spreadsheet_edition/models/ir_websocket.py"
+   ]
+  }
+ ]
+}

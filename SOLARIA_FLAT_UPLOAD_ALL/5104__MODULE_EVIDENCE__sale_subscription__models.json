@@ -1,0 +1,956 @@
+{
+ "_meta": {
+  "module": "sale_subscription",
+  "display_name": "Subscriptions",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "sale.order.close.reason",
+   "business_meaning": "Subscription Close Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/models/sale_order_close_reason.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reason",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "visible_in_portal",
+     "type": "Boolean",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "sale.order.log",
+   "business_meaning": "Sale Order Log",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/models/sale_order_log.py",
+   "key_fields": [
+    {
+     "name": "event_type",
+     "type": "Selection",
+     "label": "Type of event",
+     "selection": [
+      "0_creation",
+      "1_expansion",
+      "15_contraction",
+      "2_churn",
+      "3_transfer"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "label": "Sale Order",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "recurring_monthly",
+     "type": "Monetary",
+     "label": "New MRR",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount_signed",
+     "type": "Monetary",
+     "label": "MRR change",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "origin_order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "label": "Origin Contract",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team",
+     "label": "Sales Team",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan",
+     "label": "Recurring Plan",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "event_date",
+     "type": "Date",
+     "label": "Event Date",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "sale.subscription.plan",
+   "business_meaning": "Subscription Plan",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/models/sale_subscription_plan.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "billing_period_unit",
+     "type": "Selection",
+     "label": "Unit",
+     "selection": [
+      "week",
+      "month",
+      "year"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_closable_options",
+     "type": "Selection",
+     "label": "Closeable Plan Options",
+     "selection": [
+      "at_date",
+      "end_of_period"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "billing_period_value",
+     "type": "Integer",
+     "label": "Billing Period ",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "related_plan_id",
+     "type": "Many2many",
+     "relates_to": "sale.subscription.plan",
+     "label": "Optional Plans"
+    },
+    {
+     "name": "invoice_mail_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Invoice Email Template"
+    },
+    {
+     "name": "subscription_rule_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Recurring Pricing"
+    }
+   ],
+   "total_field_count_declared": 21
+  },
+  {
+   "model": "sale.subscription.change.customer.wizard",
+   "business_meaning": "Subscription Change Customer Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/wizard/sale_subscription_change_customer_wizard.py",
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "New Customer"
+    },
+    {
+     "name": "partner_invoice_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "New Invoice Address"
+    },
+    {
+     "name": "partner_shipping_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "New Delivery Address"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "sale.subscription.close.reason.wizard",
+   "business_meaning": "Subscription Close Reason Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/wizard/sale_subscription_close_reason_wizard.py",
+   "key_fields": [
+    {
+     "name": "close_reason_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.close.reason",
+     "label": "Close Reason",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "sale.order.log.report",
+   "business_meaning": "Sales Log Analysis Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/report/sale_order_log_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status"
+    },
+    {
+     "name": "event_type",
+     "type": "Selection",
+     "label": "Type of event",
+     "selection": [
+      "0_creation",
+      "1_expansion",
+      "15_contraction",
+      "2_churn",
+      "3_transfer"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "crm.team"
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "relates_to": "product.pricelist"
+    },
+    {
+     "name": "amount_signed",
+     "type": "Monetary",
+     "label": "MRR Change"
+    },
+    {
+     "name": "mrr_change_normalized",
+     "type": "Monetary",
+     "label": "MRR Change (normalized)"
+    },
+    {
+     "name": "arr_change_normalized",
+     "type": "Monetary",
+     "label": "ARR Change (normalized)"
+    },
+    {
+     "name": "recurring_monthly",
+     "type": "Monetary",
+     "label": "Monthly Recurring Revenue"
+    },
+    {
+     "name": "recurring_yearly",
+     "type": "Monetary",
+     "label": "Annual Recurring Revenue"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.template"
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "industry_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.industry"
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "campaign_id",
+     "type": "Many2one",
+     "relates_to": "utm.campaign"
+    },
+    {
+     "name": "origin_order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order"
+    },
+    {
+     "name": "order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order"
+    },
+    {
+     "name": "close_reason_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.close.reason",
+     "label": "Close Reason"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    },
+    {
+     "name": "log_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    }
+   ],
+   "total_field_count_declared": 30
+  },
+  {
+   "model": "sale.subscription.report",
+   "business_meaning": "Subscription Analysis",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "sale_subscription/report/sale_subscription_report.py",
+   "key_fields": [
+    {
+     "name": "recurring_monthly",
+     "type": "Monetary",
+     "label": "Monthly Recurring"
+    },
+    {
+     "name": "recurring_yearly",
+     "type": "Monetary",
+     "label": "Yearly Recurring"
+    },
+    {
+     "name": "recurring_total",
+     "type": "Monetary",
+     "label": "Recurring Revenue"
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.template"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country"
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "industry_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.industry"
+    },
+    {
+     "name": "close_reason_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.close.reason"
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan"
+    },
+    {
+     "name": "origin_order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "label": "First contract"
+    }
+   ],
+   "total_field_count_declared": 17
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "sale.order",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan",
+     "label": "Recurring Plan",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_monthly",
+     "type": "Monetary",
+     "label": "MRR",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "close_reason_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.close.reason",
+     "label": "Close Reason",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "payment_term_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "subscription_state",
+     "type": "Selection",
+     "label": "Subscription Status",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "origin_order_id",
+     "type": "Many2one",
+     "relates_to": "sale.order",
+     "label": "First contract",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "start_date",
+     "type": "Date",
+     "label": "Start Date",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "next_invoice_date",
+     "type": "Date",
+     "label": "Next Invoice",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_total",
+     "type": "Monetary",
+     "label": "Recurring Amount",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/sale_order.py"
+   ]
+  },
+  {
+   "model": "sale.order.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "parent_line_id",
+     "type": "Many2one",
+     "relates_to": "sale.order.line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_monthly",
+     "type": "Monetary",
+     "label": "Monthly Recurring Revenue",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "pricelist_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_template_variant_value_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "subscription_plan_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "last_invoiced_date",
+     "type": "Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_invoice",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "subscription_start_date",
+     "type": "Date",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "subscription_end_date",
+     "type": "Date",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "next_invoice_date",
+     "type": "Date",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/sale_order_line.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_rule_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Subscription Pricings"
+    },
+    {
+     "name": "subscription_rule_ids_fixed",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Fixed Subscription Pricings"
+    },
+    {
+     "name": "allow_prorated_price",
+     "type": "Boolean",
+     "label": "Prorated Price",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "recurring_invoice",
+     "type": "Boolean",
+     "label": "Subscription Product"
+    },
+    {
+     "name": "allow_one_time_sale",
+     "type": "Boolean",
+     "label": "Accept One-Time"
+    },
+    {
+     "name": "display_subscription_pricing",
+     "type": "Char",
+     "label": "Display Price",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/product_template.py"
+   ]
+  },
+  {
+   "model": "sale.order.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "duration_unit",
+     "type": "Selection",
+     "selection": [
+      "month",
+      "year"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan",
+     "label": "Recurring Plan"
+    },
+    {
+     "name": "duration_value",
+     "type": "Integer",
+     "label": "End After",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "is_subscription",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_unlimited",
+     "type": "Boolean",
+     "label": "Last Forever"
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/sale_order_template.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_mrr",
+     "type": "Monetary",
+     "label": "Monthly Recurring Revenue",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "subscription_id",
+     "type": "Many2one",
+     "relates_to": "sale.order"
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/account_move_line.py"
+   ]
+  },
+  {
+   "model": "payment.transaction",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "renewal_state",
+     "type": "Selection",
+     "selection": [
+      "draft",
+      "pending",
+      "authorized",
+      "cancel"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "subscription_action",
+     "type": "Selection",
+     "selection": [
+      "automatic_send_mail",
+      "manual_send_mail",
+      "assign_token"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/payment_transaction.py"
+   ]
+  },
+  {
+   "model": "product.pricelist",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_item_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Recurring Pricing"
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/product_pricelist.py"
+   ]
+  },
+  {
+   "model": "product.pricelist.item",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "plan_id",
+     "type": "Many2one",
+     "relates_to": "sale.subscription.plan",
+     "label": "Recurring Plan"
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/product_pricelist_item.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_rule_ids",
+     "type": "One2many",
+     "relates_to": "product.pricelist.item",
+     "label": "Subscription Pricings",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/product_product.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "subscription_count",
+     "type": "Integer",
+     "label": "Subscriptions",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "sale.order.template.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "recurring_invoice",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/models/sale_order_template.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "invoice_consolidation",
+     "type": "Boolean",
+     "label": "Consolidate subscriptions billing"
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/wizard/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "sale.advance.payment.inv",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "postpaid_warning_message",
+     "type": "Html",
+     "label": "Warning Message",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "sale_subscription/wizard/sale_make_invoice_advance.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/models/account_move.py"
+   ]
+  },
+  {
+   "model": "account.move.send",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/models/account_move_send.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "payment.provider",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/models/payment_provider.py"
+   ]
+  },
+  {
+   "model": "payment.token",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/models/payment_token.py"
+   ]
+  },
+  {
+   "model": "payment.link.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/wizard/payment_link_wizard.py"
+   ]
+  },
+  {
+   "model": "sale.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "sale_subscription/report/sale_report.py"
+   ]
+  }
+ ]
+}

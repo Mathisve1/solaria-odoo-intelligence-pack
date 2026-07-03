@@ -1,0 +1,786 @@
+{
+ "_meta": {
+  "module": "documents",
+  "display_name": "Documents",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "documents.access",
+   "business_meaning": "Document / Partner",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_access.py",
+   "key_fields": [
+    {
+     "name": "document_id",
+     "type": "Many2one",
+     "relates_to": "documents.document",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "role",
+     "type": "Selection",
+     "label": "Role",
+     "selection": [
+      "view",
+      "edit"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "documents.access.tracking",
+   "business_meaning": "Document Access Tracking",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_access_tracking.py",
+   "key_fields": [
+    {
+     "name": "changes",
+     "type": "Json",
+     "label": "Changes need to be tracked",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "documents",
+     "type": "Json",
+     "label": "Impacted Document Ids",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "documents.document",
+   "business_meaning": "Document",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_document.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "url",
+      "binary",
+      "folder"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_via_link",
+     "type": "Selection",
+     "label": "Link Access Rights",
+     "selection": [
+      "view",
+      "edit",
+      "none"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_internal",
+     "type": "Selection",
+     "label": "Internal Users Rights",
+     "selection": [
+      "view",
+      "edit",
+      "none"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "thumbnail_status",
+     "type": "Selection",
+     "selection": [
+      "present",
+      "error",
+      "client_generated",
+      "restricted"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Owner",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "lock_uid",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Locked by",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "folder_id",
+     "type": "Many2one",
+     "relates_to": "documents.document",
+     "label": "Folder",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "user_permission",
+     "type": "Selection",
+     "label": "User permission",
+     "selection": [
+      "edit",
+      "view",
+      "none"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "create_activity_date_deadline_range_type",
+     "type": "Selection",
+     "label": "Due type",
+     "selection": [
+      "days",
+      "weeks",
+      "months"
+     ]
+    },
+    {
+     "name": "last_access_date_group",
+     "type": "Selection",
+     "label": "Last Accessed On",
+     "selection": [
+      "0_older",
+      "1_month",
+      "2_week",
+      "3_day"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment"
+    },
+    {
+     "name": "previous_attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "History"
+    },
+    {
+     "name": "url",
+     "type": "Char",
+     "label": "Link URL",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "shortcut_document_id",
+     "type": "Many2one",
+     "relates_to": "documents.document"
+    },
+    {
+     "name": "shortcut_document_owner_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "shortcut_ids",
+     "type": "One2many",
+     "relates_to": "documents.document"
+    },
+    {
+     "name": "favorited_ids",
+     "type": "Many2many",
+     "relates_to": "res.users",
+     "label": "Favorite of"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "documents.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "request_activity_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity"
+    },
+    {
+     "name": "requestee_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "document_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_ids",
+     "type": "One2many",
+     "relates_to": "documents.access",
+     "label": "Allowed Access"
+    },
+    {
+     "name": "children_ids",
+     "type": "One2many",
+     "relates_to": "documents.document"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "create_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Activity type"
+    },
+    {
+     "name": "create_activity_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Responsible"
+    }
+   ],
+   "total_field_count_declared": 63
+  },
+  {
+   "model": "documents.mixin",
+   "business_meaning": "Documents creation mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_mixin.py",
+   "built_in_capabilities": [
+    "documents cleanup"
+   ],
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "documents.redirect",
+   "business_meaning": "Document Redirect",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_redirect.py",
+   "key_fields": [
+    {
+     "name": "access_token",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_id",
+     "type": "Many2one",
+     "relates_to": "documents.document"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "documents.tag",
+   "business_meaning": "Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_tag.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_ids",
+     "type": "Many2many",
+     "relates_to": "documents.document"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "documents.unlink.mixin",
+   "business_meaning": "Documents unlink mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/models/documents_unlink_mixin.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "documents.link_to_record_wizard",
+   "business_meaning": "Documents Link to Record",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/wizard/documents_link_to_record_wizard.py",
+   "key_fields": [
+    {
+     "name": "document_ids",
+     "type": "Many2many",
+     "relates_to": "documents.document",
+     "label": "Documents"
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model"
+    },
+    {
+     "name": "accessible_model_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model",
+     "label": "Models",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "documents.operation",
+   "business_meaning": "Documents Operation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/wizard/documents_operation.py",
+   "key_fields": [
+    {
+     "name": "operation",
+     "type": "Selection",
+     "selection": [
+      "move",
+      "shortcut",
+      "copy",
+      "add"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_permission",
+     "type": "Selection",
+     "label": "Destination User Permission",
+     "selection": [
+      "edit",
+      "view",
+      "none"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_ids",
+     "type": "Many2many",
+     "relates_to": "documents.document",
+     "label": "Documents"
+    },
+    {
+     "name": "attachment_id",
+     "type": "Many2one",
+     "relates_to": "ir.attachment",
+     "label": "Attachment"
+    },
+    {
+     "name": "destination",
+     "type": "Char",
+     "label": "Destination",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "destination_children_ids",
+     "type": "One2many",
+     "relates_to": "documents.document",
+     "label": "Siblings",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "documents.request_wizard",
+   "business_meaning": "Document Request",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/wizard/documents_request_wizard.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "requestee_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Owner",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Activity type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "activity_date_deadline_range_type",
+     "type": "Selection",
+     "label": "Due type",
+     "selection": [
+      "days",
+      "weeks",
+      "months"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Contact"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "documents.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "folder_id",
+     "type": "Many2one",
+     "relates_to": "documents.document",
+     "label": "Folder"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "documents.sharing",
+   "business_meaning": "Documents Sharing",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/wizard/documents_sharing.py",
+   "key_fields": [
+    {
+     "name": "invite_role",
+     "type": "Selection",
+     "label": "Role",
+     "selection": [
+      "view",
+      "edit"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "share_access_ids",
+     "type": "One2many",
+     "relates_to": "documents.sharing.access",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_ids",
+     "type": "Many2many",
+     "relates_to": "documents.document"
+    },
+    {
+     "name": "access_internal",
+     "type": "Selection",
+     "label": "Internal users",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_via_link",
+     "type": "Selection",
+     "label": "Access through link",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "access_via_link_mode",
+     "type": "Selection",
+     "label": "Discoverable",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "invite_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Owner of all documents",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 19
+  },
+  {
+   "model": "documents.sharing.access",
+   "business_meaning": "Documents share access",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "documents/wizard/documents_sharing_access.py",
+   "key_fields": [
+    {
+     "name": "documents_sharing_id",
+     "type": "Many2one",
+     "relates_to": "documents.sharing"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "role",
+     "type": "Selection",
+     "label": "Role",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "mail.activity.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "documents.tag"
+    },
+    {
+     "name": "folder_id",
+     "type": "Many2one",
+     "relates_to": "documents.document"
+    }
+   ],
+   "evidence_files": [
+    "documents/models/mail_activity_type.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "document_ids",
+     "type": "One2many",
+     "relates_to": "documents.document",
+     "label": "Documents"
+    },
+    {
+     "name": "document_count",
+     "type": "Integer",
+     "label": "Document Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "documents/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "ir.actions.server",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "usage",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "documents/models/ir_actions_server.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "document_ids",
+     "type": "One2many",
+     "relates_to": "documents.document"
+    }
+   ],
+   "evidence_files": [
+    "documents/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "deletion_delay",
+     "type": "Integer"
+    }
+   ],
+   "evidence_files": [
+    "documents/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "ir.binary",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/ir_binary.py"
+   ]
+  },
+  {
+   "model": "ir.embedded.actions",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/ir_embedded_actions.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "kpi.provider",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/kpi_provider.py"
+   ]
+  },
+  {
+   "model": "mail.activity",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/mail_activity.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/res_company.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "documents/models/res_users.py"
+   ]
+  }
+ ]
+}

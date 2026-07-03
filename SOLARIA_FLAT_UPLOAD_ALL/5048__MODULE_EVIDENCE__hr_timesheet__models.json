@@ -1,0 +1,630 @@
+{
+ "_meta": {
+  "module": "hr_timesheet",
+  "display_name": "Task Logs",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "account.analytic.line.calendar.employee",
+   "business_meaning": "Personal Filters on Employees for the Calendar view",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_timesheet/models/account_analytic_line_calendar_employee.py",
+   "key_fields": [
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "hr.employee.delete.wizard",
+   "business_meaning": "Employee Delete Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_timesheet/wizard/hr_employee_delete_wizard.py",
+   "key_fields": [
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employees"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "timesheets.analysis.report",
+   "business_meaning": "Timesheets Analysis Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "hr_timesheet/report/timesheets_analysis_report.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Description"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "label": "Project"
+    },
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "label": "Task"
+    },
+    {
+     "name": "parent_task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "label": "Parent Task"
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "label": "Department"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    },
+    {
+     "name": "amount",
+     "type": "Monetary",
+     "label": "Amount"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner"
+    },
+    {
+     "name": "milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "message_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 15
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "account.analytic.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "department_id",
+     "type": "Many2one",
+     "relates_to": "hr.department",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "parent_task_id",
+     "type": "Many2one",
+     "relates_to": "project.task",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee"
+    },
+    {
+     "name": "manager_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "encoding_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "milestone_id",
+     "type": "Many2one",
+     "relates_to": "project.milestone",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/hr_timesheet.py"
+   ]
+  },
+  {
+   "model": "project.project",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "account_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "timesheet_ids",
+     "type": "One2many",
+     "relates_to": "account.analytic.line"
+    },
+    {
+     "name": "timesheet_encode_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "allocated_hours",
+     "type": "Float",
+     "label": "Allocated Time",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "allow_timesheets",
+     "type": "Boolean",
+     "label": "Timesheets",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "analytic_account_active",
+     "type": "Boolean",
+     "label": "Active Account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "total_timesheet_time",
+     "type": "Float",
+     "label": "Total amount of time (in the proper unit) recorded in the project, rounded to the unit.",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "encode_uom_in_days",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "is_internal_project",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "remaining_hours",
+     "type": "Float",
+     "label": "Time Remaining",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/project_project.py"
+   ]
+  },
+  {
+   "model": "project.task",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "project_id",
+     "type": "Many2one"
+    },
+    {
+     "name": "timesheet_ids",
+     "type": "One2many",
+     "relates_to": "account.analytic.line"
+    },
+    {
+     "name": "remaining_hours",
+     "type": "Float",
+     "label": "Time Remaining",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "effective_hours",
+     "type": "Float",
+     "label": "Time Spent",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "total_hours_spent",
+     "type": "Float",
+     "label": "Total Time Spent",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "progress",
+     "type": "Float",
+     "label": "Progress",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "overtime",
+     "type": "Float",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "subtask_effective_hours",
+     "type": "Float",
+     "label": "Time Spent on Sub-tasks",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "analytic_account_active",
+     "type": "Boolean",
+     "label": "Active Analytic Account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "allow_timesheets",
+     "type": "Boolean",
+     "label": "Allow timesheets",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/project_task.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "timesheet_encode_method",
+     "type": "Selection",
+     "label": "Encoding Method",
+     "selection": [
+      "hours",
+      "days"
+     ],
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "project_time_mode_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Project Time Unit",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "module_project_timesheet_holidays",
+     "type": "Boolean",
+     "label": "Time Off",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reminder_user_allow",
+     "type": "Boolean",
+     "label": "Employee Reminder"
+    },
+    {
+     "name": "reminder_allow",
+     "type": "Boolean",
+     "label": "Approver Reminder"
+    },
+    {
+     "name": "is_encode_uom_days",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "report.project.task.user",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "allocated_hours",
+     "type": "Float",
+     "label": "Allocated Time"
+    },
+    {
+     "name": "effective_hours",
+     "type": "Float",
+     "label": "Time Spent"
+    },
+    {
+     "name": "remaining_hours",
+     "type": "Float",
+     "label": "Time Remaining"
+    },
+    {
+     "name": "remaining_hours_percentage",
+     "type": "Float",
+     "label": "Time Remaining Percentage"
+    },
+    {
+     "name": "progress",
+     "type": "Float",
+     "label": "Progress"
+    },
+    {
+     "name": "overtime",
+     "type": "Float"
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/report/project_report.py"
+   ]
+  },
+  {
+   "model": "project.update",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom"
+    },
+    {
+     "name": "display_timesheet_stats",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "allocated_time",
+     "type": "Integer",
+     "label": "Allocated Time"
+    },
+    {
+     "name": "timesheet_time",
+     "type": "Integer",
+     "label": "Timesheet Time"
+    },
+    {
+     "name": "timesheet_percentage",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/project_update.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "project_time_mode_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Project Time Unit"
+    },
+    {
+     "name": "timesheet_encode_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Timesheet Encoding Unit"
+    },
+    {
+     "name": "internal_project_id",
+     "type": "Many2one",
+     "relates_to": "project.project",
+     "label": "Internal Project"
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/res_company.py"
+   ]
+  },
+  {
+   "model": "account.analytic.applicability",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "business_domain",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/analytic_applicability.py"
+   ]
+  },
+  {
+   "model": "hr.employee",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "has_timesheet",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/hr_employee.py"
+   ]
+  },
+  {
+   "model": "hr.employee.public",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "has_timesheet",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/hr_employee_public.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "timesheet_widget",
+     "type": "Char",
+     "label": "Widget"
+    }
+   ],
+   "evidence_files": [
+    "hr_timesheet/models/uom_uom.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_timesheet/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "ir.ui.menu",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_timesheet/models/ir_ui_menu.py"
+   ]
+  },
+  {
+   "model": "project.collaborator",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "hr_timesheet/models/project_collaborator.py"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,5359 @@
+{
+ "_meta": {
+  "module": "account",
+  "display_name": "Invoicing",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "account.account",
+   "business_meaning": "Account",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_account.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "account_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "asset_receivable",
+      "asset_cash",
+      "asset_current",
+      "asset_non_current",
+      "asset_prepayments",
+      "asset_fixed",
+      "liability_payable",
+      "liability_credit_card",
+      "liability_current",
+      "liability_non_current",
+      "equity",
+      "equity_unaffected"
+     ],
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Account Name",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "account.account.tag",
+     "label": "Tags",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Account Currency",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_ids",
+     "type": "Many2many",
+     "relates_to": "res.company",
+     "label": "Companies",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "internal_group",
+     "type": "Selection",
+     "label": "Internal Group",
+     "selection": [
+      "equity",
+      "asset",
+      "liability",
+      "income",
+      "expense",
+      "off"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "reconcile",
+     "type": "Boolean",
+     "label": "Allow Reconciliation",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Code",
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Default Taxes"
+    },
+    {
+     "name": "note",
+     "type": "Text",
+     "label": "Internal Notes",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "code_mapping_ids",
+     "type": "One2many",
+     "relates_to": "account.code.mapping"
+    },
+    {
+     "name": "group_id",
+     "type": "Many2one",
+     "relates_to": "account.group",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "root_id",
+     "type": "Many2one",
+     "relates_to": "account.root",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "opening_debit",
+     "type": "Monetary",
+     "label": "Opening Debit",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "opening_credit",
+     "type": "Monetary",
+     "label": "Opening Credit",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "opening_balance",
+     "type": "Monetary",
+     "label": "Opening Balance",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 28
+  },
+  {
+   "model": "account.group",
+   "business_meaning": "Account Group",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_account.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "account.group"
+    },
+    {
+     "name": "code_prefix_start",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "code_prefix_end",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "account.account.tag",
+   "business_meaning": "Account Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_account_tag.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "applicability",
+     "type": "Selection",
+     "selection": [
+      "accounts",
+      "taxes",
+      "products"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "report_expression_id",
+     "type": "Many2one",
+     "relates_to": "account.report.expression",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "account.bank.statement",
+   "business_meaning": "Bank Statement",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_bank_statement.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "balance_start",
+     "type": "Monetary",
+     "label": "Starting Balance",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "balance_end",
+     "type": "Monetary",
+     "label": "Computed Balance",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "balance_end_real",
+     "type": "Monetary",
+     "label": "Ending Balance",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "account.bank.statement.line",
+     "label": "Statement lines"
+    },
+    {
+     "name": "attachment_ids",
+     "type": "Many2many",
+     "relates_to": "ir.attachment",
+     "label": "Attachments"
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "first_line_index",
+     "type": "Char",
+     "relates_to": "account.bank.statement.line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_complete",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "account.bank.statement.line",
+   "business_meaning": "Bank Statement Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_bank_statement_line.py",
+   "delegates_to": [
+    "account.move"
+   ],
+   "key_fields": [
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Journal Entry",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Journal Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_currency",
+     "type": "Monetary",
+     "label": "Amount in Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "statement_id",
+     "type": "Many2one",
+     "relates_to": "account.bank.statement",
+     "label": "Statement"
+    },
+    {
+     "name": "payment_ids",
+     "type": "Many2many",
+     "relates_to": "account.payment",
+     "label": "Auto-generated Payments"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner"
+    },
+    {
+     "name": "amount",
+     "type": "Monetary"
+    },
+    {
+     "name": "running_balance",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "foreign_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Foreign Currency"
+    },
+    {
+     "name": "statement_balance_end_real",
+     "type": "Monetary",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "amount_residual",
+     "type": "Float",
+     "label": "Residual Amount",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "internal_index",
+     "type": "Char",
+     "label": "Internal Reference",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_reconciled",
+     "type": "Boolean",
+     "label": "Is Reconciled",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 25
+  },
+  {
+   "model": "account.cash.rounding",
+   "business_meaning": "Account Cash Rounding",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_cash_rounding.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "strategy",
+     "type": "Selection",
+     "label": "Rounding Strategy",
+     "selection": [
+      "biggest_tax",
+      "add_invoice_line"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rounding_method",
+     "type": "Selection",
+     "label": "Rounding Method",
+     "selection": [
+      "UP",
+      "DOWN",
+      "HALF-UP"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rounding",
+     "type": "Float",
+     "label": "Rounding Precision",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "profit_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Profit Account"
+    },
+    {
+     "name": "loss_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Loss Account"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "account.code.mapping",
+   "business_meaning": "Mapping of account codes per company",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_code_mapping.py",
+   "key_fields": [
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "account.document.import.mixin",
+   "business_meaning": "Business document import mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_document_import_mixin.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "account.full.reconcile",
+   "business_meaning": "Full Reconcile",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_full_reconcile.py",
+   "key_fields": [
+    {
+     "name": "partial_reconcile_ids",
+     "type": "One2many",
+     "relates_to": "account.partial.reconcile",
+     "label": "Reconciliation Parts"
+    },
+    {
+     "name": "reconciled_line_ids",
+     "type": "One2many",
+     "relates_to": "account.move.line",
+     "label": "Matched Journal Items"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "account.incoterms",
+   "business_meaning": "Incoterms",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_incoterms.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Code",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "account.journal.group",
+   "business_meaning": "Account Journal Group",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_journal.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Ledger group",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "excluded_journal_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal",
+     "label": "Excluded Journals"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "account.journal",
+   "business_meaning": "Journal",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_journal.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log",
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Journal Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "type",
+     "type": "Selection",
+     "selection": [
+      "sale",
+      "purchase",
+      "cash",
+      "bank",
+      "credit",
+      "general"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "invoice_reference_type",
+     "type": "Selection",
+     "label": "Communication Type",
+     "selection": [
+      "partner",
+      "invoice"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "invoice_reference_model",
+     "type": "Selection",
+     "label": "Communication Standard",
+     "selection": [
+      "odoo",
+      "euro",
+      "number"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Sequence Prefix",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "suspense_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Suspense Account",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "inbound_payment_method_line_ids",
+     "type": "One2many",
+     "relates_to": "account.payment.method.line",
+     "label": "Inbound Payment Methods",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "outbound_payment_method_line_ids",
+     "type": "One2many",
+     "relates_to": "account.payment.method.line",
+     "label": "Outbound Payment Methods",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "default_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Default Account"
+    },
+    {
+     "name": "non_deductible_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Private Share Account"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    },
+    {
+     "name": "invoice_template_pdf_report_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.report",
+     "label": "Invoice report"
+    },
+    {
+     "name": "available_invoice_template_pdf_report_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.report",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "profit_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Profit Account"
+    },
+    {
+     "name": "loss_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Loss Account"
+    },
+    {
+     "name": "company_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Account Holder",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "bank_account_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "label": "Bank Account"
+    },
+    {
+     "name": "bank_id",
+     "type": "Many2one",
+     "relates_to": "res.bank",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "journal_group_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal.group",
+     "label": "Ledger Group"
+    },
+    {
+     "name": "available_payment_method_ids",
+     "type": "Many2many",
+     "relates_to": "account.payment.method",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "refund_sequence",
+     "type": "Boolean",
+     "label": "Dedicated Credit Note Sequence",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_sequence",
+     "type": "Boolean",
+     "label": "Dedicated Payment Sequence",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 43
+  },
+  {
+   "model": "account.lock_exception",
+   "business_meaning": "Account Lock Exception",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_lock_exception.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "active",
+      "revoked",
+      "expired"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lock_date_field",
+     "type": "Selection",
+     "label": "Lock Date Field",
+     "selection": [
+      "fiscalyear_lock_date",
+      "tax_lock_date",
+      "sale_lock_date",
+      "purchase_lock_date"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "User"
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "account.move",
+   "business_meaning": "Journal Entry",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_move.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "numbering sequence",
+    "portal sharing"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "posted",
+      "cancel"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "move_type",
+     "type": "Selection",
+     "label": "Type",
+     "selection": [
+      "entry",
+      "out_invoice",
+      "out_refund",
+      "in_invoice",
+      "in_refund",
+      "out_receipt",
+      "in_receipt"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Number",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "label": "Date",
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "auto_post",
+     "type": "Selection",
+     "label": "Auto-post",
+     "selection": [
+      "no",
+      "at_date",
+      "monthly",
+      "quarterly",
+      "yearly"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_bank_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "label": "Recipient Bank",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_untaxed",
+     "type": "Monetary",
+     "label": "Untaxed Amount",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "invoice_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "checked",
+     "type": "Boolean",
+     "label": "Reviewed",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "invoice_payment_term_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.term",
+     "label": "Payment Terms",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Commercial Entity",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_shipping_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Delivery Address",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_reference",
+     "type": "Char",
+     "label": "Payment Reference",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "preferred_payment_method_line_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.method.line",
+     "label": "Preferred Payment Method Line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_tax",
+     "type": "Monetary",
+     "label": "Tax",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_residual",
+     "type": "Monetary",
+     "label": "Amount Due",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_untaxed_signed",
+     "type": "Monetary",
+     "label": "Untaxed Amount Signed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_untaxed_in_currency_signed",
+     "type": "Monetary",
+     "label": "Untaxed Amount Signed Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_tax_signed",
+     "type": "Monetary",
+     "label": "Tax Signed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total_signed",
+     "type": "Monetary",
+     "label": "Total Signed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_total_in_currency_signed",
+     "type": "Monetary",
+     "label": "Total in Currency Signed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_residual_signed",
+     "type": "Monetary",
+     "label": "Amount Due Signed",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 142
+  },
+  {
+   "model": "account.move.line",
+   "business_meaning": "Journal Item",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_move_line.py",
+   "built_in_capabilities": [
+    "analytic accounting"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Label",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "display_type",
+     "type": "Selection",
+     "selection": [
+      "product",
+      "cogs",
+      "tax",
+      "discount",
+      "rounding",
+      "payment_term",
+      "line_section",
+      "line_subsection",
+      "line_note",
+      "epd",
+      "non_deductible_product_total",
+      "non_deductible_product"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "balance",
+     "type": "Monetary",
+     "label": "Balance",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Journal Entry",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tax_tag_ids",
+     "type": "Many2many",
+     "relates_to": "account.account.tag",
+     "label": "Tags",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "debit",
+     "type": "Monetary",
+     "label": "Debit",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "credit",
+     "type": "Monetary",
+     "label": "Credit",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_currency",
+     "type": "Monetary",
+     "label": "Amount in Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_residual",
+     "type": "Monetary",
+     "label": "Residual Amount",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount_residual_currency",
+     "type": "Monetary",
+     "label": "Residual Amount in Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_subtotal",
+     "type": "Monetary",
+     "label": "Subtotal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "price_total",
+     "type": "Monetary",
+     "label": "Total",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "journal_group_id",
+     "type": "Many2one",
+     "relates_to": "account.journal.group",
+     "label": "Ledger"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "search_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account"
+    },
+    {
+     "name": "cumulated_balance",
+     "type": "Monetary",
+     "label": "Cumulated Balance",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "reconcile_model_id",
+     "type": "Many2one",
+     "relates_to": "account.reconcile.model",
+     "label": "Reconciliation Model"
+    },
+    {
+     "name": "payment_id",
+     "type": "Many2one",
+     "relates_to": "account.payment",
+     "label": "Originator Payment",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "statement_line_id",
+     "type": "Many2one",
+     "relates_to": "account.bank.statement.line",
+     "label": "Originator Statement Line",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "statement_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "commercial_partner_country",
+     "type": "Many2one",
+     "label": "Commercial Partner Country",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 87
+  },
+  {
+   "model": "account.move.send",
+   "business_meaning": "Account Move Send",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_move_send.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "account.partial.reconcile",
+   "business_meaning": "Partial Reconcile",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_partial_reconcile.py",
+   "key_fields": [
+    {
+     "name": "debit_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move.line",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "credit_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move.line",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "full_reconcile_id",
+     "type": "Many2one",
+     "relates_to": "account.full.reconcile",
+     "label": "Full Reconcile"
+    },
+    {
+     "name": "exchange_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "debit_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency of the debit journal item.",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "credit_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency of the credit journal item.",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary"
+    },
+    {
+     "name": "debit_amount_currency",
+     "type": "Monetary"
+    },
+    {
+     "name": "credit_amount_currency",
+     "type": "Monetary"
+    },
+    {
+     "name": "max_date",
+     "type": "Date",
+     "label": "Max Date of Matched Lines",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "account.payment",
+   "business_meaning": "Payments",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_payment.py",
+   "built_in_capabilities": [
+    "activities/to-dos"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "selection": [
+      "draft",
+      "in_process",
+      "paid",
+      "canceled",
+      "rejected"
+     ],
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_type",
+     "type": "Selection",
+     "label": "Payment Type",
+     "selection": [
+      "outbound",
+      "inbound"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_type",
+     "type": "Selection",
+     "selection": [
+      "customer",
+      "supplier"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_bank_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "label": "Recipient Bank Account",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Number",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "payment_method_id",
+     "type": "Many2one",
+     "label": "Method",
+     "flags": [
+      "tracked",
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer/Vendor",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "amount_signed",
+     "type": "Monetary",
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "payment_method_line_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.method.line",
+     "label": "Payment Method",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "outstanding_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Outstanding Account",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "destination_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Destination Account",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "reconciled_invoices_type",
+     "type": "Selection",
+     "selection": [
+      "credit_note",
+      "invoice"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "amount_company_currency_signed",
+     "type": "Monetary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Journal Entry"
+    },
+    {
+     "name": "available_partner_bank_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "paired_internal_transfer_payment_id",
+     "type": "Many2one",
+     "relates_to": "account.payment"
+    },
+    {
+     "name": "available_payment_method_line_ids",
+     "type": "Many2many",
+     "relates_to": "account.payment.method.line",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "available_journal_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary"
+    },
+    {
+     "name": "memo",
+     "type": "Char",
+     "label": "Memo",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "payment_reference",
+     "type": "Char",
+     "label": "Payment Reference",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "invoice_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Invoices"
+    },
+    {
+     "name": "reconciled_invoice_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "label": "Reconciled Invoices",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 45
+  },
+  {
+   "model": "account.payment.method",
+   "business_meaning": "Payment Methods",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_payment_method.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_type",
+     "type": "Selection",
+     "selection": [
+      "inbound",
+      "outbound"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "account.payment.method.line",
+   "business_meaning": "Payment Methods",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_payment_method.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_method_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.method",
+     "label": "Payment Method",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account"
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal"
+    },
+    {
+     "name": "default_account_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "available_payment_method_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "account.payment.term",
+   "business_meaning": "Payment Terms",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_payment_term.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Payment Terms",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "early_pay_discount_computation",
+     "type": "Selection",
+     "label": "Cash Discount Tax Reduction",
+     "selection": [
+      "included",
+      "excluded",
+      "mixed"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "account.payment.term.line",
+     "label": "Terms"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "example_amount",
+     "type": "Monetary"
+    }
+   ],
+   "total_field_count_declared": 18
+  },
+  {
+   "model": "account.payment.term.line",
+   "business_meaning": "Payment Terms Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_payment_term.py",
+   "key_fields": [
+    {
+     "name": "value",
+     "type": "Selection",
+     "selection": [
+      "percent",
+      "fixed"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "delay_type",
+     "type": "Selection",
+     "selection": [
+      "days_after",
+      "days_after_end_of_month",
+      "days_after_end_of_next_month",
+      "days_end_of_month_on_the"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "payment_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.term",
+     "label": "Payment Terms",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "value_amount",
+     "type": "Float",
+     "label": "Due",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "nb_days",
+     "type": "Integer",
+     "label": "Days",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "account.reconcile.model.line",
+   "business_meaning": "Rules for the reconciliation model",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_reconcile_model.py",
+   "built_in_capabilities": [
+    "analytic accounting"
+   ],
+   "key_fields": [
+    {
+     "name": "amount_type",
+     "type": "Selection",
+     "selection": [
+      "fixed",
+      "percentage",
+      "percentage_st_line",
+      "regex"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "account.reconcile.model"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner"
+    },
+    {
+     "name": "amount_string",
+     "type": "Char",
+     "label": "Amount",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes"
+    },
+    {
+     "name": "amount",
+     "type": "Float",
+     "label": "Float Amount",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "account.reconcile.model",
+   "business_meaning": "Preset to create journal entries during a invoices and payments matching",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_reconcile_model.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "trigger",
+     "type": "Selection",
+     "selection": [
+      "manual",
+      "auto_reconcile"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "match_amount",
+     "type": "Selection",
+     "label": "Amount",
+     "selection": [
+      "lower",
+      "greater",
+      "between"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "match_label",
+     "type": "Selection",
+     "label": "Label",
+     "selection": [
+      "contains",
+      "not_contains",
+      "match_regex"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "mapped_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "next_activity_type_id",
+     "type": "Many2one",
+     "relates_to": "mail.activity.type",
+     "label": "Next Activity"
+    },
+    {
+     "name": "match_journal_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal",
+     "label": "Journals"
+    },
+    {
+     "name": "match_amount_min",
+     "type": "Float",
+     "label": "Amount Min Parameter",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "match_amount_max",
+     "type": "Float",
+     "label": "Amount Max Parameter",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "match_label_param",
+     "type": "Char",
+     "label": "Label Parameter",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "match_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "Partners"
+    },
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "account.reconcile.model.line"
+    },
+    {
+     "name": "can_be_proposed",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "account.report",
+   "business_meaning": "Accounting Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_report.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "availability_condition",
+     "type": "Selection",
+     "label": "Availability",
+     "selection": [
+      "country",
+      "coa",
+      "always"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "default_opening_date_filter",
+     "type": "Selection",
+     "label": "Default Opening",
+     "selection": [
+      "this_year",
+      "this_quarter",
+      "this_month",
+      "today",
+      "previous_month",
+      "previous_quarter",
+      "previous_year",
+      "this_return_period",
+      "previous_return_period"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_translation",
+     "type": "Selection",
+     "label": "Currency Translation",
+     "selection": [
+      "current",
+      "cta"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_multi_company",
+     "type": "Selection",
+     "label": "Multi-Company",
+     "selection": [
+      "selector",
+      "tax_units"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_hide_0_lines",
+     "type": "Selection",
+     "label": "Hide lines at 0",
+     "selection": [
+      "by_default",
+      "optional",
+      "never"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_hierarchy",
+     "type": "Selection",
+     "label": "Account Groups",
+     "selection": [
+      "by_default",
+      "optional",
+      "never"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_account_type",
+     "type": "Selection",
+     "label": "Account Types",
+     "selection": [
+      "both",
+      "payable",
+      "receivable",
+      "disabled"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "integer_rounding",
+     "type": "Selection",
+     "label": "Integer Rounding",
+     "selection": [
+      "HALF-UP",
+      "UP",
+      "DOWN"
+     ]
+    },
+    {
+     "name": "line_ids",
+     "type": "One2many",
+     "relates_to": "account.report.line",
+     "label": "Lines"
+    },
+    {
+     "name": "column_ids",
+     "type": "One2many",
+     "relates_to": "account.report.column",
+     "label": "Columns"
+    },
+    {
+     "name": "root_report_id",
+     "type": "Many2one",
+     "relates_to": "account.report",
+     "label": "Root Report"
+    },
+    {
+     "name": "variant_report_ids",
+     "type": "One2many",
+     "relates_to": "account.report",
+     "label": "Variants"
+    },
+    {
+     "name": "section_report_ids",
+     "type": "Many2many",
+     "relates_to": "account.report",
+     "label": "Sections"
+    },
+    {
+     "name": "section_main_report_ids",
+     "type": "Many2many",
+     "relates_to": "account.report",
+     "label": "Section Of"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "use_sections",
+     "type": "Boolean",
+     "label": "Composite Report",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "only_tax_exigible",
+     "type": "Boolean",
+     "label": "Only Tax Exigible Lines",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "allow_foreign_vat",
+     "type": "Boolean",
+     "label": "Allow Foreign VAT",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_date_range",
+     "type": "Boolean",
+     "label": "Date Range",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_show_draft",
+     "type": "Boolean",
+     "label": "Draft Entries",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_unreconciled",
+     "type": "Boolean",
+     "label": "Unreconciled Entries",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_unfold_all",
+     "type": "Boolean",
+     "label": "Unfold All",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_period_comparison",
+     "type": "Boolean",
+     "label": "Period Comparison",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_growth_comparison",
+     "type": "Boolean",
+     "label": "Growth Comparison",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_journals",
+     "type": "Boolean",
+     "label": "Journals",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_analytic",
+     "type": "Boolean",
+     "label": "Analytic Filter",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_partner",
+     "type": "Boolean",
+     "label": "Partners",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 36
+  },
+  {
+   "model": "account.report.line",
+   "business_meaning": "Accounting Report Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_report.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "report_id",
+     "type": "Many2one",
+     "relates_to": "account.report",
+     "label": "Parent Report",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "horizontal_split_side",
+     "type": "Selection",
+     "label": "Horizontal Split Side",
+     "selection": [
+      "left",
+      "right"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "hierarchy_level",
+     "type": "Integer",
+     "label": "Level",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "expression_ids",
+     "type": "One2many",
+     "relates_to": "account.report.expression",
+     "label": "Expressions"
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "account.report.line",
+     "label": "Parent Line"
+    },
+    {
+     "name": "children_ids",
+     "type": "One2many",
+     "relates_to": "account.report.line",
+     "label": "Child Lines"
+    },
+    {
+     "name": "action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.actions",
+     "label": "Action"
+    },
+    {
+     "name": "user_groupby",
+     "type": "Char",
+     "label": "User Group By",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "account.report.expression",
+   "business_meaning": "Accounting Report Expression",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_report.py",
+   "key_fields": [
+    {
+     "name": "engine",
+     "type": "Selection",
+     "label": "Computation Engine",
+     "selection": [
+      "domain",
+      "tax_tags",
+      "aggregation",
+      "account_codes",
+      "external",
+      "custom"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_scope",
+     "type": "Selection",
+     "label": "Date Scope",
+     "selection": [
+      "from_beginning",
+      "from_fiscalyear",
+      "to_beginning_of_fiscalyear",
+      "to_beginning_of_period",
+      "strict_range",
+      "previous_return_period"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "report_line_id",
+     "type": "Many2one",
+     "relates_to": "account.report.line",
+     "label": "Report Line",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "label",
+     "type": "Char",
+     "label": "Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "formula",
+     "type": "Char",
+     "label": "Formula",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "auditable",
+     "type": "Boolean",
+     "label": "Auditable",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "account.report.column",
+   "business_meaning": "Accounting Report Column",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_report.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "expression_label",
+     "type": "Char",
+     "label": "Expression Label",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "report_id",
+     "type": "Many2one",
+     "relates_to": "account.report",
+     "label": "Report"
+    },
+    {
+     "name": "figure_type",
+     "type": "Selection",
+     "label": "Figure Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "custom_audit_action_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.act_window",
+     "label": "Custom Audit Action"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "account.report.external.value",
+   "business_meaning": "Accounting Report External Value",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_report.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "target_report_expression_id",
+     "type": "Many2one",
+     "relates_to": "account.report.expression",
+     "label": "Target Expression",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "target_report_line_id",
+     "type": "Many2one",
+     "label": "Target Line",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "report_country_id",
+     "type": "Many2one",
+     "label": "Country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "carryover_origin_report_line_id",
+     "type": "Many2one",
+     "relates_to": "account.report.line",
+     "label": "Origin Line"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "account.root",
+   "business_meaning": "Account codes first 2 digits",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_root.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "parent_id",
+     "type": "Many2one",
+     "relates_to": "account.root",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "account.tax.group",
+   "business_meaning": "Tax Group",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_tax.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "tax_payable_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Tax Payable Account"
+    },
+    {
+     "name": "tax_receivable_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Tax Receivable Account"
+    },
+    {
+     "name": "advance_tax_payment_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Tax Advance Account"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "account.tax",
+   "business_meaning": "Tax",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_tax.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tax Name",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "amount_type",
+     "type": "Selection",
+     "label": "Tax Computation",
+     "selection": [
+      "group",
+      "fixed",
+      "percent",
+      "division"
+     ],
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "price_include_override",
+     "type": "Selection",
+     "label": "Included in Price",
+     "selection": [
+      "tax_included",
+      "tax_excluded"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tax_group_id",
+     "type": "Many2one",
+     "relates_to": "account.tax.group",
+     "label": "Tax Group",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "type_tax_use",
+     "type": "Selection",
+     "label": "Tax Type",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Float",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "tax_scope",
+     "type": "Selection",
+     "label": "Tax Scope",
+     "selection": [
+      "service",
+      "consu"
+     ]
+    },
+    {
+     "name": "tax_exigibility",
+     "type": "Selection",
+     "label": "Tax Exigibility",
+     "selection": [
+      "on_invoice",
+      "on_payment"
+     ]
+    },
+    {
+     "name": "invoice_repartition_line_ids",
+     "type": "One2many",
+     "relates_to": "account.tax.repartition.line",
+     "label": "Distribution for Invoices",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "refund_repartition_line_ids",
+     "type": "One2many",
+     "relates_to": "account.tax.repartition.line",
+     "label": "Distribution for Refund Invoices",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "fiscal_position_ids",
+     "type": "Many2many",
+     "relates_to": "account.fiscal.position"
+    },
+    {
+     "name": "original_tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Replaces"
+    },
+    {
+     "name": "replacing_tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Replaced by"
+    },
+    {
+     "name": "children_tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Children Taxes"
+    },
+    {
+     "name": "sequence",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "include_base_amount",
+     "type": "Boolean",
+     "label": "Affect Base of Subsequent Taxes",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "is_base_affected",
+     "type": "Boolean",
+     "label": "Base Affected by Previous Taxes",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "cash_basis_transition_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Cash Basis Transition Account"
+    },
+    {
+     "name": "repartition_line_ids",
+     "type": "One2many",
+     "relates_to": "account.tax.repartition.line",
+     "label": "Distribution"
+    },
+    {
+     "name": "repartition_lines_str",
+     "type": "Char",
+     "label": "Repartition Lines",
+     "flags": [
+      "tracked",
+      "computed"
+     ]
+    },
+    {
+     "name": "is_domestic",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 36
+  },
+  {
+   "model": "account.tax.repartition.line",
+   "business_meaning": "Tax Repartition Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/account_tax.py",
+   "key_fields": [
+    {
+     "name": "repartition_type",
+     "type": "Selection",
+     "label": "Based On",
+     "selection": [
+      "base",
+      "tax"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "document_type",
+     "type": "Selection",
+     "label": "Related to",
+     "selection": [
+      "invoice",
+      "refund"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "factor_percent",
+     "type": "Float",
+     "label": "%",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "account.account.tag",
+     "label": "Tax Grids"
+    },
+    {
+     "name": "tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "use_in_tax_closing",
+     "type": "Boolean",
+     "label": "Tax Closing Entry",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "account.chart.template",
+   "business_meaning": "Account Chart Template",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/chart_template.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "account.fiscal.position",
+   "business_meaning": "Fiscal Position",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/partner.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Fiscal Position",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "foreign_vat_header_mode",
+     "type": "Selection",
+     "selection": [
+      "templates_found",
+      "no_template"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_ids",
+     "type": "One2many",
+     "relates_to": "account.fiscal.position.account",
+     "label": "Account Mapping"
+    },
+    {
+     "name": "tax_ids",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Taxes"
+    },
+    {
+     "name": "company_country_id",
+     "type": "Many2one",
+     "label": "Company Country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "country_group_id",
+     "type": "Many2one",
+     "relates_to": "res.country.group",
+     "label": "Country Group"
+    },
+    {
+     "name": "state_ids",
+     "type": "Many2many",
+     "relates_to": "res.country.state",
+     "label": "Federal States"
+    },
+    {
+     "name": "is_domestic",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 22
+  },
+  {
+   "model": "account.fiscal.position.account",
+   "business_meaning": "Accounts Mapping of Fiscal Position",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/partner.py",
+   "key_fields": [
+    {
+     "name": "position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_src_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account on Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_dest_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account to Use Instead",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "sequence.mixin",
+   "business_meaning": "Automatic sequence",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/models/sequence_mixin.py",
+   "key_fields": [
+    {
+     "name": "sequence_prefix",
+     "type": "Char",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sequence_number",
+     "type": "Integer",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "account.automatic.entry.wizard",
+   "business_meaning": "Create Automatic Entries",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_automatic_entry_wizard.py",
+   "key_fields": [
+    {
+     "name": "action",
+     "type": "Selection",
+     "selection": [
+      "change_period",
+      "change_account"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "account_type",
+     "type": "Selection",
+     "selection": [
+      "income",
+      "expense"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "total_amount",
+     "type": "Monetary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "Many2many",
+     "relates_to": "account.move.line"
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "expense_accrual_account",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "revenue_accrual_account",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "destination_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "To"
+    },
+    {
+     "name": "percentage",
+     "type": "Float",
+     "label": "Percentage",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 16
+  },
+  {
+   "model": "account.autopost.bills.wizard",
+   "business_meaning": "Autopost Bills Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_autopost_bills_wizard.py",
+   "key_fields": [
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "account.merge.wizard",
+   "business_meaning": "Account merge wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_merge_wizard.py",
+   "key_fields": [
+    {
+     "name": "wizard_line_ids",
+     "type": "One2many",
+     "relates_to": "account.merge.wizard.line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "account_ids",
+     "type": "Many2many",
+     "relates_to": "account.account"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "account.merge.wizard.line",
+   "business_meaning": "Account merge wizard line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_merge_wizard.py",
+   "key_fields": [
+    {
+     "name": "display_type",
+     "type": "Selection",
+     "selection": [
+      "line_section",
+      "line_subsection",
+      "account"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "account.merge.wizard",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account"
+    },
+    {
+     "name": "company_ids",
+     "type": "Many2many",
+     "label": "Companies",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "account.move.reversal",
+   "business_meaning": "Account Move Reversal",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_move_reversal.py",
+   "key_fields": [
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "new_move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "available_journal_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "residual",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "account.move.send.batch.wizard",
+   "business_meaning": "Account Move Send Batch Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_move_send_batch_wizard.py",
+   "key_fields": [
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "account.move.send.wizard",
+   "business_meaning": "Account Move Send Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_move_send_wizard.py",
+   "key_fields": [
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "pdf_report_id",
+     "type": "Many2one",
+     "relates_to": "ir.actions.report",
+     "label": "Invoice report",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "template_id",
+     "type": "Many2one",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mail_partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "label": "To",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "available_pdf_report_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.report",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "sending_method_checkboxes",
+     "type": "Json",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "extra_edi_checkboxes",
+     "type": "Json",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "mail_attachments_widget",
+     "type": "Json",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "model",
+     "type": "Char",
+     "label": "Related Document Model",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "res_ids",
+     "type": "Text",
+     "label": "Related Document IDs",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "account.payment.register",
+   "business_meaning": "Pay",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_payment_register.py",
+   "key_fields": [
+    {
+     "name": "installments_mode",
+     "type": "Selection",
+     "selection": [
+      "next",
+      "overdue",
+      "before_date",
+      "full"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_type",
+     "type": "Selection",
+     "label": "Payment Type",
+     "selection": [
+      "outbound",
+      "inbound"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_type",
+     "type": "Selection",
+     "selection": [
+      "customer",
+      "supplier"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_difference_handling",
+     "type": "Selection",
+     "label": "Payment Difference Handling",
+     "selection": [
+      "open",
+      "reconcile"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_bank_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "label": "Recipient Bank Account",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "source_amount",
+     "type": "Monetary",
+     "label": "Amount to Pay (company currency)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "source_amount_currency",
+     "type": "Monetary",
+     "label": "Amount to Pay (foreign currency)",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "source_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Source Currency",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Customer/Vendor",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_method_line_id",
+     "type": "Many2one",
+     "relates_to": "account.payment.method.line",
+     "label": "Payment Method",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "payment_date",
+     "type": "Date",
+     "label": "Payment Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "available_journal_ids",
+     "type": "Many2many",
+     "relates_to": "account.journal",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "available_partner_bank_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "installments_switch_amount",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "custom_user_amount",
+     "type": "Monetary"
+    },
+    {
+     "name": "custom_user_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency"
+    },
+    {
+     "name": "line_ids",
+     "type": "Many2many",
+     "relates_to": "account.move.line",
+     "label": "Journal items"
+    },
+    {
+     "name": "available_payment_method_line_ids",
+     "type": "Many2many",
+     "relates_to": "account.payment.method.line",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "payment_difference",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "writeoff_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Difference Account"
+    },
+    {
+     "name": "duplicate_payment_ids",
+     "type": "Many2many",
+     "relates_to": "account.payment",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "untrusted_bank_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "missing_account_partners",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 48
+  },
+  {
+   "model": "account.resequence.wizard",
+   "business_meaning": "Remake the sequence of Journal Entries.",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_resequence.py",
+   "key_fields": [
+    {
+     "name": "ordering",
+     "type": "Selection",
+     "selection": [
+      "keep",
+      "date"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "first_name",
+     "type": "Char",
+     "label": "First New Sequence",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "account.secure.entries.wizard",
+   "business_meaning": "Secure Journal Entries",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_secure_entries_wizard.py",
+   "key_fields": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "hash_date",
+     "type": "Date",
+     "label": "Hash All Entries",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "unreconciled_bank_statement_line_ids",
+     "type": "Many2many",
+     "relates_to": "account.bank.statement.line",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "not_hashable_unlocked_move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "move_to_hash_ids",
+     "type": "Many2many",
+     "relates_to": "account.move",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "validate.account.move",
+   "business_meaning": "Validate Account Move",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/account_validate_account_move.py",
+   "key_fields": [
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "abnormal_date_partner_ids",
+     "type": "One2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "abnormal_amount_partner_ids",
+     "type": "One2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "account.accrued.orders.wizard",
+   "business_meaning": "Accrued Orders Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/accrued_orders.py",
+   "key_fields": [
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Accrual Account",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "reversal_date",
+     "type": "Date",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "date",
+     "type": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "Monetary",
+     "label": "Amount"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "label": "Company Currency",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "account.financial.year.op",
+   "business_meaning": "Opening Balance of Financial Year",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/setup_wizards.py",
+   "key_fields": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "opening_date",
+     "type": "Date",
+     "label": "Opening Date",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "fiscalyear_last_day",
+     "type": "Integer",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "fiscalyear_last_month",
+     "type": "Selection",
+     "flags": [
+      "required",
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "account.setup.bank.manual.config",
+   "business_meaning": "Bank setup manual config",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/wizard/setup_wizards.py",
+   "delegates_to": [
+    "res.partner.bank"
+   ],
+   "key_fields": [
+    {
+     "name": "res_partner_bank_id",
+     "type": "Many2one",
+     "relates_to": "res.partner.bank",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required",
+      "computed"
+     ]
+    },
+    {
+     "name": "new_journal_name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "linked_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "report.account.report_hash_integrity",
+   "business_meaning": "Get hash integrity result as PDF.",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/report/account_hash_integrity_templates.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "account.invoice.report",
+   "business_meaning": "Invoices Statistics",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/report/account_invoice_report.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Invoice Status",
+     "selection": [
+      "draft",
+      "posted",
+      "cancel"
+     ]
+    },
+    {
+     "name": "move_type",
+     "type": "Selection",
+     "selection": [
+      "out_invoice",
+      "in_invoice",
+      "out_refund",
+      "in_refund"
+     ]
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Journal"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    },
+    {
+     "name": "company_currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Company Currency"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner"
+    },
+    {
+     "name": "commercial_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Main Partner"
+    },
+    {
+     "name": "country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Country"
+    },
+    {
+     "name": "invoice_user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Salesperson"
+    },
+    {
+     "name": "fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "label": "Fiscal Position"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit"
+    },
+    {
+     "name": "product_categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category"
+    },
+    {
+     "name": "account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Revenue/Expense Account"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency"
+    }
+   ],
+   "total_field_count_declared": 27
+  },
+  {
+   "model": "report.account.report_invoice",
+   "business_meaning": "Account report without payment lines",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/report/account_invoice_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.account.report_invoice_with_payments",
+   "business_meaning": "Account report with payment lines",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "account/report/account_invoice_report.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "account.journal",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "current_statement_balance",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "last_statement_id",
+     "type": "Many2one",
+     "relates_to": "account.bank.statement",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kanban_dashboard",
+     "type": "Text",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kanban_dashboard_graph",
+     "type": "Text",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "json_activity_data",
+     "type": "Text",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "show_on_dashboard",
+     "type": "Boolean",
+     "label": "Show journal on dashboard"
+    },
+    {
+     "name": "color",
+     "type": "Integer",
+     "label": "Color Index"
+    },
+    {
+     "name": "has_statement_lines",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "entries_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "has_posted_entries",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_journal_dashboard.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "account_price_include",
+     "type": "Selection",
+     "label": "Default Sales Price Include",
+     "selection": [
+      "tax_included",
+      "tax_excluded"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "tax_calculation_rounding_method",
+     "type": "Selection",
+     "label": "Tax Calculation Rounding Method",
+     "selection": [
+      "round_globally",
+      "round_per_line"
+     ]
+    },
+    {
+     "name": "terms_type",
+     "type": "Selection",
+     "label": "Terms & Conditions format",
+     "selection": [
+      "plain",
+      "html"
+     ]
+    },
+    {
+     "name": "domestic_fiscal_position_id",
+     "type": "Many2one",
+     "relates_to": "account.fiscal.position",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "account_fiscal_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "label": "Fiscal Country",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "quick_edit_mode",
+     "type": "Selection",
+     "label": "Quick encoding",
+     "selection": [
+      "out_invoices",
+      "in_invoices",
+      "out_and_in_invoices"
+     ]
+    },
+    {
+     "name": "fiscalyear_last_day",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "fiscalyear_last_month",
+     "type": "Selection",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "fiscalyear_lock_date",
+     "type": "Date",
+     "label": "Global Lock Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "tax_lock_date",
+     "type": "Date",
+     "label": "Tax Return Lock Date",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/company.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "autopost_bills",
+     "type": "Selection",
+     "label": "Auto-post bills",
+     "selection": [
+      "always",
+      "ask",
+      "never"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "trust",
+     "type": "Selection",
+     "label": "Degree of trust you have in this debtor",
+     "selection": [
+      "good",
+      "normal",
+      "bad"
+     ]
+    },
+    {
+     "name": "invoice_sending_method",
+     "type": "Selection",
+     "label": "Invoice sending",
+     "selection": [
+      "manual",
+      "email"
+     ]
+    },
+    {
+     "name": "invoice_edi_format",
+     "type": "Selection",
+     "label": "eInvoice format",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "duplicate_bank_partner_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "credit",
+     "type": "Monetary",
+     "label": "Total Receivable",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "credit_to_invoice",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "debit",
+     "type": "Monetary",
+     "label": "Total Payable",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "total_invoiced",
+     "type": "Monetary",
+     "label": "Total Invoiced",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/partner.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "relates_to": "res.currency",
+     "label": "Currency",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "currency_exchange_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Currency Exchange Journal",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "income_currency_exchange_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Gain Exchange Rate Account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "expense_currency_exchange_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Loss Exchange Rate Account",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "sale_tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax",
+     "label": "Default Sale Tax",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "purchase_tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax",
+     "label": "Default Purchase Tax",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_price_include",
+     "type": "Selection",
+     "label": "Default Sales Price Include",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "account_journal_suspense_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Bank Suspense",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "transfer_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Internal Transfer",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "tax_cash_basis_journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Tax Cash Basis Journal",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.partner.bank",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "bank_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "One2many",
+     "relates_to": "account.journal",
+     "label": "Account Journal"
+    },
+    {
+     "name": "related_moves",
+     "type": "One2many",
+     "relates_to": "account.move"
+    },
+    {
+     "name": "active",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "acc_number",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "acc_holder_name",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "clearing_number",
+     "type": "Char",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "allow_out_payment",
+     "type": "Boolean",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/res_partner_bank.py"
+   ]
+  },
+  {
+   "model": "account.analytic.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "general_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Financial Account",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "product_category",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "journal_id",
+     "type": "Many2one",
+     "relates_to": "account.journal",
+     "label": "Financial Journal",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "move_line_id",
+     "type": "Many2one",
+     "relates_to": "account.move.line",
+     "label": "Journal Item"
+    },
+    {
+     "name": "code",
+     "type": "Char"
+    },
+    {
+     "name": "ref",
+     "type": "Char",
+     "label": "Ref."
+    },
+    {
+     "name": "category",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_analytic_line.py"
+   ]
+  },
+  {
+   "model": "mail.message",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "account_audit_log_move_id",
+     "type": "Many2one",
+     "relates_to": "account.move",
+     "label": "Journal Entry",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "label": "Partner",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_account_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Account",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_tax_id",
+     "type": "Many2one",
+     "relates_to": "account.tax",
+     "label": "Tax",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company ",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_preview",
+     "type": "Text",
+     "label": "Description",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_audit_log_restricted",
+     "type": "Boolean",
+     "label": "Protected by restricted Audit Logs",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/mail_message.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "taxes_id",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Sales Taxes"
+    },
+    {
+     "name": "supplier_taxes_id",
+     "type": "Many2many",
+     "relates_to": "account.tax",
+     "label": "Purchase Taxes"
+    },
+    {
+     "name": "property_account_income_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Income Account"
+    },
+    {
+     "name": "property_account_expense_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Expense Account"
+    },
+    {
+     "name": "account_tag_ids",
+     "type": "Many2many",
+     "relates_to": "account.account.tag",
+     "label": "Account Tags"
+    },
+    {
+     "name": "tax_string",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "fiscal_country_codes",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/product.py"
+   ]
+  },
+  {
+   "model": "account.analytic.applicability",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category"
+    },
+    {
+     "name": "business_domain",
+     "type": "Selection"
+    },
+    {
+     "name": "account_prefix",
+     "type": "Char",
+     "label": "Financial Accounts Prefixes"
+    },
+    {
+     "name": "display_account_prefix",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "account_prefix_placeholder",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_analytic_plan.py"
+   ]
+  },
+  {
+   "model": "account.analytic.distribution.model",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "product_categ_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "label": "Product Category"
+    },
+    {
+     "name": "account_prefix",
+     "type": "Char",
+     "label": "Accounts Prefix"
+    },
+    {
+     "name": "prefix_placeholder",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_analytic_distribution_model.py"
+   ]
+  },
+  {
+   "model": "base.document.layout",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "from_invoice",
+     "type": "Boolean"
+    },
+    {
+     "name": "qr_code",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "vat",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "account_number",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/wizard/base_document_layout.py"
+   ]
+  },
+  {
+   "model": "account.analytic.account",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "invoice_count",
+     "type": "Integer",
+     "label": "Invoice Count",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "vendor_bill_count",
+     "type": "Integer",
+     "label": "Vendor Bill Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_analytic_account.py"
+   ]
+  },
+  {
+   "model": "account.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "statement_line_ids",
+     "type": "One2many",
+     "relates_to": "account.bank.statement.line",
+     "label": "Statements"
+    },
+    {
+     "name": "payment_ids",
+     "type": "One2many",
+     "relates_to": "account.payment",
+     "label": "Payments"
+    }
+   ],
+   "evidence_files": [
+    "account/models/account_bank_statement_line.py",
+    "account/models/account_payment.py"
+   ]
+  },
+  {
+   "model": "digest.digest",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "kpi_account_total_revenue_value",
+     "type": "Monetary",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "kpi_account_total_revenue",
+     "type": "Boolean",
+     "label": "Revenue"
+    }
+   ],
+   "evidence_files": [
+    "account/models/digest.py"
+   ]
+  },
+  {
+   "model": "product.category",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "property_account_income_categ_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Income Account",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "property_account_expense_categ_id",
+     "type": "Many2one",
+     "relates_to": "account.account",
+     "label": "Expense Account",
+     "flags": [
+      "tracked"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/product.py"
+   ]
+  },
+  {
+   "model": "res.currency",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "display_rounding_warning",
+     "type": "Boolean",
+     "label": "Display Rounding Warning",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "fiscal_country_codes",
+     "type": "Char"
+    }
+   ],
+   "evidence_files": [
+    "account/models/res_currency.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "is_invoice_report",
+     "type": "Boolean",
+     "label": "Invoice report"
+    }
+   ],
+   "evidence_files": [
+    "account/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "ir.module.module",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "account_templates",
+     "type": "Binary",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/ir_module.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "tax_string",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/product.py"
+   ]
+  },
+  {
+   "model": "res.country.group",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "exclude_state_ids",
+     "type": "Many2many",
+     "relates_to": "res.country.state",
+     "label": "Fiscal Exceptions"
+    }
+   ],
+   "evidence_files": [
+    "account/models/res_country_group.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "fiscal_country_codes",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "account/models/uom_uom.py"
+   ]
+  },
+  {
+   "model": "account.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/account_move_line_tax_details.py"
+   ]
+  },
+  {
+   "model": "decimal.precision",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/decimal_precision.py"
+   ]
+  },
+  {
+   "model": "ir.attachment",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/ir_attachment.py"
+   ]
+  },
+  {
+   "model": "ir.http",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/ir_http.py"
+   ]
+  },
+  {
+   "model": "kpi.provider",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/kpi_provider.py"
+   ]
+  },
+  {
+   "model": "mail.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/mail_template.py"
+   ]
+  },
+  {
+   "model": "mail.tracking.value",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/mail_tracking_value.py"
+   ]
+  },
+  {
+   "model": "base.partner.merge.automatic.wizard",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/merge_partner_automatic.py",
+    "account/wizard/base_partner_merge.py"
+   ]
+  },
+  {
+   "model": "onboarding.onboarding",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/onboarding_onboarding.py"
+   ]
+  },
+  {
+   "model": "onboarding.onboarding.step",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/onboarding_onboarding_step.py"
+   ]
+  },
+  {
+   "model": "product.catalog.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/product_catalog_mixin.py"
+   ]
+  },
+  {
+   "model": "res.groups",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/res_users.py"
+   ]
+  },
+  {
+   "model": "account.chart.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "account/models/template_generic_coa.py"
+   ]
+  }
+ ]
+}

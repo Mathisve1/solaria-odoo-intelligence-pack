@@ -1,0 +1,426 @@
+{
+ "_meta": {
+  "module": "stock_barcode",
+  "display_name": "Barcode",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "stock_barcode.cancel.operation",
+   "business_meaning": "Cancel Operation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "stock_barcode/wizard/stock_barcode_cancel_operation.py",
+   "key_fields": [
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    }
+   ],
+   "total_field_count_declared": 2
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "stock.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "parent_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "parent_location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_stock_quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "packaging_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Packaging Unit of Measure",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "outermost_result_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_barcode",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "formatted_product_barcode",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "location_processed",
+     "type": "Boolean"
+    },
+    {
+     "name": "dummy_id",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lot_properties",
+     "type": "Properties",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/stock_move_line.py"
+   ]
+  },
+  {
+   "model": "stock.picking.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "restrict_put_in_pack",
+     "type": "Selection",
+     "selection": [
+      "mandatory",
+      "optional",
+      "no"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "restrict_scan_tracking_number",
+     "type": "Selection",
+     "selection": [
+      "mandatory",
+      "optional"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "restrict_scan_source_location",
+     "type": "Selection",
+     "selection": [
+      "no",
+      "mandatory"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "restrict_scan_dest_location",
+     "type": "Selection",
+     "selection": [
+      "mandatory",
+      "optional",
+      "no"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "barcode_allow_extra_product",
+     "type": "Boolean",
+     "label": "Allow extra products"
+    },
+    {
+     "name": "barcode_validation_after_dest_location",
+     "type": "Boolean",
+     "label": "Force a destination for all products"
+    },
+    {
+     "name": "barcode_validation_all_product_packed",
+     "type": "Boolean",
+     "label": "Force all products to be packed"
+    },
+    {
+     "name": "barcode_validation_full",
+     "type": "Boolean",
+     "label": "Allow full picking validation"
+    },
+    {
+     "name": "restrict_scan_product",
+     "type": "Boolean",
+     "label": "Force Product scan?"
+    },
+    {
+     "name": "show_barcode_validation",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/stock_picking_type.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "barcode_nomenclature_id",
+     "type": "Many2one",
+     "relates_to": "barcode.nomenclature",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "stock_barcode_demo_active",
+     "type": "Boolean",
+     "label": "Demo Data Active",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "show_barcode_nomenclature",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "stock_barcode_mute_sound_notifications",
+     "type": "Boolean",
+     "label": "Mute Barcode application sounds"
+    },
+    {
+     "name": "barcode_max_time_between_keys_in_ms",
+     "type": "Integer",
+     "label": "Max time between each key"
+    },
+    {
+     "name": "barcode_rfid_batch_time",
+     "type": "Integer",
+     "label": "RFID Timer"
+    },
+    {
+     "name": "barcode_separator_regex",
+     "type": "Char",
+     "label": "Multiscan Separator"
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "stock.quant",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "dummy_id",
+     "type": "Char",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "image_1920",
+     "type": "Image",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_reference_code",
+     "type": "Char",
+     "label": "Product Reference Code",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/stock_quant.py"
+   ]
+  },
+  {
+   "model": "stock.backorder.confirmation",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "empty_move_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partial_move_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/wizard/stock_backorder_confirmation.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "has_image",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/product_product.py"
+   ]
+  },
+  {
+   "model": "stock.location",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "barcode_img",
+     "type": "Binary",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/stock_location.py"
+   ]
+  },
+  {
+   "model": "stock.scrap",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "product_barcode",
+     "type": "Char",
+     "label": "Barcode",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock_barcode/models/stock_scrap.py"
+   ]
+  },
+  {
+   "model": "product.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/product_uom.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "stock.lot",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_lot.py"
+   ]
+  },
+  {
+   "model": "stock.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_move.py"
+   ]
+  },
+  {
+   "model": "stock.package",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_package.py"
+   ]
+  },
+  {
+   "model": "stock.package.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_package_type.py"
+   ]
+  },
+  {
+   "model": "stock.picking",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "stock.warehouse",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/stock_warehouse.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock_barcode/models/uom_uom.py"
+   ]
+  }
+ ]
+}

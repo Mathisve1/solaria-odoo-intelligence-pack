@@ -1,0 +1,3658 @@
+{
+ "_meta": {
+  "module": "stock",
+  "display_name": "Inventory",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "product.removal",
+   "business_meaning": "Removal Strategy",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/product_strategy.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "method",
+     "type": "Char",
+     "label": "Method",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "stock.putaway.rule",
+   "business_meaning": "Putaway Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/product_strategy.py",
+   "key_fields": [
+    {
+     "name": "location_in_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_out_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "storage_category_id",
+     "type": "Many2one",
+     "relates_to": "stock.storage.category",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "sublocation",
+     "type": "Selection",
+     "selection": [
+      "no",
+      "last_used",
+      "closest_location"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "category_id",
+     "type": "Many2one",
+     "relates_to": "product.category"
+    },
+    {
+     "name": "package_type_ids",
+     "type": "Many2many",
+     "relates_to": "stock.package.type",
+     "label": "Package Type"
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "stock.location",
+   "business_meaning": "Inventory Locations",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_location.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Location Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "usage",
+     "type": "Selection",
+     "label": "Location Type",
+     "selection": [
+      "supplier",
+      "view",
+      "internal",
+      "customer",
+      "inventory",
+      "production",
+      "transit"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "child_ids",
+     "type": "One2many",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "child_internal_location_ids",
+     "type": "Many2many",
+     "relates_to": "stock.location",
+     "label": "Internal locations among descendants",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "removal_strategy_id",
+     "type": "Many2one",
+     "relates_to": "product.removal"
+    },
+    {
+     "name": "putaway_rule_ids",
+     "type": "One2many",
+     "relates_to": "stock.putaway.rule"
+    },
+    {
+     "name": "quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "warehouse_view_ids",
+     "type": "One2many",
+     "relates_to": "stock.warehouse"
+    },
+    {
+     "name": "storage_category_id",
+     "type": "Many2one",
+     "relates_to": "stock.storage.category",
+     "label": "Storage Category"
+    },
+    {
+     "name": "outgoing_move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "incoming_move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "complete_name",
+     "type": "Char",
+     "label": "Full Location Name",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "replenish_location",
+     "type": "Boolean",
+     "label": "Replenishments",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "next_inventory_date",
+     "type": "Date",
+     "label": "Next Expected",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 25
+  },
+  {
+   "model": "stock.route",
+   "business_meaning": "Inventory Routes",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_location.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Route",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "rule_ids",
+     "type": "One2many",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "supplied_wh_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse"
+    },
+    {
+     "name": "supplier_wh_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "product_ids",
+     "type": "Many2many",
+     "relates_to": "product.template"
+    },
+    {
+     "name": "categ_ids",
+     "type": "Many2many",
+     "relates_to": "product.category"
+    },
+    {
+     "name": "warehouse_domain_ids",
+     "type": "One2many",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "warehouse_ids",
+     "type": "Many2many",
+     "relates_to": "stock.warehouse"
+    }
+   ],
+   "total_field_count_declared": 15
+  },
+  {
+   "model": "stock.lot",
+   "business_meaning": "Lot/Serial",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_lot.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Lot/Serial Number",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "delivery_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking",
+     "label": "Transfers",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "partner_ids",
+     "type": "Many2many",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 14
+  },
+  {
+   "model": "stock.move",
+   "business_meaning": "Stock Move",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_move.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "waiting",
+      "confirmed",
+      "partially_available",
+      "assigned",
+      "done",
+      "cancel"
+     ]
+    },
+    {
+     "name": "product_uom",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "procure_method",
+     "type": "Selection",
+     "label": "Supply Method",
+     "selection": [
+      "make_to_stock",
+      "make_to_order"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "packaging_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "date",
+     "type": "Datetime",
+     "label": "Date Scheduled",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_category_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "never_product_template_attribute_value_ids",
+     "type": "Many2many",
+     "relates_to": "product.template.attribute.value",
+     "label": "Never attribute Values"
+    },
+    {
+     "name": "product_uom_qty",
+     "type": "Float",
+     "label": "Demand",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "location_final_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "move_dest_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "move_orig_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "scrap_id",
+     "type": "Many2one",
+     "relates_to": "stock.scrap"
+    },
+    {
+     "name": "reference_ids",
+     "type": "Many2many",
+     "relates_to": "stock.reference",
+     "label": "References"
+    },
+    {
+     "name": "rule_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "package_ids",
+     "type": "One2many",
+     "relates_to": "stock.package",
+     "label": "Packages",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "origin_returned_move_id",
+     "type": "Many2one",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "returned_move_ids",
+     "type": "One2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "restrict_partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    }
+   ],
+   "total_field_count_declared": 74
+  },
+  {
+   "model": "stock.move.line",
+   "business_meaning": "Product Moves (Stock Move Line)",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_move_line.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "lot_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot"
+    },
+    {
+     "name": "result_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "package_history_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.history",
+     "label": "Package History"
+    },
+    {
+     "name": "date",
+     "type": "Datetime",
+     "label": "Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "picking_partner_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "move_partner_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "scrap_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "consume_line_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "produce_line_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "quant_id",
+     "type": "Many2one",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "picking_location_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "picking_location_dest_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "quantity_product_uom",
+     "type": "Float",
+     "label": "Quantity in Product UoM",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "picked",
+     "type": "Boolean",
+     "label": "Picked",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 44
+  },
+  {
+   "model": "stock.warehouse.orderpoint",
+   "business_meaning": "Minimum Inventory Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_orderpoint.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "trigger",
+     "type": "Selection",
+     "label": "Trigger",
+     "selection": [
+      "auto",
+      "manual"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_max_qty",
+     "type": "Float",
+     "label": "Max Quantity",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_category_id",
+     "type": "Many2one",
+     "relates_to": "product.category",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_uom",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_min_qty",
+     "type": "Float",
+     "label": "Min Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "allowed_replenishment_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "replenishment_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom"
+    },
+    {
+     "name": "allowed_location_ids",
+     "type": "One2many",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "rule_ids",
+     "type": "Many2many",
+     "relates_to": "stock.rule",
+     "label": "Rules used",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route",
+     "label": "Route"
+    },
+    {
+     "name": "effective_route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "qty_to_order_computed",
+     "type": "Float",
+     "label": "To Order Computed",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "deadline_date",
+     "type": "Date",
+     "label": "Deadline",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 33
+  },
+  {
+   "model": "stock.package",
+   "business_meaning": "Package",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_package.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Package Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "contained_quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "package_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.type"
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "parent_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "child_package_ids",
+     "type": "One2many",
+     "relates_to": "stock.package",
+     "label": "Contained Packages"
+    },
+    {
+     "name": "all_children_package_ids",
+     "type": "One2many",
+     "relates_to": "stock.package",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "package_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "outermost_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "child_package_dest_ids",
+     "type": "One2many",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "picking_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking",
+     "label": "Transfers",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "complete_name",
+     "type": "Char",
+     "label": "Full Package Name",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 24
+  },
+  {
+   "model": "stock.package.history",
+   "business_meaning": "Stock Package History",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_package_history.py",
+   "key_fields": [
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line",
+     "label": "Move Lines",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "package_name",
+     "type": "Char",
+     "label": "Package Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "package_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.type",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "parent_orig_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "parent_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "outermost_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "picking_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking",
+     "label": "Transfers"
+    }
+   ],
+   "total_field_count_declared": 13
+  },
+  {
+   "model": "stock.package.type",
+   "business_meaning": "Stock package type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_package_type.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Package Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "package_use",
+     "type": "Selection",
+     "label": "Package Use",
+     "selection": [
+      "disposable",
+      "reusable"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "storage_category_capacity_ids",
+     "type": "One2many",
+     "relates_to": "stock.storage.category.capacity"
+    },
+    {
+     "name": "route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route",
+     "label": "Routes"
+    }
+   ],
+   "total_field_count_declared": 17
+  },
+  {
+   "model": "stock.picking.type",
+   "business_meaning": "Picking Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_picking.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Operation Type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "default_location_src_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "default_location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "code",
+     "type": "Selection",
+     "selection": [
+      "incoming",
+      "outgoing",
+      "internal"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "reservation_method",
+     "type": "Selection",
+     "selection": [
+      "at_confirm",
+      "manual",
+      "by_date"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "create_backorder",
+     "type": "Selection",
+     "selection": [
+      "ask",
+      "always",
+      "never"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_type",
+     "type": "Selection",
+     "selection": [
+      "direct",
+      "one"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_label_format",
+     "type": "Selection",
+     "label": "Product Label Format to auto-print",
+     "selection": [
+      "dymo",
+      "2x7xprice",
+      "4x7xprice",
+      "4x12",
+      "4x12xprice",
+      "zpl",
+      "zplxprice"
+     ]
+    },
+    {
+     "name": "lot_label_format",
+     "type": "Selection",
+     "label": "Lot Label Format to auto-print",
+     "selection": [
+      "4x12_lots",
+      "4x12_units",
+      "zpl_lots",
+      "zpl_units"
+     ]
+    },
+    {
+     "name": "package_label_to_print",
+     "type": "Selection",
+     "selection": [
+      "pdf",
+      "zpl"
+     ]
+    },
+    {
+     "name": "sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence"
+    },
+    {
+     "name": "sequence_code",
+     "type": "Char",
+     "label": "Sequence Prefix",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "return_picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "favorite_user_ids",
+     "type": "Many2many",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "use_create_lots",
+     "type": "Boolean",
+     "label": "Create New Lots/Serial Numbers",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "use_existing_lots",
+     "type": "Boolean",
+     "label": "Use Existing Lots/Serial Numbers",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "print_label",
+     "type": "Boolean",
+     "label": "Generate Shipping Labels",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 49
+  },
+  {
+   "model": "stock.picking",
+   "business_meaning": "Transfer",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_picking.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "waiting",
+      "confirmed",
+      "assigned",
+      "done",
+      "cancel"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "move_type",
+     "type": "Selection",
+     "selection": [
+      "direct",
+      "one"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference"
+    },
+    {
+     "name": "scheduled_date",
+     "type": "Datetime",
+     "label": "Scheduled Date",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "products_availability_state",
+     "type": "Selection",
+     "selection": [
+      "available",
+      "expected",
+      "late"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "search_date_category",
+     "type": "Selection",
+     "label": "Date Category",
+     "selection": [
+      "before",
+      "yesterday",
+      "today",
+      "day_1",
+      "day_2",
+      "after"
+     ]
+    },
+    {
+     "name": "backorder_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "backorder_ids",
+     "type": "One2many",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "return_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "return_ids",
+     "type": "One2many",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "reference_ids",
+     "type": "Many2many",
+     "relates_to": "stock.reference",
+     "label": "References",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "move_ids",
+     "type": "One2many",
+     "relates_to": "stock.move",
+     "label": "Stock Moves"
+    },
+    {
+     "name": "warehouse_address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "package_history_ids",
+     "type": "Many2many",
+     "relates_to": "stock.package.history",
+     "label": "Transfered Packages"
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_country_id",
+     "type": "Many2one",
+     "relates_to": "res.country",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "date_deadline",
+     "type": "Datetime",
+     "label": "Deadline",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "has_deadline_issue",
+     "type": "Boolean",
+     "label": "Is late",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "shipping_weight",
+     "type": "Float",
+     "label": "Weight for Shipping",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 57
+  },
+  {
+   "model": "stock.quant",
+   "business_meaning": "Quants",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_quant.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "label": "Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "storage_category_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot"
+    },
+    {
+     "name": "package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "reserved_quantity",
+     "type": "Float",
+     "label": "Reserved Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "in_date",
+     "type": "Datetime",
+     "label": "Incoming Date",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_categ_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "inventory_diff_quantity",
+     "type": "Float",
+     "label": "Difference",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "inventory_date",
+     "type": "Date",
+     "label": "Scheduled",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "inventory_quantity_set",
+     "type": "Boolean",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 29
+  },
+  {
+   "model": "stock.reference",
+   "business_meaning": "Reference between stock documents",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_reference.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move",
+     "label": "Stock Moves"
+    },
+    {
+     "name": "picking_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking",
+     "label": "Transfers",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.replenish.mixin",
+   "business_meaning": "Product Replenish Mixin",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_replenish_mixin.py",
+   "key_fields": [
+    {
+     "name": "route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route",
+     "label": "Preferred Route"
+    },
+    {
+     "name": "allowed_route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "stock.rule",
+   "business_meaning": "Stock Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_rule.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "action",
+     "type": "Selection",
+     "label": "Action",
+     "selection": [
+      "pull",
+      "push",
+      "pull_push"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "procure_method",
+     "type": "Selection",
+     "label": "Supply Method",
+     "selection": [
+      "make_to_stock",
+      "make_to_order",
+      "mts_else_mto"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "auto",
+     "type": "Selection",
+     "label": "Automatic Move",
+     "selection": [
+      "manual",
+      "transparent"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "location_src_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "route_company_id",
+     "type": "Many2one",
+     "label": "Route Company",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "partner_address_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse"
+    }
+   ],
+   "total_field_count_declared": 22
+  },
+  {
+   "model": "stock.scrap",
+   "business_meaning": "Scrap",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_scrap.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "draft",
+      "done"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "scrap_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "scrap_qty",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "lot_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot"
+    },
+    {
+     "name": "package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "owner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "move_ids",
+     "type": "One2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "scrap_reason_tag_ids",
+     "type": "Many2many",
+     "relates_to": "stock.scrap.reason.tag",
+     "label": "Scrap Reason"
+    }
+   ],
+   "total_field_count_declared": 19
+  },
+  {
+   "model": "stock.scrap.reason.tag",
+   "business_meaning": "Scrap Reason Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_scrap.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.storage.category",
+   "business_meaning": "Storage Category",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_storage_category.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Storage Category",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "allow_new_product",
+     "type": "Selection",
+     "selection": [
+      "empty",
+      "same",
+      "mixed"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "capacity_ids",
+     "type": "One2many",
+     "relates_to": "stock.storage.category.capacity"
+    },
+    {
+     "name": "product_capacity_ids",
+     "type": "One2many",
+     "relates_to": "stock.storage.category.capacity",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "package_capacity_ids",
+     "type": "One2many",
+     "relates_to": "stock.storage.category.capacity",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "location_ids",
+     "type": "One2many",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "stock.storage.category.capacity",
+   "business_meaning": "Storage Category Capacity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_storage_category.py",
+   "key_fields": [
+    {
+     "name": "storage_category_id",
+     "type": "Many2one",
+     "relates_to": "stock.storage.category",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "package_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.type"
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "stock.warehouse",
+   "business_meaning": "Warehouse",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/models/stock_warehouse.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Warehouse",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "reception_steps",
+     "type": "Selection",
+     "selection": [
+      "one_step",
+      "two_steps",
+      "three_steps"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "delivery_steps",
+     "type": "Selection",
+     "selection": [
+      "ship_only",
+      "pick_ship",
+      "pick_pack_ship"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "view_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "lot_stock_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "code",
+     "type": "Char",
+     "label": "Short Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "wh_input_stock_loc_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "wh_qc_stock_loc_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "wh_output_stock_loc_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "wh_pack_stock_loc_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "mto_pull_id",
+     "type": "Many2one",
+     "relates_to": "stock.rule"
+    },
+    {
+     "name": "pick_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "pack_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "out_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "in_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "int_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "qc_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "store_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "xdock_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking.type"
+    },
+    {
+     "name": "reception_route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "delivery_route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "resupply_wh_ids",
+     "type": "Many2many",
+     "relates_to": "stock.warehouse"
+    },
+    {
+     "name": "resupply_route_ids",
+     "type": "One2many",
+     "relates_to": "stock.route"
+    }
+   ],
+   "total_field_count_declared": 28
+  },
+  {
+   "model": "product.replenish",
+   "business_meaning": "Product Replenish",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/product_replenish.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unity of measure",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "label": "Warehouse",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "date_planned",
+     "type": "Datetime",
+     "label": "Scheduled Date",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_has_variants",
+     "type": "Boolean",
+     "label": "Has variants",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "allowed_uom_ids",
+     "type": "Many2many",
+     "relates_to": "uom.uom",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "forecast_uom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    }
+   ],
+   "total_field_count_declared": 11
+  },
+  {
+   "model": "stock.backorder.confirmation.line",
+   "business_meaning": "Backorder Confirmation Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_backorder_confirmation.py",
+   "key_fields": [
+    {
+     "name": "backorder_confirmation_id",
+     "type": "Many2one",
+     "relates_to": "stock.backorder.confirmation"
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.backorder.confirmation",
+   "business_meaning": "Backorder Confirmation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_backorder_confirmation.py",
+   "key_fields": [
+    {
+     "name": "pick_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "backorder_confirmation_line_ids",
+     "type": "One2many",
+     "relates_to": "stock.backorder.confirmation.line",
+     "label": "Backorder Confirmation Lines"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.inventory.adjustment.name",
+   "business_meaning": "Inventory Adjustment Reference / Reason",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_inventory_adjustment_name.py",
+   "key_fields": [
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.inventory.conflict",
+   "business_meaning": "Conflict in Inventory",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_inventory_conflict.py",
+   "key_fields": [
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant",
+     "label": "Quants"
+    },
+    {
+     "name": "quant_to_fix_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant",
+     "label": "Conflicts"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "stock.inventory.warning",
+   "business_meaning": "Inventory Adjustment Warning",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_inventory_warning.py",
+   "key_fields": [
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "picking.label.type",
+   "business_meaning": "Choose whether to print product or lot/sn labels",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_label_type.py",
+   "key_fields": [
+    {
+     "name": "label_type",
+     "type": "Selection",
+     "label": "Labels to print",
+     "selection": [
+      "products",
+      "lots"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking"
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "lot.label.layout",
+   "business_meaning": "Choose the sheet layout to print lot labels",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_lot_label_layout.py",
+   "key_fields": [
+    {
+     "name": "label_quantity",
+     "type": "Selection",
+     "label": "Quantity to print",
+     "selection": [
+      "lots",
+      "units"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "print_format",
+     "type": "Selection",
+     "label": "Format",
+     "selection": [
+      "4x12",
+      "zpl"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move.line"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.orderpoint.snooze",
+   "business_meaning": "Snooze Orderpoint",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_orderpoint_snooze.py",
+   "key_fields": [
+    {
+     "name": "predefined_date",
+     "type": "Selection",
+     "label": "Snooze for",
+     "selection": [
+      "day",
+      "week",
+      "month",
+      "custom"
+     ]
+    },
+    {
+     "name": "orderpoint_ids",
+     "type": "Many2many",
+     "relates_to": "stock.warehouse.orderpoint"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.package.destination",
+   "business_meaning": "Stock Package Destination",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_package_destination.py",
+   "key_fields": [
+    {
+     "name": "move_line_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move.line",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "filtered_location",
+     "type": "One2many",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "stock.return.picking.line",
+   "business_meaning": "Return Picking Line",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_picking_return.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Unit",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "wizard_id",
+     "type": "Many2one",
+     "relates_to": "stock.return.picking",
+     "label": "Wizard"
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "stock.move"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "stock.return.picking",
+   "business_meaning": "Return Picking",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_picking_return.py",
+   "key_fields": [
+    {
+     "name": "product_return_moves",
+     "type": "One2many",
+     "relates_to": "stock.return.picking.line",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "stock.put.in.pack",
+   "business_meaning": "Put In Pack Wizard",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_put_in_pack.py",
+   "key_fields": [
+    {
+     "name": "location_dest_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "move_line_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move.line",
+     "label": "Move lines"
+    },
+    {
+     "name": "package_ids",
+     "type": "Many2many",
+     "relates_to": "stock.package",
+     "label": "Packages"
+    },
+    {
+     "name": "package_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.type"
+    },
+    {
+     "name": "package_type_sequence_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "result_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package"
+    },
+    {
+     "name": "origin_package_ids",
+     "type": "Many2many",
+     "relates_to": "stock.package",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "stock.quantity.history",
+   "business_meaning": "Stock Quantity History",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_quantity_history.py",
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "stock.quant.relocate",
+   "business_meaning": "Stock Quantity Relocation",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_quant_relocate.py",
+   "key_fields": [
+    {
+     "name": "dest_package_id",
+     "type": "Many2one",
+     "relates_to": "stock.package",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "dest_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    }
+   ],
+   "total_field_count_declared": 9
+  },
+  {
+   "model": "stock.replenishment.info",
+   "business_meaning": "Stock supplier replenishment information",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_replenishment_info.py",
+   "key_fields": [
+    {
+     "name": "based_on",
+     "type": "Selection",
+     "label": "Based on",
+     "selection": [
+      "one_week",
+      "one_month",
+      "three_months",
+      "one_year",
+      "last_year",
+      "last_year_2",
+      "last_year_3",
+      "last_year_quarter"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "orderpoint_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse.orderpoint"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_min_qty",
+     "type": "Float",
+     "label": "Min",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "product_max_qty",
+     "type": "Float",
+     "label": "Max",
+     "flags": [
+      "required",
+      "related"
+     ]
+    },
+    {
+     "name": "percent_factor",
+     "type": "Integer",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouseinfo_ids",
+     "type": "One2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "wh_replenishment_option_ids",
+     "type": "One2many",
+     "relates_to": "stock.replenishment.option",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "total_field_count_declared": 12
+  },
+  {
+   "model": "stock.replenishment.option",
+   "business_meaning": "Stock warehouse replenishment option",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_replenishment_info.py",
+   "key_fields": [
+    {
+     "name": "route_id",
+     "type": "Many2one",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "replenishment_info_id",
+     "type": "Many2one",
+     "relates_to": "stock.replenishment.info"
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 10
+  },
+  {
+   "model": "stock.request.count",
+   "business_meaning": "Stock Request an Inventory Count",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_request_count.py",
+   "key_fields": [
+    {
+     "name": "inventory_date",
+     "type": "Date",
+     "label": "Scheduled at",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Assign to"
+    },
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant"
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "stock.rules.report",
+   "business_meaning": "Stock Rules report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_rules_report.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template",
+     "label": "Product Template",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "warehouse_ids",
+     "type": "Many2many",
+     "relates_to": "stock.warehouse",
+     "label": "Warehouses",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_has_variants",
+     "type": "Boolean",
+     "label": "Has variants",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 4
+  },
+  {
+   "model": "stock.warn.insufficient.qty",
+   "business_meaning": "Warn Insufficient Quantity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_warn_insufficient_qty.py",
+   "key_fields": [
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "quant_ids",
+     "type": "Many2many",
+     "relates_to": "stock.quant",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quantity",
+     "type": "Float",
+     "label": "Quantity",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_uom_name",
+     "type": "Char",
+     "label": "Unit",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "stock.warn.insufficient.qty.scrap",
+   "business_meaning": "Warn Insufficient Scrap Quantity",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/wizard/stock_warn_insufficient_qty.py",
+   "key_fields": [
+    {
+     "name": "scrap_id",
+     "type": "Many2one",
+     "relates_to": "stock.scrap"
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "report.stock.label_product_product_view",
+   "business_meaning": "Product Label Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.stock.label_lot_template_view",
+   "business_meaning": "Lot Label Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/product_label_report.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.stock.quantity",
+   "business_meaning": "Stock Quantity Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/report_stock_quantity.py",
+   "key_fields": [
+    {
+     "name": "state",
+     "type": "Selection",
+     "label": "State",
+     "selection": [
+      "forecast",
+      "in",
+      "out"
+     ]
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product",
+     "label": "Product"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse"
+    }
+   ],
+   "total_field_count_declared": 7
+  },
+  {
+   "model": "report.stock.report_reception",
+   "business_meaning": "Stock Reception Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/report_stock_reception.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.stock.report_stock_rule",
+   "business_meaning": "Stock rule report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/report_stock_rule.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "stock.forecasted_product_product",
+   "business_meaning": "Stock Replenishment Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/stock_forecasted.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "stock.forecasted_product_template",
+   "business_meaning": "Stock Replenishment Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/stock_forecasted.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "stock.traceability.report",
+   "business_meaning": "Traceability Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "stock/report/stock_traceability.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "stock_quant_ids",
+     "type": "One2many",
+     "relates_to": "stock.quant"
+    },
+    {
+     "name": "stock_move_ids",
+     "type": "One2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "orderpoint_ids",
+     "type": "One2many",
+     "relates_to": "stock.warehouse.orderpoint"
+    },
+    {
+     "name": "putaway_rule_ids",
+     "type": "One2many",
+     "relates_to": "stock.putaway.rule"
+    },
+    {
+     "name": "storage_category_capacity_ids",
+     "type": "One2many",
+     "relates_to": "stock.storage.category.capacity"
+    },
+    {
+     "name": "qty_available",
+     "type": "Float",
+     "label": "Quantity On Hand",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "virtual_available",
+     "type": "Float",
+     "label": "Forecasted Quantity",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "free_qty",
+     "type": "Float",
+     "label": "Free To Use Quantity ",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "incoming_qty",
+     "type": "Float",
+     "label": "Incoming",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "outgoing_qty",
+     "type": "Float",
+     "label": "Outgoing",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock/models/product.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "tracking",
+     "type": "Selection",
+     "label": "Tracking",
+     "selection": [
+      "serial",
+      "lot",
+      "none"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "is_storable",
+     "type": "Boolean",
+     "label": "Track Inventory",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "responsible_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "label": "Responsible"
+    },
+    {
+     "name": "property_stock_production",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "property_stock_inventory",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "lot_sequence_id",
+     "type": "Many2one",
+     "relates_to": "ir.sequence"
+    },
+    {
+     "name": "location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "warehouse_id",
+     "type": "Many2one",
+     "relates_to": "stock.warehouse"
+    },
+    {
+     "name": "route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "route_from_categ_ids",
+     "type": "Many2many",
+     "label": "Category Routes",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock/models/product.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "module_product_expiry",
+     "type": "Boolean",
+     "label": "Expiration Dates"
+    },
+    {
+     "name": "group_stock_production_lot",
+     "type": "Boolean",
+     "label": "Lots & Serial Numbers"
+    },
+    {
+     "name": "group_stock_lot_print_gs1",
+     "type": "Boolean",
+     "label": "Print GS1 Barcodes for Lots & Serial Numbers"
+    },
+    {
+     "name": "group_lot_on_delivery_slip",
+     "type": "Boolean",
+     "label": "Display Lots & Serial Numbers on Delivery Slips"
+    },
+    {
+     "name": "group_stock_tracking_lot",
+     "type": "Boolean",
+     "label": "Packages"
+    },
+    {
+     "name": "group_stock_tracking_owner",
+     "type": "Boolean",
+     "label": "Consignment"
+    },
+    {
+     "name": "group_stock_adv_location",
+     "type": "Boolean",
+     "label": "Multi-Step Routes"
+    },
+    {
+     "name": "group_warning_stock",
+     "type": "Boolean",
+     "label": "Warnings for Stock"
+    },
+    {
+     "name": "group_stock_sign_delivery",
+     "type": "Boolean",
+     "label": "Signature"
+    },
+    {
+     "name": "module_stock_picking_batch",
+     "type": "Boolean",
+     "label": "Batch, Wave & Cluster Transfers"
+    }
+   ],
+   "evidence_files": [
+    "stock/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "res.company",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "annual_inventory_month",
+     "type": "Selection",
+     "label": "Annual Inventory Month",
+     "selection": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+     ]
+    },
+    {
+     "name": "stock_confirmation_type",
+     "type": "Selection",
+     "selection": [
+      "sms"
+     ]
+    },
+    {
+     "name": "internal_transit_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location"
+    },
+    {
+     "name": "stock_mail_confirmation_template_id",
+     "type": "Many2one",
+     "relates_to": "mail.template",
+     "label": "Email Template confirmation picking"
+    },
+    {
+     "name": "horizon_days",
+     "type": "Float",
+     "label": "Replenishment Horizon",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "stock_move_email_validation",
+     "type": "Boolean",
+     "label": "Email Confirmation picking"
+    },
+    {
+     "name": "annual_inventory_day",
+     "type": "Integer",
+     "label": "Day of the month"
+    },
+    {
+     "name": "stock_text_confirmation",
+     "type": "Boolean",
+     "label": "Stock Text Confirmation"
+    }
+   ],
+   "evidence_files": [
+    "stock/models/res_company.py"
+   ]
+  },
+  {
+   "model": "product.category",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "removal_strategy_id",
+     "type": "Many2one",
+     "relates_to": "product.removal",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "packaging_reserve_method",
+     "type": "Selection",
+     "label": "Reserve Packagings",
+     "selection": [
+      "full",
+      "partial"
+     ]
+    },
+    {
+     "name": "route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route"
+    },
+    {
+     "name": "parent_route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route",
+     "label": "Parent Routes",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "total_route_ids",
+     "type": "Many2many",
+     "relates_to": "stock.route",
+     "label": "Total routes",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "putaway_rule_ids",
+     "type": "One2many",
+     "relates_to": "stock.putaway.rule"
+    },
+    {
+     "name": "filter_for_stock_putaway_rule",
+     "type": "Boolean",
+     "label": "stock.putaway.rule"
+    }
+   ],
+   "evidence_files": [
+    "stock/models/product.py"
+   ]
+  },
+  {
+   "model": "product.label.layout",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "move_quantity",
+     "type": "Selection",
+     "label": "Quantity to print",
+     "selection": [
+      "move",
+      "custom"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "zpl_template",
+     "type": "Selection",
+     "label": "ZPL Template",
+     "selection": [
+      "normal",
+      "small",
+      "alternative",
+      "jewelry"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "move_ids",
+     "type": "Many2many",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "print_format",
+     "type": "Selection"
+    },
+    {
+     "name": "zpl_preview",
+     "type": "Image",
+     "label": "ZPL Preview"
+    }
+   ],
+   "evidence_files": [
+    "stock/wizard/product_label_layout.py"
+   ]
+  },
+  {
+   "model": "res.partner",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "property_stock_customer",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "label": "Customer Location"
+    },
+    {
+     "name": "property_stock_supplier",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "label": "Vendor Location"
+    },
+    {
+     "name": "picking_warn_msg",
+     "type": "Text",
+     "label": "Message for Stock Picking"
+    }
+   ],
+   "evidence_files": [
+    "stock/models/res_partner.py"
+   ]
+  },
+  {
+   "model": "uom.uom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "package_type_id",
+     "type": "Many2one",
+     "relates_to": "stock.package.type",
+     "label": "Package Type"
+    },
+    {
+     "name": "route_ids",
+     "type": "Many2many",
+     "label": "Routes",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "stock/models/product.py"
+   ]
+  },
+  {
+   "model": "barcode.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "type",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "stock/models/barcode.py"
+   ]
+  },
+  {
+   "model": "ir.actions.report",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock/models/ir_actions_report.py"
+   ]
+  },
+  {
+   "model": "product.catalog.mixin",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock/models/product_catalog_mixin.py"
+   ]
+  },
+  {
+   "model": "res.users",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "stock/models/res_users.py"
+   ]
+  }
+ ]
+}
