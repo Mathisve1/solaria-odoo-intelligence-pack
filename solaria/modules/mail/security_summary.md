@@ -19,8 +19,15 @@
 |---|---|---|
 | Canned Response Administrator | group_mail_canned_response_admin | — |
 | Mail Template Editor | group_mail_template_editor | — |
-| — | base.group_system | group_mail_template_editor, group_mail_canned_response_admin |
 | Receive notifications in Odoo | group_mail_notification_type_inbox | — |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_system | group_mail_template_editor, group_mail_canned_response_admin |
 
 ## Access rights (ir.model.access) — 69 rules
 

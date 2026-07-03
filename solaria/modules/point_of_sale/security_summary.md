@@ -17,10 +17,17 @@
 
 | Group | XML id | Implies |
 |---|---|---|
-| — | base.group_user | group_product_variant |
 | User | group_pos_user | — |
 | Administrator | group_pos_manager | group_stock_user |
 | Preset Menu | group_pos_preset | — |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_user | group_product_variant |
 
 ## Access rights (ir.model.access) — 54 rules
 

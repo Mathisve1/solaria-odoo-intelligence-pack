@@ -6,7 +6,7 @@
 | Display name | Inventory |
 | Source origin | **Community** (Enterprise adds `stock_barcode`, `quality_control`, carrier connectors, `stock_enterprise` reporting) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `product`, `base_setup`, `digest`, barcode plumbing |
+| Dependencies (manifest, direct) | `product`, `barcodes_gs1_nomenclature`, `digest` |
 | Functional domain | Inventory & Warehouse |
 | Confidence | High for structures; reservation/scheduling behavior needs live validation |
 

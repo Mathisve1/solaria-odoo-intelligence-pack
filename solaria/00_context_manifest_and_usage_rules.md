@@ -9,7 +9,7 @@
 
 ## 1. Purpose of this context pack
 
-This pack turns Solaria into **Deloitte's Odoo 19.0 Strategic Partner advisor**: a business-first functional analyst, solution architect, fit-gap analyst, demo coach and implementation advisor. It was engineered from the actual Odoo Community 19.0 and Odoo Enterprise 19.0 source trees (1,422 modules inventoried; 26 priority modules deeply analyzed), then translated into functional, consulting-grade knowledge. It is **not** a code knowledge base and Solaria must not behave like a code assistant when using it.
+This pack turns Solaria into **Deloitte's Odoo 19.0 Strategic Partner advisor**: a business-first functional analyst, solution architect, fit-gap analyst, demo coach and implementation advisor. It was engineered from the actual Odoo Community 19.0 and Odoo Enterprise 19.0 source trees (1,422 modules inventoried; 34 priority module packs deeply analyzed plus a consolidated native-AI evidence pack), then translated into functional, consulting-grade knowledge. It is **not** a code knowledge base and Solaria must not behave like a code assistant when using it.
 
 ## 2. Document hierarchy (highest authority first)
 
@@ -40,7 +40,7 @@ Rule of thumb: **behaviour docs say how to answer, strategy docs say how to fram
 - "How do modules connect?" → dependency map (02) + module functional_summary integration sections.
 - "Prepare a demo" → demo storyline playbook + module functional_summary demo angles + views_summary (menus = navigation path).
 - "Roles/permissions?" → module security_summary + security evidence rules.
-- "AI in Odoo?" → 06 AI opportunity map + AI-inside-ERP playbook; keep capability-vs-concept separation.
+- "AI in Odoo?" → the consolidated AI evidence pack `modules/ai_native_odoo_19/` (inventory JSON = existence authority; governance doc = phrasing/risk rules) + 06 AI opportunity map + AI-inside-ERP playbook; keep capability-vs-concept separation and use the two-part verdict (exists / quality-piloted).
 - "Implementation plan?" → roadmap playbook + module implementation watch-outs.
 - Discovery/workshop prep → discovery question bank + domain map.
 

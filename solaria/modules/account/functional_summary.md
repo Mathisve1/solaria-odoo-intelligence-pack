@@ -6,7 +6,7 @@
 | Display name | Invoicing (Community app name) |
 | Source origin | **Community**. Enterprise turns it into full Accounting via `account_accountant`, `account_reports`, `account_asset`, `account_budget`, `account_followup`, OCR extract modules, `l10n_*_reports` |
 | Version scope | Odoo 19.0 |
-| Dependencies | `base`, `product`, `analytic`, `portal`, payment ecosystem |
+| Dependencies (manifest, direct) | `base_setup`, `onboarding`, `product`, `analytic`, `portal`, `digest` |
 | Functional domain | Accounting & Finance |
 | Confidence | High for structures; posting/tax edge behavior needs live validation with finance experts |
 

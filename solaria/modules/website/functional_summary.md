@@ -6,7 +6,7 @@
 | Display name | Website |
 | Source origin | **Community** (Enterprise adds `website_studio`, `website_generator`, `ai_website`, push notifications) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `web`, `portal`, `mail`, `http_routing` ecosystem |
+| Dependencies (manifest, direct) | `web`, `html_builder`, `html_editor`, `http_routing`, `portal`, `mail`, `utm`, `social_media`, `auth_signup`, `google_recaptcha`, `digest` |
 | Functional domain | Website / front-office platform |
 | Confidence | High for structures; builder UX evolves per release — demo live |
 

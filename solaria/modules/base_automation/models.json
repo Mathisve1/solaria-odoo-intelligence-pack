@@ -1,0 +1,215 @@
+{
+ "_meta": {
+  "module": "base_automation",
+  "display_name": "Automation Rules",
+  "source_origin": "community",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "base.automation",
+   "business_meaning": "Automation Rule",
+   "defined_or_extended": "defined_here",
+   "source_origin": "community",
+   "evidence_file": "base_automation/models/base_automation.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "trigger",
+     "type": "Selection",
+     "label": "Trigger",
+     "selection": [
+      "on_stage_set",
+      "on_user_set",
+      "on_tag_set",
+      "on_state_set",
+      "on_priority_set",
+      "on_archive",
+      "on_unarchive",
+      "on_create",
+      "on_create_or_write",
+      "on_write",
+      "on_unlink",
+      "on_change"
+     ],
+     "flags": [
+      "required",
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Automation Rule Name",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "model_id",
+     "type": "Many2one",
+     "relates_to": "ir.model",
+     "label": "Model",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "trg_date_range_mode",
+     "type": "Selection",
+     "label": "Delay mode",
+     "selection": [
+      "after",
+      "before"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_date_range_type",
+     "type": "Selection",
+     "label": "Delay unit",
+     "selection": [
+      "minutes",
+      "hour",
+      "day",
+      "month"
+     ],
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_date_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields",
+     "label": "Trigger Date",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "action_server_ids",
+     "type": "One2many",
+     "relates_to": "ir.actions.server",
+     "label": "Actions",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_selection_field_id",
+     "type": "Many2one",
+     "relates_to": "ir.model.fields.selection",
+     "label": "Trigger Field",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_date_range",
+     "type": "Integer",
+     "label": "Delay",
+     "flags": [
+      "tracked",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_date_calendar_id",
+     "type": "Many2one",
+     "relates_to": "resource.calendar",
+     "label": "Use Calendar",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "on_change_field_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model.fields",
+     "label": "On Change Fields Trigger",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trigger_field_ids",
+     "type": "Many2many",
+     "relates_to": "ir.model.fields",
+     "label": "Trigger Fields",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "trg_field_ref",
+     "type": "Many2oneReference",
+     "label": "Trigger Reference",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_pre_domain",
+     "type": "Char",
+     "label": "Before Update Domain",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "filter_domain",
+     "type": "Char",
+     "label": "Apply on",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 26
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "ir.actions.server",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "base_automation_id",
+     "type": "Many2one",
+     "relates_to": "base.automation",
+     "label": "Automation Rule"
+    },
+    {
+     "name": "usage",
+     "type": "Selection"
+    }
+   ],
+   "evidence_files": [
+    "base_automation/models/ir_actions_server.py"
+   ]
+  },
+  {
+   "model": "ir.cron",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "base_automation/models/ir_actions_server.py"
+   ]
+  }
+ ]
+}

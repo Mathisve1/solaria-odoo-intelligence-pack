@@ -6,7 +6,7 @@
 | Display name | Field Service |
 | Source origin | **Enterprise** (built on Community `project`+`hr_timesheet` foundations) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `project`, `hr_timesheet`, timer infrastructure (+siblings: `industry_fsm_report` worksheets, `industry_fsm_sale`, `industry_fsm_stock`) |
+| Dependencies (manifest, direct) | `project_enterprise`, `timesheet_grid`, `base_geolocalize` — i.e., FSM sits on the **Enterprise** project/timesheet layer, not plain Community `project` (+siblings: `industry_fsm_report` worksheets, `industry_fsm_sale`, `industry_fsm_stock`) |
 | Functional domain | Field Service |
 | Confidence | High for structures; mobile/offline UX must be validated on real devices |
 

@@ -6,7 +6,7 @@
 | Display name | Purchase |
 | Source origin | **Community** (Enterprise adds `account_3way_match`, `approvals_purchase`, bill OCR + PO matching, intrastat) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `account`, `product` (+`purchase_stock` bridge to inventory) |
+| Dependencies (manifest, direct) | `account` only — product comes transitively; `purchase_stock` (auto-installed bridge) connects it to inventory |
 | Functional domain | Purchase / procure-to-pay |
 | Confidence | High for structures; approval/matching nuances need live validation |
 
@@ -30,8 +30,13 @@ Buyers, procurement managers, warehouse (receipts), AP accountants (bills), budg
 3. Vendor bill creation under billing policy (ordered vs received) + matching.
 4. Analysis: purchase reporting pivots (spend by vendor/category/period).
 
-## Key functional capabilities
-Vendor pricelists (multi-vendor per product, price breaks, lead times), purchase templates/agreements (via `purchase_requisition`), currencies, incoterms, warnings on vendor/product, dropshipping (with `stock_dropshipping`), duplicate-bill guards at account level.
+## Key functional capabilities (source-verified structures)
+- `purchase.order` with native approval state (`draft → sent → to approve → purchase`), receipt/invoice status fields driving exception worklists, and order locking.
+- Vendor pricing via `product.supplierinfo`: multi-vendor per product, price breaks, vendor lead times, vendor product codes — the data spine of buyer productivity.
+- **Bill↔PO matching tooling is first-class in 19.0**: `purchase.bill.line.match` (line-level matching model) and `bill.to.po.wizard` (create/link a PO from a received bill) — the Community foundation the Enterprise 3-way match and OCR build on.
+- Agreements/blanket orders via `purchase_requisition` (Community sibling — confirm fit per client in a demo); alternative RFQs comparison patterns (validate exact 19.0 UX live).
+- Auto-replenishment: orderpoints generate RFQs grouped per vendor (with `purchase_stock`); vendor confirmation reminder mails (group-gated, source-verified).
+- Currencies, incoterms, vendor/product warnings, dropshipping (with `stock_dropshipping`), purchase analytics (`purchase.report`: spend by vendor/category/period).
 
 ## Fit with other modules
 `stock` (receipts, MTO/dropship routes), `account` (bills, 3-way in E), `mrp` (subcontracting purchases), `sale` (inter-company patterns in E), `approvals` (E, PO approvals), `hr_expense` (employee spend separate).

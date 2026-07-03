@@ -22,7 +22,14 @@
 | Show SLA Policies | group_use_sla | — |
 | Show Customer Ratings | group_use_rating | — |
 | Auto Assigment | group_auto_assignment | — |
-| — | base.default_user_group | group_helpdesk_manager |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.default_user_group | group_helpdesk_manager |
 
 ## Access rights (ir.model.access) — 22 rules
 

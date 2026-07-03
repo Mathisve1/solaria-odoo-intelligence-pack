@@ -6,7 +6,7 @@
 | Display name | Project |
 | Source origin | **Community** (Enterprise adds `project_enterprise` Gantt/map, `project_forecast`/`planning`, `documents_project`; billing depth via `sale_timesheet`/`timesheet_grid`) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `base`, `mail`, `portal`, `rating`, `analytic` (profitability), `hr_timesheet` bridge |
+| Dependencies (manifest, direct) | `analytic`, `base_setup`, `mail`, `portal`, `rating`, `resource`, `web`, `web_tour`, `digest` — `hr_timesheet` builds on top (it depends on project, not vice versa) |
 | Functional domain | Project / services delivery |
 | Confidence | High for structures; profitability computation details need live validation |
 

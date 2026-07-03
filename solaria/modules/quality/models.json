@@ -1,0 +1,926 @@
+{
+ "_meta": {
+  "module": "quality",
+  "display_name": "Quality Base (pack merges: `quality`, `quality_control`)",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "quality.point.test_type",
+   "business_meaning": "Quality Control Test Type",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "technical_name",
+     "type": "Char",
+     "label": "Technical name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "quality.point",
+   "business_meaning": "Quality Control Point",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "test_type_id",
+     "type": "Many2one",
+     "relates_to": "quality.point.test_type",
+     "flags": [
+      "required",
+      "tracked"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "quality.alert.team",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "picking_type_ids",
+     "type": "Many2many",
+     "relates_to": "stock.picking.type",
+     "label": "Operation Types",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "product_ids",
+     "type": "Many2many",
+     "relates_to": "product.product",
+     "label": "Products"
+    },
+    {
+     "name": "product_category_ids",
+     "type": "Many2many",
+     "relates_to": "product.category",
+     "label": "Product Categories"
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users"
+    },
+    {
+     "name": "check_ids",
+     "type": "One2many",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "failure_location_ids",
+     "type": "Many2many",
+     "relates_to": "stock.location",
+     "label": "Failure Locations"
+    }
+   ],
+   "total_field_count_declared": 18
+  },
+  {
+   "model": "quality.alert.team",
+   "business_meaning": "Quality Alert Team",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "built_in_capabilities": [
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "label": "Company"
+    }
+   ],
+   "total_field_count_declared": 6
+  },
+  {
+   "model": "quality.reason",
+   "business_meaning": "Root Cause for Quality Failure",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 1
+  },
+  {
+   "model": "quality.tag",
+   "business_meaning": "Quality Tag",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Tag Name",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 2
+  },
+  {
+   "model": "quality.alert.stage",
+   "business_meaning": "Quality Alert Stage",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "team_ids",
+     "type": "Many2many",
+     "relates_to": "quality.alert.team",
+     "label": "Teams"
+    }
+   ],
+   "total_field_count_declared": 5
+  },
+  {
+   "model": "quality.check",
+   "business_meaning": "Quality Check",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "quality_state",
+     "type": "Selection",
+     "label": "Status",
+     "selection": [
+      "none",
+      "pass",
+      "fail"
+     ],
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "quality.alert.team",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "test_type_id",
+     "type": "Many2one",
+     "relates_to": "quality.point.test_type",
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Reference"
+    },
+    {
+     "name": "point_id",
+     "type": "Many2one",
+     "relates_to": "quality.point"
+    },
+    {
+     "name": "control_date",
+     "type": "Datetime",
+     "label": "Control Date",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "label": "Partner",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "label": "Lot/Serial"
+    },
+    {
+     "name": "alert_ids",
+     "type": "One2many",
+     "relates_to": "quality.alert",
+     "label": "Alerts"
+    },
+    {
+     "name": "failure_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "label": "Failure Location"
+    },
+    {
+     "name": "title",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "Html",
+     "label": "Note",
+     "flags": [
+      "computed-stored"
+     ]
+    }
+   ],
+   "total_field_count_declared": 20
+  },
+  {
+   "model": "quality.alert",
+   "business_meaning": "Quality Alert",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality.py",
+   "built_in_capabilities": [
+    "activities/to-dos",
+    "chatter/log"
+   ],
+   "key_fields": [
+    {
+     "name": "stage_id",
+     "type": "Many2one",
+     "relates_to": "quality.alert.stage",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "relates_to": "res.users",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "team_id",
+     "type": "Many2one",
+     "relates_to": "quality.alert.team",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Name"
+    },
+    {
+     "name": "priority",
+     "type": "Selection",
+     "label": "Priority",
+     "selection": [
+      "0",
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "reason_id",
+     "type": "Many2one",
+     "relates_to": "quality.reason"
+    },
+    {
+     "name": "tag_ids",
+     "type": "Many2many",
+     "relates_to": "quality.tag",
+     "label": "Tags"
+    },
+    {
+     "name": "picking_id",
+     "type": "Many2one",
+     "relates_to": "stock.picking"
+    },
+    {
+     "name": "partner_id",
+     "type": "Many2one",
+     "relates_to": "res.partner"
+    },
+    {
+     "name": "check_id",
+     "type": "Many2one",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "product_tmpl_id",
+     "type": "Many2one",
+     "relates_to": "product.template"
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "lot_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "label": "Lot"
+    }
+   ],
+   "total_field_count_declared": 19
+  },
+  {
+   "model": "quality.check.spreadsheet",
+   "business_meaning": "Quality check spreadsheet",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality_check_spreadsheet.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company",
+     "flags": [
+      "required"
+     ]
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "quality.spreadsheet.template",
+   "business_meaning": "Quality check template spreadsheet",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/models/quality_spreadsheet_template.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "relates_to": "res.company"
+    }
+   ],
+   "total_field_count_declared": 3
+  },
+  {
+   "model": "quality.check.wizard",
+   "business_meaning": "Wizard for Quality Check Pop Up",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/wizard/quality_check_wizard.py",
+   "key_fields": [
+    {
+     "name": "check_ids",
+     "type": "Many2many",
+     "relates_to": "quality.check",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "current_check_id",
+     "type": "Many2one",
+     "relates_to": "quality.check",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "failure_location_id",
+     "type": "Many2one",
+     "relates_to": "stock.location",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "potential_failure_location_ids",
+     "type": "Many2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "lot_line_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "total_field_count_declared": 31
+  },
+  {
+   "model": "report.quality_control.quality_worksheet",
+   "business_meaning": "Quality Worksheet Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/report/worksheet_custom_reports.py",
+   "total_field_count_declared": 0
+  },
+  {
+   "model": "report.quality_control.quality_worksheet_internal",
+   "business_meaning": "Quality Worksheet Internal Report",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "quality/report/worksheet_custom_reports.py",
+   "total_field_count_declared": 0
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "quality.point",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "measure_on",
+     "type": "Selection",
+     "label": "Control per",
+     "selection": [
+      "operation",
+      "product",
+      "move_line"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "measure_frequency_type",
+     "type": "Selection",
+     "label": "Control Frequency",
+     "selection": [
+      "all",
+      "random",
+      "periodical",
+      "on_demand"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "measure_frequency_unit",
+     "type": "Selection",
+     "selection": [
+      "day",
+      "week",
+      "month"
+     ]
+    },
+    {
+     "name": "spreadsheet_template_id",
+     "type": "Many2one",
+     "relates_to": "quality.spreadsheet.template"
+    },
+    {
+     "name": "failure_message",
+     "type": "Html",
+     "label": "Failure Message"
+    },
+    {
+     "name": "measure_frequency_value",
+     "type": "Float",
+     "label": "Percentage"
+    },
+    {
+     "name": "measure_frequency_unit_value",
+     "type": "Integer",
+     "label": "Frequency Unit Value"
+    },
+    {
+     "name": "is_lot_tested_fractionally",
+     "type": "Boolean",
+     "label": "Lot Tested Fractionally",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "testing_percentage_within_lot",
+     "type": "Float"
+    },
+    {
+     "name": "norm",
+     "type": "Float",
+     "label": "Norm"
+    }
+   ],
+   "evidence_files": [
+    "quality/models/quality.py"
+   ]
+  },
+  {
+   "model": "quality.check",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "measure_on",
+     "type": "Selection",
+     "label": "Control per",
+     "selection": [
+      "operation",
+      "product",
+      "move_line"
+     ],
+     "flags": [
+      "required",
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "measure_success",
+     "type": "Selection",
+     "label": "Measure Success",
+     "selection": [
+      "none",
+      "pass",
+      "fail"
+     ],
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "product_id",
+     "type": "Many2one",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lot_ids",
+     "type": "Many2many",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "lot_line_id",
+     "type": "Many2one",
+     "relates_to": "stock.lot",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "spreadsheet_template_id",
+     "type": "Many2one",
+     "relates_to": "quality.spreadsheet.template",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "measure",
+     "type": "Float",
+     "label": "Measure",
+     "flags": [
+      "tracked"
+     ]
+    },
+    {
+     "name": "move_line_id",
+     "type": "Many2one",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "uom_id",
+     "type": "Many2one",
+     "label": "Unit",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "spreadsheet_id",
+     "type": "Many2one",
+     "relates_to": "quality.check.spreadsheet"
+    }
+   ],
+   "evidence_files": [
+    "quality/models/quality.py"
+   ]
+  },
+  {
+   "model": "stock.picking",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "check_ids",
+     "type": "One2many",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "quality_alert_ids",
+     "type": "One2many",
+     "relates_to": "quality.alert"
+    },
+    {
+     "name": "quality_check_todo",
+     "type": "Boolean",
+     "label": "Pending checks",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_check_fail",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_alert_count",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "quality/models/stock_picking.py"
+   ]
+  },
+  {
+   "model": "product.template",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_control_point_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_pass_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_fail_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "quality/models/quality.py"
+   ]
+  },
+  {
+   "model": "product.product",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_control_point_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_pass_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_fail_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "quality/models/quality.py"
+   ]
+  },
+  {
+   "model": "stock.lot",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_check_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_alert_qty",
+     "type": "Integer",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "quality/models/stock_lot.py"
+   ]
+  },
+  {
+   "model": "stock.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "check_state",
+     "type": "Selection",
+     "selection": [
+      "no_checks",
+      "in_progress",
+      "pass",
+      "fail"
+     ],
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "check_ids",
+     "type": "One2many",
+     "relates_to": "quality.check"
+    }
+   ],
+   "evidence_files": [
+    "quality/models/stock_move_line.py"
+   ]
+  },
+  {
+   "model": "quality.alert",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "title",
+     "type": "Char",
+     "label": "Title"
+    }
+   ],
+   "evidence_files": [
+    "quality/models/quality.py"
+   ]
+  },
+  {
+   "model": "stock.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "quality/models/stock_move.py"
+   ]
+  }
+ ]
+}

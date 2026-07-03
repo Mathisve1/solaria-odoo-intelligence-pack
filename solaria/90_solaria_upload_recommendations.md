@@ -6,6 +6,8 @@
 | Authority level | High for upload/rollout decisions |
 | Version scope | Odoo 19.0 pack, first iteration |
 
+> **V2 note — start with the operator kit.** A step-by-step, checklist-grade version of this plan now lives in `upload_ready/` (README + exact per-batch checklists with pasteable descriptions, acceptance tests and troubleshooting). Use the kit for execution; use this document for the full-plan overview and the later batches (4–5).
+
 ## 1. Principles
 - Upload in **batches**, testing after each with `92_solaria_test_questions.md` — behavior first, evidence later.
 - Every upload gets its **description** pasted from `93_solaria_document_description_copy_paste.md` (or the file's `.usage.md`).
@@ -33,7 +35,7 @@ Test focus: answering structure, edition discipline, uncertainty language.
 Test focus: module routing, "does module X exist and in which edition", AI capability-vs-concept separation.
 
 ### Batch 3 — Functional summaries for priority modules
-For each priority module (start Tier 1: sale, account, crm, stock, purchase, mrp, project, hr; then Tier 2): `modules/<name>/README.md` + `modules/<name>/functional_summary.md` + `modules/<name>/standard_vs_custom.md`.
+V2 refinement: start with **functional summaries only** for the 14-module set in `upload_ready/batch_3_functional_summary_selection.md`; add README.md and standard_vs_custom.md per module on demand. Remaining summaries (incl. V2 packs: account_accountant, account_reports, web_studio, base_automation, spreadsheet_edition, quality, mrp_workorder, stock_barcode) follow demand. **Upload `modules/ai_native_odoo_19/` (inventory JSON + functional summary + governance doc) as one unit as soon as AI questions appear.**
 Test focus: module-depth questions, customization challenges.
 
 ### Batch 4 — Supporting evidence (per module, as needed)

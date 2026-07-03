@@ -1,0 +1,33 @@
+# Workflow & Automation Summary — `mrp_workorder` (Odoo 19.0)
+
+| Attribute | Value |
+|---|---|
+| Module | `mrp_workorder` — MRP II |
+| Source origin | enterprise |
+| Version scope | 19.0 |
+| Document type | Workflow & Automation Summary |
+| Authority | High for shipped states/crons/actions (Source-Code-Derived Evidence) |
+| Confidence | High for existence of listed items; runtime behaviour needs live validation |
+
+
+## Main business flow (consultant narrative)
+- Operator flow: work order queue → start (timer) → instructions/quality inline → register output/scrap → done; 'propose change' lets operators suggest BoM/instruction fixes — a lean-culture hook.
+- Planning flows: Gantt by production/work center for sequencing; blocked/ready states come from mrp core.
+
+## Server actions shipped (incl. contextual actions)
+
+| Action | On object | Kind |
+|---|---|---|
+| Overview | stock.picking.type | code |
+| Unplan orders | mrp.production | code |
+| Work Orders Planning | mrp.workorder | code |
+| Work Orders Planning | mrp.workorder | code |
+
+## Integration surface
+- Direct dependencies: `quality`, `mrp`, `barcodes`, `web_gantt`, `web_tour`, `hr_hourly_cost`
+- Sequences configured: 0 — numbering is configuration, not code.
+
+## Implementation implications (generic)
+- Status flows above are the checkpoints for data migration (records must land in a valid state).
+- Crons imply background behaviour after go-live — include in cutover runbooks and monitoring.
+- Mail templates are white-label surfaces: rebrand before UAT.

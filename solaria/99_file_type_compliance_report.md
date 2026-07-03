@@ -4,9 +4,9 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 
 | Metric | Value |
 |---|---|
-| Total files | 417 |
-| `.md` files | 386 |
-| `.json` files | 28 |
+| Total files | 565 |
+| `.md` files | 525 |
+| `.json` files | 37 |
 | `.yaml` files | 1 |
 | `.txt` files | 1 |
 | `.html` files | 1 |
@@ -40,6 +40,10 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `06_odoo_ai_opportunity_map.usage.md`
 - `07_priority_module_recommendation.md`
 - `07_priority_module_recommendation.usage.md`
+- `10_executive_orientation_for_deloitte_odoo.md`
+- `10_executive_orientation_for_deloitte_odoo.usage.md`
+- `11_functional_consultant_orientation_for_deloitte_odoo.md`
+- `11_functional_consultant_orientation_for_deloitte_odoo.usage.md`
 - `90_solaria_upload_recommendations.md`
 - `90_solaria_upload_recommendations.usage.md`
 - `91_solaria_global_context_prompt.md`
@@ -49,10 +53,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `92_solaria_test_questions.usage.md`
 - `93_solaria_document_description_copy_paste.md`
 - `93_solaria_document_description_copy_paste.usage.md`
+- `96_evidence_and_claims_audit.md`
+- `96_evidence_and_claims_audit.usage.md`
+- `97_v2_module_improvement_report.md`
+- `97_v2_module_improvement_report.usage.md`
+- `98_v2_initial_audit_report.md`
+- `98_v2_initial_audit_report.usage.md`
 - `99_file_type_compliance_report.md`
 - `99_file_type_compliance_report.usage.md`
 - `99_quality_control_report.md`
 - `99_quality_control_report.usage.md`
+- `99_v2_final_release_notes.md`
+- `99_v2_final_release_notes.usage.md`
+- `99_v2_self_check.md`
+- `99_v2_self_check.usage.md`
 - `index.html`
 - `index.usage.md`
 - `modules/account/README.md`
@@ -69,6 +83,44 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/account/views_summary.usage.md`
 - `modules/account/workflow_summary.md`
 - `modules/account/workflow_summary.usage.md`
+- `modules/account_accountant/README.md`
+- `modules/account_accountant/README.usage.md`
+- `modules/account_accountant/functional_summary.md`
+- `modules/account_accountant/functional_summary.usage.md`
+- `modules/account_accountant/models.json`
+- `modules/account_accountant/models.usage.md`
+- `modules/account_accountant/security_summary.md`
+- `modules/account_accountant/security_summary.usage.md`
+- `modules/account_accountant/standard_vs_custom.md`
+- `modules/account_accountant/standard_vs_custom.usage.md`
+- `modules/account_accountant/views_summary.md`
+- `modules/account_accountant/views_summary.usage.md`
+- `modules/account_accountant/workflow_summary.md`
+- `modules/account_accountant/workflow_summary.usage.md`
+- `modules/account_reports/README.md`
+- `modules/account_reports/README.usage.md`
+- `modules/account_reports/functional_summary.md`
+- `modules/account_reports/functional_summary.usage.md`
+- `modules/account_reports/models.json`
+- `modules/account_reports/models.usage.md`
+- `modules/account_reports/security_summary.md`
+- `modules/account_reports/security_summary.usage.md`
+- `modules/account_reports/standard_vs_custom.md`
+- `modules/account_reports/standard_vs_custom.usage.md`
+- `modules/account_reports/views_summary.md`
+- `modules/account_reports/views_summary.usage.md`
+- `modules/account_reports/workflow_summary.md`
+- `modules/account_reports/workflow_summary.usage.md`
+- `modules/ai_native_odoo_19/README.md`
+- `modules/ai_native_odoo_19/README.usage.md`
+- `modules/ai_native_odoo_19/ai_module_inventory.json`
+- `modules/ai_native_odoo_19/ai_module_inventory.usage.md`
+- `modules/ai_native_odoo_19/functional_summary.md`
+- `modules/ai_native_odoo_19/functional_summary.usage.md`
+- `modules/ai_native_odoo_19/governance_and_validation.md`
+- `modules/ai_native_odoo_19/governance_and_validation.usage.md`
+- `modules/ai_native_odoo_19/standard_vs_custom.md`
+- `modules/ai_native_odoo_19/standard_vs_custom.usage.md`
 - `modules/approvals/README.md`
 - `modules/approvals/README.usage.md`
 - `modules/approvals/functional_summary.md`
@@ -97,6 +149,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/base/views_summary.usage.md`
 - `modules/base/workflow_summary.md`
 - `modules/base/workflow_summary.usage.md`
+- `modules/base_automation/README.md`
+- `modules/base_automation/README.usage.md`
+- `modules/base_automation/functional_summary.md`
+- `modules/base_automation/functional_summary.usage.md`
+- `modules/base_automation/models.json`
+- `modules/base_automation/models.usage.md`
+- `modules/base_automation/security_summary.md`
+- `modules/base_automation/security_summary.usage.md`
+- `modules/base_automation/standard_vs_custom.md`
+- `modules/base_automation/standard_vs_custom.usage.md`
+- `modules/base_automation/views_summary.md`
+- `modules/base_automation/views_summary.usage.md`
+- `modules/base_automation/workflow_summary.md`
+- `modules/base_automation/workflow_summary.usage.md`
 - `modules/contacts/README.md`
 - `modules/contacts/README.usage.md`
 - `modules/contacts/functional_summary.md`
@@ -265,6 +331,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/mrp/views_summary.usage.md`
 - `modules/mrp/workflow_summary.md`
 - `modules/mrp/workflow_summary.usage.md`
+- `modules/mrp_workorder/README.md`
+- `modules/mrp_workorder/README.usage.md`
+- `modules/mrp_workorder/functional_summary.md`
+- `modules/mrp_workorder/functional_summary.usage.md`
+- `modules/mrp_workorder/models.json`
+- `modules/mrp_workorder/models.usage.md`
+- `modules/mrp_workorder/security_summary.md`
+- `modules/mrp_workorder/security_summary.usage.md`
+- `modules/mrp_workorder/standard_vs_custom.md`
+- `modules/mrp_workorder/standard_vs_custom.usage.md`
+- `modules/mrp_workorder/views_summary.md`
+- `modules/mrp_workorder/views_summary.usage.md`
+- `modules/mrp_workorder/workflow_summary.md`
+- `modules/mrp_workorder/workflow_summary.usage.md`
 - `modules/planning/README.md`
 - `modules/planning/README.usage.md`
 - `modules/planning/functional_summary.md`
@@ -335,6 +415,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/purchase/views_summary.usage.md`
 - `modules/purchase/workflow_summary.md`
 - `modules/purchase/workflow_summary.usage.md`
+- `modules/quality/README.md`
+- `modules/quality/README.usage.md`
+- `modules/quality/functional_summary.md`
+- `modules/quality/functional_summary.usage.md`
+- `modules/quality/models.json`
+- `modules/quality/models.usage.md`
+- `modules/quality/security_summary.md`
+- `modules/quality/security_summary.usage.md`
+- `modules/quality/standard_vs_custom.md`
+- `modules/quality/standard_vs_custom.usage.md`
+- `modules/quality/views_summary.md`
+- `modules/quality/views_summary.usage.md`
+- `modules/quality/workflow_summary.md`
+- `modules/quality/workflow_summary.usage.md`
 - `modules/sale/README.md`
 - `modules/sale/README.usage.md`
 - `modules/sale/functional_summary.md`
@@ -377,6 +471,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/sign/views_summary.usage.md`
 - `modules/sign/workflow_summary.md`
 - `modules/sign/workflow_summary.usage.md`
+- `modules/spreadsheet_edition/README.md`
+- `modules/spreadsheet_edition/README.usage.md`
+- `modules/spreadsheet_edition/functional_summary.md`
+- `modules/spreadsheet_edition/functional_summary.usage.md`
+- `modules/spreadsheet_edition/models.json`
+- `modules/spreadsheet_edition/models.usage.md`
+- `modules/spreadsheet_edition/security_summary.md`
+- `modules/spreadsheet_edition/security_summary.usage.md`
+- `modules/spreadsheet_edition/standard_vs_custom.md`
+- `modules/spreadsheet_edition/standard_vs_custom.usage.md`
+- `modules/spreadsheet_edition/views_summary.md`
+- `modules/spreadsheet_edition/views_summary.usage.md`
+- `modules/spreadsheet_edition/workflow_summary.md`
+- `modules/spreadsheet_edition/workflow_summary.usage.md`
 - `modules/stock/README.md`
 - `modules/stock/README.usage.md`
 - `modules/stock/functional_summary.md`
@@ -391,6 +499,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/stock/views_summary.usage.md`
 - `modules/stock/workflow_summary.md`
 - `modules/stock/workflow_summary.usage.md`
+- `modules/stock_barcode/README.md`
+- `modules/stock_barcode/README.usage.md`
+- `modules/stock_barcode/functional_summary.md`
+- `modules/stock_barcode/functional_summary.usage.md`
+- `modules/stock_barcode/models.json`
+- `modules/stock_barcode/models.usage.md`
+- `modules/stock_barcode/security_summary.md`
+- `modules/stock_barcode/security_summary.usage.md`
+- `modules/stock_barcode/standard_vs_custom.md`
+- `modules/stock_barcode/standard_vs_custom.usage.md`
+- `modules/stock_barcode/views_summary.md`
+- `modules/stock_barcode/views_summary.usage.md`
+- `modules/stock_barcode/workflow_summary.md`
+- `modules/stock_barcode/workflow_summary.usage.md`
 - `modules/website/README.md`
 - `modules/website/README.usage.md`
 - `modules/website/functional_summary.md`
@@ -419,6 +541,20 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `modules/website_sale/views_summary.usage.md`
 - `modules/website_sale/workflow_summary.md`
 - `modules/website_sale/workflow_summary.usage.md`
+- `modules/web_studio/README.md`
+- `modules/web_studio/README.usage.md`
+- `modules/web_studio/functional_summary.md`
+- `modules/web_studio/functional_summary.usage.md`
+- `modules/web_studio/models.json`
+- `modules/web_studio/models.usage.md`
+- `modules/web_studio/security_summary.md`
+- `modules/web_studio/security_summary.usage.md`
+- `modules/web_studio/standard_vs_custom.md`
+- `modules/web_studio/standard_vs_custom.usage.md`
+- `modules/web_studio/views_summary.md`
+- `modules/web_studio/views_summary.usage.md`
+- `modules/web_studio/workflow_summary.md`
+- `modules/web_studio/workflow_summary.usage.md`
 - `playbooks/deloitte_odoo_partner_positioning.md`
 - `playbooks/deloitte_odoo_partner_positioning.usage.md`
 - `playbooks/odoo_ai_inside_erp_strategy.md`
@@ -433,3 +569,15 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `playbooks/odoo_implementation_roadmap_template.usage.md`
 - `playbooks/odoo_requirement_to_solution_mapping_guide.md`
 - `playbooks/odoo_requirement_to_solution_mapping_guide.usage.md`
+- `upload_ready/README.md`
+- `upload_ready/README.usage.md`
+- `upload_ready/batch_1_exact_upload_checklist.md`
+- `upload_ready/batch_1_exact_upload_checklist.usage.md`
+- `upload_ready/batch_2_exact_upload_checklist.md`
+- `upload_ready/batch_2_exact_upload_checklist.usage.md`
+- `upload_ready/batch_3_functional_summary_selection.md`
+- `upload_ready/batch_3_functional_summary_selection.usage.md`
+- `upload_ready/do_not_upload_initially.md`
+- `upload_ready/do_not_upload_initially.usage.md`
+- `upload_ready/solaria_acceptance_test_script.md`
+- `upload_ready/solaria_acceptance_test_script.usage.md`

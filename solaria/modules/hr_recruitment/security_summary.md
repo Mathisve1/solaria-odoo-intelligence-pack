@@ -21,7 +21,14 @@
 | Officer: Manage all applicants | group_hr_recruitment_user | — |
 | Administrator | group_hr_recruitment_manager | — |
 | Display CV on application form | group_applicant_cv_display | — |
-| — | base.group_user | group_applicant_cv_display |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_user | group_applicant_cv_display |
 
 ## Access rights (ir.model.access) — 31 rules
 

@@ -21,7 +21,14 @@
 | Administrator | group_purchase_manager | — |
 | A warning can be set on a product or a customer (Purchase) | group_warning_purchase | — |
 | Send an automatic reminder email to confirm delivery | group_send_reminder | — |
-| — | base.group_user | group_send_reminder |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_user | group_send_reminder |
 
 ## Access rights (ir.model.access) — 35 rules
 

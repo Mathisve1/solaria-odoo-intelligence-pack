@@ -1,0 +1,667 @@
+{
+ "_meta": {
+  "module": "mrp_workorder",
+  "display_name": "MRP II",
+  "source_origin": "enterprise",
+  "version_scope": "19.0",
+  "evidence_type": "model",
+  "confidence": "high for existence; behaviour needs live validation",
+  "how_to_read": "defined_here = models this module creates; extended_by_this_module = fields it adds to other modules' models. key_fields is a curated selection (relational/status/tracked fields), not the full schema. No source code is included."
+ },
+ "models_defined": [
+  {
+   "model": "mrp_production.additional.workorder",
+   "business_meaning": "Additional Workorder",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "mrp_workorder/wizard/additional_workorder.py",
+   "key_fields": [
+    {
+     "name": "name",
+     "type": "Char",
+     "label": "Title",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "label": "Work Center",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "blocked_by_workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder",
+     "label": "Insert after operation"
+    },
+    {
+     "name": "company_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_assigned_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "Employee"
+    }
+   ],
+   "total_field_count_declared": 8
+  },
+  {
+   "model": "propose.change",
+   "business_meaning": "Propose a change in the production",
+   "defined_or_extended": "defined_here",
+   "source_origin": "enterprise",
+   "evidence_file": "mrp_workorder/wizard/propose_change.py",
+   "key_fields": [
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder",
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "change_type",
+     "type": "Selection",
+     "selection": [
+      "update_step",
+      "remove_step",
+      "set_picture"
+     ]
+    },
+    {
+     "name": "step_id",
+     "type": "Many2one",
+     "relates_to": "quality.check"
+    }
+   ],
+   "total_field_count_declared": 7
+  }
+ ],
+ "models_extended": [
+  {
+   "model": "mrp.workorder",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_point_ids",
+     "type": "Many2many",
+     "relates_to": "quality.point",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "check_ids",
+     "type": "One2many",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "finished_product_check_ids",
+     "type": "Many2many",
+     "relates_to": "quality.check",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "done_check_ids",
+     "type": "Many2many",
+     "relates_to": "quality.check",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_alert_ids",
+     "type": "One2many",
+     "relates_to": "quality.alert"
+    },
+    {
+     "name": "current_quality_check_id",
+     "type": "Many2one",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "move_line_ids",
+     "type": "One2many",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "test_type_id",
+     "type": "Many2one",
+     "relates_to": "quality.point.test_type",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "user_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/mrp_workorder.py"
+   ]
+  },
+  {
+   "model": "quality.point",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "test_report_type",
+     "type": "Selection",
+     "label": "Report Type",
+     "selection": [
+      "pdf",
+      "zpl"
+     ],
+     "flags": [
+      "required"
+     ]
+    },
+    {
+     "name": "operation_id",
+     "type": "Many2one",
+     "relates_to": "mrp.routing.workcenter"
+    },
+    {
+     "name": "bom_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "component_ids",
+     "type": "One2many",
+     "relates_to": "product.product",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_ids",
+     "type": "Many2many"
+    },
+    {
+     "name": "bom_product_ids",
+     "type": "One2many",
+     "relates_to": "product.product",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "test_type_id",
+     "type": "Many2one",
+     "relates_to": "quality.point.test_type"
+    },
+    {
+     "name": "component_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "is_workorder_step",
+     "type": "Boolean",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "bom_active",
+     "type": "Boolean",
+     "label": "Related Bill of Material Active",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/quality.py"
+   ]
+  },
+  {
+   "model": "quality.check",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    },
+    {
+     "name": "next_check_id",
+     "type": "Many2one",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "previous_check_id",
+     "type": "Many2one",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "move_id",
+     "type": "Many2one",
+     "relates_to": "stock.move"
+    },
+    {
+     "name": "component_id",
+     "type": "Many2one",
+     "relates_to": "product.product"
+    },
+    {
+     "name": "component_uom_id",
+     "type": "Many2one",
+     "relates_to": "uom.uom",
+     "label": "Component Unit",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "finished_lot_ids",
+     "type": "Many2many",
+     "relates_to": "stock.lot",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/quality.py"
+   ]
+  },
+  {
+   "model": "stock.move",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "check_id",
+     "type": "One2many",
+     "relates_to": "quality.check"
+    },
+    {
+     "name": "move_line_ids_picked",
+     "type": "One2many",
+     "relates_to": "stock.move.line"
+    },
+    {
+     "name": "note",
+     "type": "Html",
+     "label": "Note",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "worksheet_document",
+     "type": "Binary",
+     "label": "Worksheet Image/PDF",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "product_barcode",
+     "type": "Char",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "picking_type_prefill_shop_floor_lots",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/stock_move.py"
+   ]
+  },
+  {
+   "model": "mrp.production",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "check_ids",
+     "type": "One2many",
+     "relates_to": "quality.check",
+     "label": "Checks"
+    },
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "working employees",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "log_note",
+     "type": "Text",
+     "label": "Log note"
+    },
+    {
+     "name": "picking_type_auto_close",
+     "type": "Boolean",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "state_color",
+     "type": "Integer",
+     "label": "State Color",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/mrp_production.py"
+   ]
+  },
+  {
+   "model": "mrp.workcenter.productivity",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "employee_id",
+     "type": "Many2one",
+     "relates_to": "hr.employee",
+     "label": "Employee",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "employee_cost",
+     "type": "Monetary",
+     "label": "employee_cost",
+     "flags": [
+      "computed-stored"
+     ]
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "total_cost",
+     "type": "Float",
+     "label": "Cost",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/mrp_workcenter.py"
+   ]
+  },
+  {
+   "model": "mrp.routing.workcenter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_point_ids",
+     "type": "One2many",
+     "relates_to": "quality.point"
+    },
+    {
+     "name": "default_picking_type_ids",
+     "type": "One2many",
+     "relates_to": "stock.picking.type",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "quality_point_count",
+     "type": "Integer",
+     "label": "Instructions",
+     "flags": [
+      "computed"
+     ]
+    },
+    {
+     "name": "employee_ratio",
+     "type": "Float",
+     "label": "Employee Capacity"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/quality.py"
+   ]
+  },
+  {
+   "model": "mrp.workcenter",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "employee_ids",
+     "type": "Many2many",
+     "relates_to": "hr.employee",
+     "label": "employees with access"
+    },
+    {
+     "name": "currency_id",
+     "type": "Many2one",
+     "flags": [
+      "related"
+     ]
+    },
+    {
+     "name": "employee_costs_hour",
+     "type": "Monetary",
+     "label": "Employee Hourly Cost"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/mrp_workcenter.py"
+   ]
+  },
+  {
+   "model": "quality.alert",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "workorder_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workorder"
+    },
+    {
+     "name": "workcenter_id",
+     "type": "Many2one",
+     "relates_to": "mrp.workcenter"
+    },
+    {
+     "name": "production_id",
+     "type": "Many2one",
+     "relates_to": "mrp.production"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/quality.py"
+   ]
+  },
+  {
+   "model": "res.config.settings",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "group_mrp_wo_tablet_timer",
+     "type": "Boolean",
+     "label": "Timer"
+    },
+    {
+     "name": "group_mrp_wo_shop_floor",
+     "type": "Boolean",
+     "label": "Shop Floor"
+    },
+    {
+     "name": "wo_shop_floor_maximum_card_count",
+     "type": "Integer",
+     "label": "Maximum number of cards per page"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/res_config_settings.py"
+   ]
+  },
+  {
+   "model": "stock.picking.type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "prefill_shop_floor_lots",
+     "type": "Boolean",
+     "label": "Pre fill lot/serial numbers in shop floor moves "
+    },
+    {
+     "name": "auto_close_production",
+     "type": "Boolean",
+     "label": "Close Manufacturing Orders"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/stock_picking_type.py"
+   ]
+  },
+  {
+   "model": "mrp.bom",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "quality_point_count",
+     "type": "Integer",
+     "label": "Instructions Count",
+     "flags": [
+      "computed"
+     ]
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/mrp_bom.py"
+   ]
+  },
+  {
+   "model": "quality.point.test_type",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [
+    {
+     "name": "allow_registration",
+     "type": "Boolean"
+    }
+   ],
+   "evidence_files": [
+    "mrp_workorder/models/quality.py"
+   ]
+  },
+  {
+   "model": "hr.employee",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/models/hr_employee.py"
+   ]
+  },
+  {
+   "model": "stock.move.line",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/models/stock_move.py"
+   ]
+  },
+  {
+   "model": "stock.rule",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/models/stock_rule.py"
+   ]
+  },
+  {
+   "model": "change.production.qty",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/wizard/change_production_qty.py"
+   ]
+  },
+  {
+   "model": "mrp.production.backorder",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/wizard/mrp_production_backorder.py"
+   ]
+  },
+  {
+   "model": "report.mrp.report_mo_overview",
+   "defined_or_extended": "extended_by_this_module",
+   "fields_added_or_modified": [],
+   "evidence_files": [
+    "mrp_workorder/report/mrp_report_mo_overview.py"
+   ]
+  }
+ ]
+}

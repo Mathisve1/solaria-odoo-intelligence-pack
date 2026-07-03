@@ -6,7 +6,7 @@
 | Display name | Employees |
 | Source origin | **Community** (Enterprise adds payroll, appraisal, referral, salary configurator, documents/planning bridges) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `base_setup`, `mail`, `resource` ecosystem |
+| Dependencies (manifest, direct) | `base_setup`, `digest`, `phone_validation`, `resource_mail`, `web` — `resource_mail` pulls in resource calendars + mail/chatter |
 | Functional domain | HR (employee master) |
 | Confidence | High for structures; version/contract handling specifics need live validation |
 

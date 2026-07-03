@@ -20,7 +20,14 @@
 | User: own timesheets only | group_hr_timesheet_user | group_user |
 | User: all timesheets | group_hr_timesheet_approver | group_hr_timesheet_user |
 | Administrator | group_timesheet_manager | group_hr_timesheet_approver, group_hr_user |
-| — | project.group_project_manager | group_hr_timesheet_approver |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| project.group_project_manager | group_hr_timesheet_approver |
 
 ## Access rights (ir.model.access) — 7 rules
 

@@ -6,7 +6,7 @@
 | Display name | Sales |
 | Source origin | **Community** (Enterprise extends via `sale_enterprise`, `sale_subscription`, `sale_renting`, marketplace connectors, `partner_commission`, external tax engines) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `account`, `product`, `sales_team`, `utm`, `portal`, `payment` (via ecosystem) |
+| Dependencies (manifest, direct) | `sales_team`, `account_payment`, `utm` — `account_payment` pulls in `account` + `payment`; `sale_management` packages the app UI |
 | Functional domain | Sales / quote-to-order |
 | Confidence | High for structures; pricing/portal behavior details need demo validation |
 
@@ -61,7 +61,7 @@ True CPQ (deep constraint-based configuration) beyond native configurator/combos
 CPQ suites, marketplace/EDI networks not covered by connectors, external tax engines (natively supported pattern in E via Avatax), CPFR/forecast collaboration platforms.
 
 ## Common client questions
-"Can customers sign and pay quotes online?" — yes, Community, configuration. · "Discount control?" — rights + automation alerts; hard approval gates → Approvals (E)/custom. · "Multiple price lists per market/customer?" — native pricelists. · "Down payments?" — native wizard. · "Blanket orders?" — see `sale_blanket_order`-style options / requisitions on purchase side; validate in catalog first.
+"Can customers sign and pay quotes online?" — yes, Community, configuration. · "Discount control?" — rights + automation alerts; hard approval gates → Approvals (E)/custom. · "Multiple price lists per market/customer?" — native pricelists. · "Down payments?" — native wizard. · "Blanket orders on the sales side?" — no dedicated sales blanket-order app in the official 19.0 catalog (purchase side has `purchase_requisition`, Community); the native patterns are long-validity quotations/templates or recurring plans — validate the client's exact need in a demo before proposing anything custom.
 
 ## Fit-gap considerations
 High fit for standard B2B/B2C order flows. Gap hotspots: CPQ depth, rebates/commissions, multi-level order approvals, exotic pricing (formula pricing exists — validate expressiveness live).

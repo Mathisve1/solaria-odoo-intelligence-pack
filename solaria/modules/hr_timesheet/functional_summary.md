@@ -6,7 +6,7 @@
 | Display name | Timesheets |
 | Source origin | **Community** (Enterprise adds `timesheet_grid`: grid entry, validation, reminders; billing depth via `sale_timesheet(_enterprise)`) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `hr`, `project`, `analytic` (timesheets ARE analytic lines) |
+| Dependencies (manifest, direct) | `hr`, `hr_hourly_cost`, `analytic`, `project`, `uom` — timesheets ARE analytic lines (`account.analytic.line`) |
 | Functional domain | Timesheets / services costing & billing |
 | Confidence | High for structures; grid/validation UX is Enterprise runtime — validate live |
 

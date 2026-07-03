@@ -184,8 +184,8 @@ Format per domain: **Purpose · Key modules (C=Community, E=Enterprise) · Typic
 
 ## AI & Automation (E for AI; automation partly C)
 - **Purpose:** Native AI layer (agents, AI fields, AI server actions, domain assists, OCR) + rule automation.
-- **Modules:** C: `base_automation` (automation rules) · E: whole `ai*` family, `iap_extract` OCR family, `web_studio_ai_fields`.
-- **Watch-outs:** pgvector prerequisite (`ai_auto_install`); IAP = pay-per-use; treat performance claims cautiously — module existence is verified, quality is not. See `06_odoo_ai_opportunity_map.md`.
+- **Modules:** C: `base_automation` (automation rules — deep pack exists) · E: whole `ai*` family, `iap_extract` OCR family, `web_studio_ai_fields`.
+- **Watch-outs:** pgvector prerequisite (`ai_auto_install`); IAP = pay-per-use; treat performance claims cautiously — module existence is verified, quality is not. Deep coverage: `modules/ai_native_odoo_19/` (consolidated evidence + governance) and `modules/base_automation/`; strategy: `06_odoo_ai_opportunity_map.md`.
 
 ## Localization & Fiscal Compliance
 - **Purpose:** Country charts of accounts, taxes, EDI (e-invoicing), statutory reports, payroll rules.

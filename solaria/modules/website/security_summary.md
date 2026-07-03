@@ -21,8 +21,15 @@
 | Restricted Editor | group_website_restricted_editor | — |
 | Editor and Designer | group_website_designer | group_sanitize_override |
 | Public access to arbitrary exposed model | website_page_controller_expose | — |
-| — | base.group_public | — |
-| — | base.group_portal | — |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_public | (see security file) |
+| base.group_portal | (see security file) |
 
 ## Access rights (ir.model.access) — 44 rules
 

@@ -13,11 +13,13 @@
 ## Deloitte advisory notes
 - Follows sales groups; recurring billing jobs run as system — finance should own plan/pricing config rights.
 
-## Security groups defined by this module
+## Existing groups this module modifies
 
-| Group | XML id | Implies |
-|---|---|---|
-| — | base.group_user | group_discount_per_so_line |
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_user | group_discount_per_so_line |
 
 ## Access rights (ir.model.access) — 19 rules
 

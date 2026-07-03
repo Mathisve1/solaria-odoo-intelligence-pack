@@ -6,6 +6,21 @@
 | Usage | When uploading a file to Solaria, paste its description below into the document description / usage-instruction field. Priorities: 1 = upload first. Authority: how strongly Solaria should trust it. |
 
 For module evidence files not individually listed (Batch 4), use the generic templates at the end. Full registry (machine-readable, every file): `00_document_usage_registry.json`.
+**V2 note:** exact per-batch upload checklists with these descriptions pre-inserted live in `upload_ready/` — prefer them for execution. V2 additions covered below: the `ai_native_odoo_19` consolidated pack and eight new module packs (account_accountant, account_reports, web_studio, base_automation, spreadsheet_edition, quality, mrp_workorder, stock_barcode) — use the Batch 3/4 templates for their standard files.
+
+## V2 — AI evidence pack (`modules/ai_native_odoo_19/`, upload as one unit when AI questions appear)
+
+**`modules/ai_native_odoo_19/ai_module_inventory.json`**
+> Source-verified inventory of all 28 native AI and OCR-digitization modules in Odoo 19.0 (all Enterprise; pgvector and IAP gates noted). THE authority on whether a native AI module exists. Existence only — output quality requires a pilot on client data.
+
+**`modules/ai_native_odoo_19/functional_summary.md`**
+> Business-level explanation of the native AI layer of Odoo 19.0 Enterprise, grouped by capability (platform, front-office assists, drafting, document intelligence/OCR, specialized assists), with edition/infrastructure/commercial gates and what does NOT exist natively. Use for any "what can Odoo's AI do" question; always give the two-part verdict (exists / quality-piloted).
+
+**`modules/ai_native_odoo_19/standard_vs_custom.md`**
+> Places AI requests on the Deloitte solution ladder for Odoo 19.0: what is native (Enterprise), what is configuration (agents, AI fields, AI steps), when custom AI or external AI platforms are justified, and what to avoid. Use for scoping any AI build/buy question.
+
+**`modules/ai_native_odoo_19/governance_and_validation.md`**
+> Governance and phrasing rules for AI in Odoo engagements: risk table, AI register, validation protocol (pilot, leakage test), EU AI Act mapping, demo-safe rules and client-safe wording patterns with examples of what never to promise. High authority for how to talk about and govern AI.
 
 ---
 

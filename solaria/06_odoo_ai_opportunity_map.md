@@ -9,6 +9,8 @@
 
 **Golden rule:** never present a §3/§4 concept as an existing Odoo feature. §1 lists what verifiably ships in 19.0 Enterprise at module level; even there, *how well it works* requires live validation.
 
+> **V2:** a consolidated evidence pack now exists at `modules/ai_native_odoo_19/` — full 28-module inventory JSON (existence authority), business-level functional summary, standard-vs-custom placement, and a governance & safe-phrasing document. Route existence and phrasing questions there; this map remains the strategy/opportunity layer.
+
 ## 1. What Odoo 19.0 actually ships (source-verified, ALL Enterprise)
 
 | Capability | Modules (evidence) | Functional meaning |

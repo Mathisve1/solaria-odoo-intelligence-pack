@@ -1,0 +1,441 @@
+{
+ "_meta": {
+  "title": "Odoo 19.0 Native AI & Document-Digitization Module Inventory (source-verified)",
+  "version_scope": "Odoo 19.0 (Enterprise snapshot 2026-07-02)",
+  "key_fact": "Every module listed ships in the ENTERPRISE tree; the Community 19.0 tree contains no ai* modules. Existence is source-verified; runtime quality/behaviour is NOT verified and requires live validation.",
+  "infrastructure_note": "ai_auto_install activates the AI stack only when PostgreSQL pgvector is available; OCR extract modules run via IAP (metered pay-per-use).",
+  "how_to_use": "Authoritative list for (does a native AI module exist for X, and in which edition). For value framing and governance see the pack md documents and 06_odoo_ai_opportunity_map.md."
+ },
+ "ai_platform_and_domain_modules": [
+  {
+   "technical_name": "ai",
+   "display_name": "AI",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Base module for AI features",
+   "depends": [
+    "mail"
+   ],
+   "auto_install": false,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_app",
+   "display_name": "AI",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "A powerful suite of AI tools and agents\n        integrated directly into your Odoo environment.",
+   "depends": [
+    "attachment_indexation",
+    "ai"
+   ],
+   "auto_install": false,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_fields",
+   "display_name": "ai_fields",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Implementation of AI computed fields",
+   "depends": [
+    "ai"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_server_actions",
+   "display_name": "ai_server_actions",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Implementation of AI server actions",
+   "depends": [
+    "ai_fields"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_auto_install",
+   "display_name": "AI Auto Install",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Auto install AI module if pgvector is available",
+   "depends": [
+    "mail"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_crm",
+   "display_name": "AI crm",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Automatically create leads.",
+   "depends": [
+    "ai_app",
+    "crm"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_crm_livechat",
+   "display_name": "AI crm livechat",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Automatically create leads from livechat.",
+   "depends": [
+    "ai_crm",
+    "ai_livechat"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_documents",
+   "display_name": "AI Documents",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Automatically sort your documents.",
+   "depends": [
+    "ai",
+    "documents",
+    "base_automation"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_documents_account",
+   "display_name": "AI Documents Account",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI Documents Account",
+   "depends": [
+    "ai_documents",
+    "documents_account"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_documents_source",
+   "display_name": "AI Documents Source",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Add documents to AI agents as sources.",
+   "depends": [
+    "ai",
+    "documents"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_account",
+   "display_name": "AI Text Draft - Accounting",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI text draft integration with accounting",
+   "depends": [
+    "ai",
+    "account"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_knowledge",
+   "display_name": "AI Text Draft - Knowledge",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI text draft integration with knowledge",
+   "depends": [
+    "ai",
+    "knowledge"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_livechat",
+   "display_name": "AI Livechat",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "AI",
+   "summary": "Augment Livechat with AI Agents.",
+   "depends": [
+    "ai_app",
+    "im_livechat"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_website",
+   "display_name": "AI Website Integration",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI website integration",
+   "depends": [
+    "ai",
+    "website"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "ai_website_livechat",
+   "display_name": "AI Website Livechat Integration",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI website livechat components for web builder",
+   "depends": [
+    "ai_website",
+    "ai_livechat",
+    "html_builder"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "hr_recruitment_ai",
+   "display_name": "Recruitment With AI",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Human Resources/Recruitment",
+   "summary": "",
+   "depends": [
+    "hr_recruitment",
+    "ai"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "sign_ai",
+   "display_name": "Sign AI Integration",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Sign AI integration",
+   "depends": [
+    "sign",
+    "ai"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "voip_ai",
+   "display_name": "Phone - AI",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Productivity/Phone",
+   "summary": "Extend Phone with AI features (such as transcription)",
+   "depends": [
+    "voip",
+    "ai"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "esg_csrd_ai",
+   "display_name": "AI - ESG CSRD",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "AI integration with ESG CSRD",
+   "depends": [
+    "ai_app",
+    "esg_csrd"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "web_studio_ai_fields",
+   "display_name": "web_studio_ai_fields",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden",
+   "summary": "Enable creating AI computed fields in studio",
+   "depends": [
+    "ai_fields",
+    "web_studio"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "test_ai_fields",
+   "display_name": "Test AI Field",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden/Tests",
+   "summary": "",
+   "depends": [
+    "ai_fields"
+   ],
+   "auto_install": false,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  }
+ ],
+ "ocr_document_digitization_modules_iap": [
+  {
+   "technical_name": "iap_extract",
+   "display_name": "Iap Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Hidden/Tools",
+   "summary": "Common module for requesting data from the extract server",
+   "depends": [
+    "base",
+    "iap",
+    "mail",
+    "iap_mail"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "account_extract",
+   "display_name": "Account Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Accounting/Accounting",
+   "summary": "Digitise and extract data from documents.",
+   "depends": [
+    "account",
+    "iap_extract",
+    "iap_mail",
+    "mail_enterprise",
+    "account_bank_statement_import"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "account_invoice_extract",
+   "display_name": "Account Invoice Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Accounting/Accounting",
+   "summary": "Extract data from invoice scans to fill them automatically",
+   "depends": [
+    "account_extract"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "account_invoice_extract_purchase",
+   "display_name": "Account Invoice Extract Purchase",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Accounting",
+   "summary": "Automatically finds the purchase order linked to a vendor bill when using invoice extraction",
+   "depends": [
+    "account_invoice_extract",
+    "purchase"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "account_bank_statement_extract",
+   "display_name": "Account Bank Statement Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Accounting/Accounting",
+   "summary": "Extract data from bank statement scans to fill them automatically",
+   "depends": [
+    "accountant",
+    "account_bank_statement_import",
+    "iap_extract",
+    "account_extract"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "hr_expense_extract",
+   "display_name": "Hr Expense Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Human Resources/Expenses",
+   "summary": "Extract data from expense scans to fill them automatically",
+   "depends": [
+    "hr_expense",
+    "iap_extract",
+    "iap_mail",
+    "mail_enterprise",
+    "hr_expense_predict_product"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  },
+  {
+   "technical_name": "hr_recruitment_extract",
+   "display_name": "Hr Recruitment Extract",
+   "source_origin": "enterprise",
+   "version_scope": "19.0",
+   "category": "Human Resources/Recruitment",
+   "summary": "Extract data from CV scans to fill applicant forms automatically",
+   "depends": [
+    "hr_recruitment",
+    "iap_extract",
+    "iap_mail",
+    "mail_enterprise"
+   ],
+   "auto_install": true,
+   "evidence_type": "manifest",
+   "confidence": "high (module existence verified in source)"
+  }
+ ]
+}

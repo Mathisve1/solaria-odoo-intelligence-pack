@@ -6,7 +6,7 @@
 | Display name | Manufacturing |
 | Source origin | **Community** (Enterprise adds `mrp_workorder` shop floor, `mrp_mps` master schedule, `mrp_plm`, `quality_mrp`, IoT) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `stock`, `product` |
+| Dependencies (manifest, direct) | `product`, `stock`, `resource` |
 | Functional domain | Manufacturing / plan-to-produce |
 | Confidence | High for structures; scheduling/costing behavior needs live validation |
 

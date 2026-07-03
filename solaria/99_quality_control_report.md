@@ -1,10 +1,46 @@
-# Quality Control Report — Deloitte Solaria Odoo Intelligence Pack (Iteration 1)
+# Quality Control Report — Deloitte Solaria Odoo Intelligence Pack
 
 | Attribute | Value |
 |---|---|
 | Document type | Context Manifest / Knowledge Base Rules (quality control) |
 | Version scope | Odoo 19.0 (Community final + Enterprise snapshot 2026-07-02) |
-| Pack build date | 2026-07-02 |
+| Pack version | **V2** (V2 section below; V1 baseline report follows) |
+| Build dates | V1 + V2: 2026-07-02 |
+
+---
+
+# V2 SECTION — What changed, what improved, what remains risky
+
+## V2.1 What changed (full detail: `99_v2_final_release_notes.md`, worklogs 96/97/98)
+- **Evidence hardening (credibility fixes):** dependency rows in 16 functional summaries replaced with exact manifest values ("Dependencies (manifest, direct)" convention); the one uncataloged module reference removed; generated security summaries corrected to distinguish group *definitions* from group *modifications* (12 files re-rendered); purchase capabilities rebuilt with source-verified structures.
+- **Behaviour hardening:** controlled six-grade evidence vocabulary + AI two-part verdict + generic-answer kill-switch + self-description rule added to the role rules and both global-prompt twins; manifest routing updated.
+- **New module packs (9):** finance depth (`account_accountant`, `account_reports`), platform (`web_studio` — incl. newly evidenced Studio approval rules, `base_automation`, `spreadsheet_edition`), supply-chain depth (`quality` merging quality+quality_control, `mrp_workorder`, `stock_barcode`), and the consolidated **`ai_native_odoo_19`** evidence pack (28-module inventory JSON + governance/safe-phrasing doc).
+- **Upload readiness:** new `upload_ready/` operator kit (README, exact Batch 1–3 checklists with pasteable descriptions and pass/fail tests, do-not-upload guardrail, 12-question acceptance script); 90/93 updated to route through it.
+- **Audience docs:** executive orientation (10) and functional-consultant orientation (11).
+- **Governance records:** 98 initial audit, 96 claims audit, 97 module improvement report, V2 release notes and self-check; registry regenerated (281+ entries), index/compliance regenerated.
+
+## V2.2 Risks reduced
+Overclaiming via inexact dependencies/uncataloged names (fixed corpus-wide) · misleading security evidence (fixed at generator level and regenerated) · AI hype risk (dedicated governance/phrasing doc + two-part-verdict rule) · upload/operator error (checklist-grade kit with per-batch acceptance gates) · generic-answer drift (kill-switch rule).
+
+## V2.3 Remaining gaps and risks (unchanged in kind, reduced in surface)
+1. Behaviour-level claims remain structurally unverifiable from source — the caveat system is the control; reviewers must keep caveats in deliverables.
+2. `implied_ids` parsing in security summaries is heuristic for exotic expressions (96 audit A3 residual) — iteration-3 refinement queued.
+3. Country statutory completeness, OCR/AI quality, offline envelopes, signature legal levels: still validation-mandatory watchlist items.
+4. Retrieval behavior in the live Solaria platform is untested from here — the acceptance script exists precisely to close this after upload.
+5. Deep packs now 34 + AI pack, of 1,422 modules — coverage limits remain and are declared (07).
+
+## V2.4 Recommended manual review before first upload (V2 order)
+1. `98_v2_initial_audit_report.md` + `96_evidence_and_claims_audit.md` (know the fix history), 2. Batch-1 documents end-to-end, 3. the AI pack's `governance_and_validation.md` with Deloitte risk/legal, 4. one V2 pack against a live 19.0 DB (suggest `account_reports` drill-down and Studio approval rules), 5. the upload-ready kit dry-run by the actual operator.
+
+## V2.5 Upload plan after V2
+Execute `upload_ready/` batches 1→2→3 with their acceptance gates; volume guardrail ≤ ~30 documents until the 12-question script passes twice; expand on measured demand (do_not_upload_initially triggers). Do not upload: usage companions, index.html, 96/97/98/99 governance reports (optional late exceptions documented), bulk evidence files.
+
+## V2.6 Retrieval/volume concerns (stated honestly)
+The pack now holds 280+ documents; uploading everything would risk retrieval dilution on any platform. The kit's staged approach + volume guardrail is the mitigation; measured question logs decide expansion. The catalog JSON (~1.3 MB) is the single heaviest retrieval object — monitor its behavior in Batch-2 testing (fallback: rely on domain map + module packs and upload the catalog last).
+
+---
+
+# V1 BASELINE REPORT (unchanged below; counts refer to the V1 state — see compliance report for current totals)
 
 ## 1. What was created
 

@@ -20,8 +20,15 @@
 | UOM Price Display for eCommerce | group_show_uom_price | — |
 | Comparison Price | group_product_price_comparison | — |
 | Product Feed | group_product_feed | — |
-| — | base.group_user | group_delivery_invoice_address |
-| — | sales_team.group_sale_manager | group_website_restricted_editor |
+
+## Existing groups this module modifies
+
+These records extend groups owned by other modules (typically adding implied rights) — they do not create new roles:
+
+| Existing group (reference) | Rights/groups implied by this module |
+|---|---|
+| base.group_user | group_delivery_invoice_address |
+| sales_team.group_sale_manager | group_website_restricted_editor |
 
 ## Access rights (ir.model.access) — 66 rules
 

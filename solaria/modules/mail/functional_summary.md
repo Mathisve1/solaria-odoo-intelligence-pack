@@ -6,7 +6,7 @@
 | Display name | Discuss |
 | Source origin | **Community** (Enterprise `mail_enterprise` adds mobile/UI polish) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `base`, `base_setup`, `bus`, `web_tour` |
+| Dependencies (manifest, direct) | `base`, `base_setup`, `bus`, `web_tour`, `html_editor` |
 | Functional domain | Communication & activity backbone |
 | Confidence | High (source-verified: 83 models incl. mixins used platform-wide) |
 

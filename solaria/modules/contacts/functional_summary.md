@@ -6,7 +6,7 @@
 | Display name | Contacts |
 | Source origin | **Community** (thin app UI over `res.partner` from `base`) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `base_setup`, `mail` |
+| Dependencies (manifest, direct) | `base`, `mail` |
 | Functional domain | Partner master data |
 | Confidence | High (source-verified; app = menus/views over the base partner model) |
 

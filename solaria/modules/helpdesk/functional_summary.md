@@ -6,7 +6,7 @@
 | Display name | Helpdesk |
 | Source origin | **Enterprise** (no Community equivalent app in 19.0) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `mail`, `utm`, `rating`, `resource`, `portal`, `digest` (+bridges: `helpdesk_stock`, `helpdesk_account`, `helpdesk_timesheet`, `website_helpdesk`, `crm_helpdesk`) |
+| Dependencies (manifest, direct) | `base_setup`, `mail`, `utm`, `rating`, `web_tour`, `web_cohort`, `resource`, `portal`, `digest` (+bridges: `helpdesk_stock`, `helpdesk_account`, `helpdesk_timesheet`, `website_helpdesk`, `crm_helpdesk`) |
 | Functional domain | Helpdesk / customer service |
 | Confidence | High for structures; SLA computation and assignment behavior need live validation |
 

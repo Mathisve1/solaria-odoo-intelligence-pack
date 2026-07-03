@@ -6,7 +6,7 @@
 | Display name | Point of Sale |
 | Source origin | **Community** (Enterprise adds `pos_enterprise`, `pos_iot`, `pos_settle_due`, extra terminals, country fiscal certifications) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `stock`, `account`, `payment`, `barcodes` ecosystem |
+| Dependencies (manifest, direct) | `stock_account`, `barcodes`, `resource`, `html_editor`, `digest`, `phone_validation`, `partner_autocomplete`, `iot_base`, `google_address_autocomplete` — `stock_account` pulls in `stock` + `account` |
 | Functional domain | Point of Sale / retail & hospitality |
 | Confidence | High for structures; register UX, offline behavior and fiscal compliance must be validated live per country |
 

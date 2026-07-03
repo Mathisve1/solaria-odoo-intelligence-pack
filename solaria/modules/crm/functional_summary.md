@@ -6,7 +6,7 @@
 | Display name | CRM |
 | Source origin | **Community** (Enterprise extends via `crm_enterprise`, `ai_crm`, `voip_crm`, `social_crm`, `appointment_crm`, `marketing_automation_crm`) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `sales_team`, `mail`, `calendar`, `contacts`, `utm`, `phone_validation`, `digest`, `resource` |
+| Dependencies (manifest, direct) | `base_setup`, `sales_team`, `mail`, `calendar`, `resource`, `utm`, `web_tour`, `contacts`, `digest`, `phone_validation` |
 | Functional domain | CRM |
 | Confidence | High for structures (source-verified); behavior details need demo validation |
 

@@ -6,7 +6,7 @@
 | Display name | eCommerce |
 | Source origin | **Community** (Enterprise adds checkout carrier/tax connectors, subscription/rental commerce, dashboards) |
 | Version scope | Odoo 19.0 |
-| Dependencies | `website`, `sale`, `payment`, `delivery` ecosystem |
+| Dependencies (manifest, direct) | `website`, `sale`, `website_payment`, `website_mail`, `portal_rating`, `delivery`, `html_builder`, `digest` |
 | Functional domain | eCommerce |
 | Confidence | High for structures; checkout UX and payment flows must be validated live |
 
