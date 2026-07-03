@@ -1,0 +1,65 @@
+{
+ "_meta": {
+  "title": "Batch 4 — Later Evidence Files (NOT for immediate upload)",
+  "version": "V3 final",
+  "principle": "Evidence files are uploaded per module, per demonstrated need — never in bulk. A trigger fires when consultants ask the corresponding question class about a specific module MORE THAN ONCE, or a named engagement activity starts (role design workshop, demo build, migration mapping).",
+  "procedure": "On trigger: upload only the matching file(s) for the requested module(s), paste the description template from document_descriptions or the file's .usage.md, then re-run the nearest acceptance suite's spot checks. Max 10 files per expansion step.",
+  "description_templates_location": "93_solaria_document_description_copy_paste.md (Batch 4 section) or each file's .usage.md",
+  "paths_relative_to": "solaria/"
+ },
+ "use_case_groups": [
+  {
+   "use_case": "technical_validation (data model, migration mapping, integration field-level design)",
+   "file_pattern": "modules/<module>/models.json",
+   "trigger": "Field-level or data-mapping questions about a module recur; a migration or integration design workstream starts.",
+   "first_candidates": ["modules/sale/models.json", "modules/account/models.json", "modules/stock/models.json", "modules/crm/models.json"],
+   "warning": "Highest volume category (34 files) — never upload all at once; JSON evidence dilutes narrative retrieval fastest."
+  },
+  {
+   "use_case": "security_roles (role design, permissions, segregation of duties)",
+   "file_pattern": "modules/<module>/security_summary.md",
+   "trigger": "An authorization-concept workstream starts, or permissions questions recur for a module.",
+   "first_candidates": ["modules/account/security_summary.md", "modules/stock/security_summary.md", "modules/hr/security_summary.md", "modules/documents/security_summary.md"],
+   "warning": "Shipped defaults only — pair with the reminder that client security models are design work."
+  },
+  {
+   "use_case": "workflow_design (process design, cutover state mapping, automation inventory)",
+   "file_pattern": "modules/<module>/workflow_summary.md",
+   "trigger": "Process-design or migration state-mapping questions recur; cutover runbook preparation starts.",
+   "first_candidates": ["modules/sale/workflow_summary.md", "modules/purchase/workflow_summary.md", "modules/mrp/workflow_summary.md", "modules/account/workflow_summary.md"]
+  },
+  {
+   "use_case": "ui_demo_preparation (exact menu paths, view types, printable reports)",
+   "file_pattern": "modules/<module>/views_summary.md",
+   "trigger": "A demo build starts for a module and the builder asks navigation-level questions.",
+   "first_candidates": ["modules/sale/views_summary.md", "modules/stock/views_summary.md", "modules/helpdesk/views_summary.md"]
+  },
+  {
+   "use_case": "customization_decisioning (module-specific build-vs-configure depth)",
+   "file_pattern": "modules/<module>/standard_vs_custom.md",
+   "trigger": "Recurring customization debates on a specific module (the global framework 05 is already uploaded in Batch 1).",
+   "first_candidates": ["modules/sale/standard_vs_custom.md", "modules/purchase/standard_vs_custom.md", "modules/web_studio/standard_vs_custom.md", "modules/base_automation/standard_vs_custom.md"]
+  },
+  {
+   "use_case": "ai_governance_depth (AI existence verification and build scoping beyond Batch 3's summary+governance)",
+   "file_pattern": "modules/ai_native_odoo_19/{ai_module_inventory.json, standard_vs_custom.md, README.md}",
+   "trigger": "AI existence disputes ('is there really a module for X?') or AI build-vs-buy scoping sessions.",
+   "first_candidates": ["modules/ai_native_odoo_19/ai_module_inventory.json", "modules/ai_native_odoo_19/standard_vs_custom.md"],
+   "warning": "Inventory JSON is the existence authority — upload when precision matters more than prose."
+  },
+  {
+   "use_case": "methodology (playbooks — fit-gap runs, demo craft, roadmaps, discovery, positioning)",
+   "file_pattern": "playbooks/*.md (7 files)",
+   "trigger": "Methodology questions recur (how to run fit-gap, structure a demo, build a roadmap).",
+   "first_candidates": ["playbooks/odoo_fit_gap_methodology.md", "playbooks/odoo_requirement_to_solution_mapping_guide.md", "playbooks/odoo_demo_storyline_playbook.md"],
+   "warning": "deloitte_odoo_partner_positioning.md is internal framing — restrict audience if the platform supports it."
+  },
+  {
+   "use_case": "remaining_functional_summaries (modules not in Batch 3)",
+   "file_pattern": "modules/<module>/functional_summary.md for: base, mail, product, contacts, hr, hr_timesheet, website, point_of_sale, planning, knowledge, approvals, marketing_automation, account_accountant, account_reports, spreadsheet_edition, quality, mrp_workorder, stock_barcode",
+   "trigger": "The module appears in real consultant questions.",
+   "first_candidates": ["modules/account_accountant/functional_summary.md", "modules/account_reports/functional_summary.md", "modules/quality/functional_summary.md", "modules/mrp_workorder/functional_summary.md"],
+   "note": "Finance-depth pair (account_accountant + account_reports) is the most likely first trigger — upload as a pair."
+  }
+ ]
+}

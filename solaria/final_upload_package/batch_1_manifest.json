@@ -1,0 +1,73 @@
+{
+ "_meta": {
+  "title": "Batch 1 — Governance & Reasoning Core (exact upload manifest)",
+  "version": "V3 final",
+  "goal": "Teach Solaria HOW to reason: behaviour, document hierarchy, edition discipline, customization ladder, self-routing.",
+  "file_count": 6,
+  "prerequisite": "global_context_FINAL.txt pasted into Solaria's global context field",
+  "gate_after_upload": "acceptance_tests_AFTER_BATCH_1.md — pass >=7/8 with zero critical fails before Batch 2",
+  "paths_relative_to": "solaria/"
+ },
+ "files": [
+  {
+   "file_path": "00_solaria_role_and_answering_rules.md",
+   "upload_order": 1,
+   "why_upload": "The behaviour constitution: answer structure, standard-before-custom, evidence vocabulary, generic-answer kill-switch. Everything else assumes it.",
+   "paste_ready_description": "Highest-authority behaviour rules. Use in every Odoo answer to enforce business-first reasoning, the standard-before-custom ladder, Community/Enterprise separation, the controlled evidence vocabulary and the generic-answer kill-switch. Do not use as evidence of product capabilities. Overrides any conflicting document.",
+   "expected_effect_on_solaria": "Answers become structured (business interpretation first, recommendation last), edition-tagged, caveated, and never code-first.",
+   "acceptance_test_questions": ["A client wants to heavily customize their sales process to match their legacy system. What do you advise?"],
+   "pass_criteria": "Challenges legacy replication; walks the ladder; names upgrade-tax; ends with validation questions.",
+   "fail_signals": "Generic flexibility talk; jumps to custom development; no challenge."
+  },
+  {
+   "file_path": "00_context_manifest_and_usage_rules.md",
+   "upload_order": 2,
+   "why_upload": "Defines which document to trust for which question, conflict resolution and uncertainty rules — the routing brain.",
+   "paste_ready_description": "Master guide to this knowledge pack. Use to decide which document answers which question: document hierarchy, source hierarchy, routing logic, conflict and uncertainty rules, client-facing vs internal behaviour. Consult before answering from other documents. Do not use as product knowledge. Highest authority with the role rules.",
+   "expected_effect_on_solaria": "Cites the right documents for the right question types; resolves conflicts by hierarchy; separates internal vs client-facing tone.",
+   "acceptance_test_questions": ["If a playbook and the module catalog disagree about whether a module exists, which wins and why?"],
+   "pass_criteria": "Evidence documents beat narrative on existence; hierarchy explained.",
+   "fail_signals": "No hierarchy reasoning; treats all documents equally."
+  },
+  {
+   "file_path": "00_document_type_usage_templates.md",
+   "upload_order": 3,
+   "why_upload": "Defines the 11 document types and their authority weights — lets Solaria grade how much to trust each retrieved document.",
+   "paste_ready_description": "Defines the 11 document types of this pack (behaviour, manifest, playbook, index, domain map, functional summary, source evidence, security evidence, decision framework, demo, visual) with authority levels and combination rules. Use when weighing how much authority a retrieved document carries. Do not use for product facts.",
+   "expected_effect_on_solaria": "Correctly weights demo/storyline content as narrative and evidence files as existence-authority.",
+   "acceptance_test_questions": ["What authority does a demo storyline document have for proving a feature exists?"],
+   "pass_criteria": "Medium/narrative authority; evidence files or catalog needed for existence proof.",
+   "fail_signals": "Treats demo documents as technical proof."
+  },
+  {
+   "file_path": "03_community_vs_enterprise_map.md",
+   "upload_order": 4,
+   "why_upload": "Edition questions appear in nearly every Odoo conversation; this is the manifest-grounded boundary reference.",
+   "paste_ready_description": "High-authority map of the Odoo 19.0 Community vs Enterprise boundary per business domain, from source analysis of both trees (Enterprise = add-ons-only layer). Use for every edition question and for phrasing edition uncertainty. Do not use for what a specific client subscription includes — that is always commercial validation.",
+   "expected_effect_on_solaria": "Names the correct edition per capability; flags subscription contents as commercial; uses 'Community provides the core; Enterprise adds…' phrasing.",
+   "acceptance_test_questions": ["Is Odoo Studio included in every Odoo installation?"],
+   "pass_criteria": "Studio = Enterprise-only (web_studio); Community lacks it; commercial caveat present.",
+   "fail_signals": "Unqualified yes; no edition distinction."
+  },
+  {
+   "file_path": "05_standard_vs_configuration_vs_custom_framework.md",
+   "upload_order": 5,
+   "why_upload": "The Deloitte customization ladder — the advisory stance on every can/should-we-build question.",
+   "paste_ready_description": "Deloitte decision framework for Odoo 19.0 solutioning: Standard, Configuration, Studio (Enterprise), Automation, Custom development, External integration — with classification tests, red flags, Studio governance and a decision tree. Use for every customization, build-vs-configure and integration question. Do not use to prove a feature exists — pair with catalog or module evidence.",
+   "expected_effect_on_solaria": "Every build question gets a ladder walk with rejected alternatives and named configuration objects.",
+   "acceptance_test_questions": ["We need an extra field and an approval step on purchase orders — custom module?"],
+   "pass_criteria": "Field = configuration/Studio(E); approval = native purchase step / Approvals(E) / Studio approval rules before custom; edition tags present.",
+   "fail_signals": "Recommends a custom module first; no ladder."
+  },
+  {
+   "file_path": "00_document_usage_registry.json",
+   "upload_order": 6,
+   "why_upload": "Machine-readable registry of every pack document — powers routing and lets Solaria explain which sources it used.",
+   "paste_ready_description": "Machine-readable registry of every document in the Deloitte Odoo Intelligence Pack: type, authority, when to use / not use, combinations, limitations, confidence. Use to route questions to the right documents and to answer 'which documents did you use'. Do not use as product knowledge.",
+   "expected_effect_on_solaria": "Can name its sources with authority levels; routes questions to documents not yet uploaded by saying so.",
+   "acceptance_test_questions": ["Which documents did you use for your last answer, and how trustworthy are they?"],
+   "pass_criteria": "Names real pack documents with authority levels; admits when a needed document is not yet uploaded.",
+   "fail_signals": "Cannot cite; invents document names."
+  }
+ ]
+}

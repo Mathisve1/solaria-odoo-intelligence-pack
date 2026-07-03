@@ -1,0 +1,64 @@
+{
+ "_meta": {
+  "title": "Batch 2 — Navigation & Global Evidence (exact upload manifest)",
+  "version": "V3 final",
+  "goal": "Teach Solaria WHERE to look: domain routing, module existence/edition authority, dependency structure, honest AI inventory, coverage awareness.",
+  "file_count": 5,
+  "prerequisite": "Batch 1 uploaded AND its acceptance gate passed (>=7/8, no critical fail)",
+  "gate_after_upload": "acceptance_tests_AFTER_BATCH_2.md — pass >=8/10 with zero critical fails before Batch 3",
+  "size_note": "01_global_module_catalog.json (~1.3 MB) uploads LAST in this batch and has a dedicated retrieval test; fallback if it degrades retrieval: remove it, rely on domain map + module packs, retry in a later expansion.",
+  "paths_relative_to": "solaria/"
+ },
+ "files": [
+  {
+   "file_path": "04_functional_domain_map.md",
+   "upload_order": 1,
+   "why_upload": "Routes business problems to domains and candidate modules — the scoping backbone.",
+   "paste_ready_description": "Domain-level map of Odoo 19.0 (CRM, Sales, Finance, Supply Chain, Manufacturing, Project, HR, Services, Website/eCommerce, POS, Marketing, Subscriptions, BI, AI, Localization, Technical): purpose, key modules with edition, typical client questions, demo potential and watch-outs per domain. Use to scope which domains and modules a business problem touches. Do not use for field-level or workflow-level claims — go module-level.",
+   "expected_effect_on_solaria": "Vague business problems get routed to named domains and candidate modules with editions.",
+   "acceptance_test_questions": ["A wholesale distributor wants to modernize operations — which Odoo domains and modules should we explore?"],
+   "pass_criteria": "Names relevant domains (sales, inventory, purchase, finance, eCommerce/B2B portal) with concrete modules and editions.",
+   "fail_signals": "Domain-free generic advice."
+  },
+  {
+   "file_path": "07_priority_module_recommendation.md",
+   "upload_order": 2,
+   "why_upload": "Coverage awareness: which modules have deep packs (34 + AI pack) — so Solaria declares reduced confidence elsewhere.",
+   "paste_ready_description": "Lists the Odoo 19.0 modules with deep intelligence packs (tiers and rationale, including V2 additions and the consolidated AI evidence pack) plus next-iteration candidates. Use to know whether deep coverage exists for a module; if absent, answer from catalog and domain map at reduced confidence and say so. Do not use for capability details.",
+   "expected_effect_on_solaria": "Transparent about coverage limits instead of bluffing on non-deep modules.",
+   "acceptance_test_questions": ["Do you have deep coverage of the fleet module?"],
+   "pass_criteria": "Says no deep pack; offers catalog/domain-level answer at reduced confidence.",
+   "fail_signals": "Pretends deep knowledge of uncovered modules."
+  },
+  {
+   "file_path": "02_global_dependency_map.yaml",
+   "upload_order": 3,
+   "why_upload": "Architecture authority: direct dependencies, hubs, and which Enterprise modules extend each core Community app.",
+   "paste_ready_description": "Manifest-level dependency map of all 1,422 Odoo 19.0 modules: per-module direct dependencies with edition, dependency hubs, and which Enterprise modules extend each core Community app. Use for architecture and 'what depends on / extends what' questions. Direct dependencies only — not behaviour, not transitive chains.",
+   "expected_effect_on_solaria": "Dependency-grounded architecture reasoning (e.g., subscriptions ⇒ Enterprise accounting).",
+   "acceptance_test_questions": ["Why does selling subscriptions force an Enterprise accounting decision?"],
+   "pass_criteria": "sale_subscription depends on account_accountant (manifest evidence) — implication drawn.",
+   "fail_signals": "No dependency reasoning."
+  },
+  {
+   "file_path": "06_odoo_ai_opportunity_map.md",
+   "upload_order": 4,
+   "why_upload": "The AI strategy layer with the verified-inventory/concept split — until the full AI pack arrives in Batch 3.",
+   "paste_ready_description": "Two-layer AI reference for Odoo 19.0: (1) source-verified inventory of the native Enterprise AI layer (AI agents, AI fields, AI server actions, domain assists, OCR family, pgvector prerequisite) and (2) Deloitte opportunity concepts per domain with governance requirements. Use for AI value and opportunity questions. Never present layer-2 concepts as product features; quality always requires a pilot.",
+   "expected_effect_on_solaria": "AI answers carry the four-way separation (native verified / Deloitte concept / custom opportunity / validation required) and Enterprise-only framing.",
+   "acceptance_test_questions": ["Does Odoo 19 have AI, and what exactly ships?"],
+   "pass_criteria": "Enterprise-only native list with gates (pgvector, IAP); concepts labeled Deloitte; two-part verdict.",
+   "fail_signals": "Concept-capability blur; Community AI claims; quoted accuracy numbers."
+  },
+  {
+   "file_path": "01_global_module_catalog.json",
+   "upload_order": 5,
+   "why_upload": "THE existence/edition authority for all 1,422 modules. Uploaded last in the batch because it is the heaviest retrieval object.",
+   "paste_ready_description": "Source-derived catalog of ALL 1,422 Odoo 19.0 modules (650 Community + 772 Enterprise): edition, dependencies, category, functional domain, summary, per-entry confidence. THE authority on whether a module exists and which edition ships it. Never cite a module absent from this catalog. Do not use for runtime behaviour or feature depth.",
+   "expected_effect_on_solaria": "Obscure-module questions answered from evidence; invented modules disappear.",
+   "acceptance_test_questions": ["Does Odoo 19.0 have a module for equipment rental, and in which edition?", "Is there a module called sale_blanket_order in Odoo 19.0?"],
+   "pass_criteria": "Rental: names the sale_renting family with edition. Blanket order: correctly answers that no such module exists in the official 19.0 catalog (ecosystem modules are out of scope) — no invention.",
+   "fail_signals": "Invented module names; hedge-guessing instead of consulting the catalog; retrieval visibly degraded on unrelated re-tests after upload (then apply the size_note fallback)."
+  }
+ ]
+}

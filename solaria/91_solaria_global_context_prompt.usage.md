@@ -26,4 +26,4 @@ Same as twin.
 High.
 
 ## Recommended Solaria document description (copy-paste)
-> Plain-text paste source of the Solaria global context prompt (identical to the .md twin).
+> Plain-text V2 prompt (identical to the .md twin). SUPERSEDED FOR EXECUTION by final_upload_package/global_context_FINAL.txt — paste that version into Solaria instead.

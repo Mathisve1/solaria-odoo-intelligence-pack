@@ -4,11 +4,11 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 
 | Metric | Value |
 |---|---|
-| Total files | 565 |
-| `.md` files | 525 |
-| `.json` files | 37 |
+| Total files | 609 |
+| `.md` files | 564 |
+| `.json` files | 41 |
+| `.txt` files | 2 |
 | `.yaml` files | 1 |
-| `.txt` files | 1 |
 | `.html` files | 1 |
 | Unsupported files | 0 |
 
@@ -67,8 +67,52 @@ Solaria-supported extensions allowed in this pack: `.md` `.json` `.yaml` `.yml` 
 - `99_v2_final_release_notes.usage.md`
 - `99_v2_self_check.md`
 - `99_v2_self_check.usage.md`
+- `99_v3_final_preupload_report.md`
+- `99_v3_final_preupload_report.usage.md`
+- `99_v3_preupload_readiness_audit.md`
+- `99_v3_preupload_readiness_audit.usage.md`
+- `99_v3_self_check.md`
+- `99_v3_self_check.usage.md`
 - `index.html`
 - `index.usage.md`
+- `final_upload_package/HUMAN_GO_NO_GO_CHECKLIST.md`
+- `final_upload_package/HUMAN_GO_NO_GO_CHECKLIST.usage.md`
+- `final_upload_package/README.md`
+- `final_upload_package/README.usage.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_1.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_1.usage.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_2.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_2.usage.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_3.md`
+- `final_upload_package/acceptance_tests_AFTER_BATCH_3.usage.md`
+- `final_upload_package/answer_quality_rubric.md`
+- `final_upload_package/answer_quality_rubric.usage.md`
+- `final_upload_package/batch_1_manifest.json`
+- `final_upload_package/batch_1_manifest.usage.md`
+- `final_upload_package/batch_2_manifest.json`
+- `final_upload_package/batch_2_manifest.usage.md`
+- `final_upload_package/batch_3_manifest.json`
+- `final_upload_package/batch_3_manifest.usage.md`
+- `final_upload_package/batch_4_later_evidence_manifest.json`
+- `final_upload_package/batch_4_later_evidence_manifest.usage.md`
+- `final_upload_package/context_overload_strategy.md`
+- `final_upload_package/context_overload_strategy.usage.md`
+- `final_upload_package/do_not_upload_manifest.md`
+- `final_upload_package/do_not_upload_manifest.usage.md`
+- `final_upload_package/document_descriptions_BATCH_1.md`
+- `final_upload_package/document_descriptions_BATCH_1.usage.md`
+- `final_upload_package/document_descriptions_BATCH_2.md`
+- `final_upload_package/document_descriptions_BATCH_2.usage.md`
+- `final_upload_package/document_descriptions_BATCH_3.md`
+- `final_upload_package/document_descriptions_BATCH_3.usage.md`
+- `final_upload_package/future_upload_roadmap.md`
+- `final_upload_package/future_upload_roadmap.usage.md`
+- `final_upload_package/global_context_FINAL.txt`
+- `final_upload_package/global_context_FINAL.usage.md`
+- `final_upload_package/red_team_tests.md`
+- `final_upload_package/red_team_tests.usage.md`
+- `final_upload_package/simulated_answer_benchmark.md`
+- `final_upload_package/simulated_answer_benchmark.usage.md`
 - `modules/account/README.md`
 - `modules/account/README.usage.md`
 - `modules/account/functional_summary.md`

@@ -4,8 +4,24 @@
 |---|---|
 | Document type | Context Manifest / Knowledge Base Rules (quality control) |
 | Version scope | Odoo 19.0 (Community final + Enterprise snapshot 2026-07-02) |
-| Pack version | **V2** (V2 section below; V1 baseline report follows) |
-| Build dates | V1 + V2: 2026-07-02 |
+| Pack version | **V3** (pre-upload gate; V3 section first, then V2, then the V1 baseline) |
+| Build dates | V1 + V2: 2026-07-02 · V3: 2026-07-03 |
+
+---
+
+# V3 SECTION — Pre-upload gate (branch `solaria-v3-preupload-gate`)
+
+## V3.1 What changed
+V3 added **no new knowledge content** — it made the upload operationally foolproof: the authoritative `final_upload_package/` (operator README, `global_context_FINAL.txt`, exact Batch 1/2/3 manifests with per-file descriptions and tests, Batch-4 later-evidence manifest by use case, do-not-upload manifest, per-batch paste sheets, acceptance suites 8/10/12, 15-probe red-team suite, 0–5 answer rubric, 10-outline simulated benchmark, context-overload strategy with the retrieval-quality checklist, future-upload roadmap, binary human go/no-go checklist), plus the readiness audit (`99_v3_preupload_readiness_audit.md`), supersession pointers in the V2 kit/90/93, and repo hygiene (five stray zero-byte staged files removed from the repository root).
+
+## V3.2 Key gate decisions
+Batch 1 = 6 governance docs (unchanged, judged right-sized) · Batch 2 = 5 navigation docs with the catalog uploaded last under a dedicated retrieval test · Batch 3 expanded 14→18 (adds `web_studio`, `base_automation`, and the AI pack's functional summary + governance doc as one unit, gated on risk/legal review) · total first footprint 29 documents (within the ≤~30 guardrail) · test suites and operator artifacts must never be uploaded (test integrity).
+
+## V3.3 Remaining risks (accepted at gate)
+Live retrieval behavior unverifiable before upload (Batch-1 gate is the control) · catalog JSON size (mitigation + fallback encoded in the Batch-2 manifest) · AI risk/legal review pending (blocks only Batch-3 items 17–18) · single-platform assumption (Solaria description/context fields — operator verifies field limits on first paste).
+
+## V3.4 Upload plan after V3
+Execute `final_upload_package/README.md` steps 0–7 with the go/no-go checklist. Full lists and verdict: `99_v3_final_preupload_report.md`.
 
 ---
 

@@ -6,7 +6,7 @@
 | Usage | When uploading a file to Solaria, paste its description below into the document description / usage-instruction field. Priorities: 1 = upload first. Authority: how strongly Solaria should trust it. |
 
 For module evidence files not individually listed (Batch 4), use the generic templates at the end. Full registry (machine-readable, every file): `00_document_usage_registry.json`.
-**V2 note:** exact per-batch upload checklists with these descriptions pre-inserted live in `upload_ready/` — prefer them for execution. V2 additions covered below: the `ai_native_odoo_19` consolidated pack and eight new module packs (account_accountant, account_reports, web_studio, base_automation, spreadsheet_edition, quality, mrp_workorder, stock_barcode) — use the Batch 3/4 templates for their standard files.
+**V3 note:** the authoritative paste sheets are now `final_upload_package/document_descriptions_BATCH_1/2/3.md` (titles + descriptions + routing language, aligned with the batch manifests) — use those for Batches 1–3; this document remains the reference for later batches (evidence templates, playbooks) and the V2 additions. **V2 note:** exact per-batch upload checklists with these descriptions pre-inserted live in `upload_ready/` — prefer them for execution. V2 additions covered below: the `ai_native_odoo_19` consolidated pack and eight new module packs (account_accountant, account_reports, web_studio, base_automation, spreadsheet_edition, quality, mrp_workorder, stock_barcode) — use the Batch 3/4 templates for their standard files.
 
 ## V2 — AI evidence pack (`modules/ai_native_odoo_19/`, upload as one unit when AI questions appear)
 

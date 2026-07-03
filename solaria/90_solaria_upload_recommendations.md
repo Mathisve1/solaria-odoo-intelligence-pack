@@ -6,7 +6,7 @@
 | Authority level | High for upload/rollout decisions |
 | Version scope | Odoo 19.0 pack, first iteration |
 
-> **V2 note — start with the operator kit.** A step-by-step, checklist-grade version of this plan now lives in `upload_ready/` (README + exact per-batch checklists with pasteable descriptions, acceptance tests and troubleshooting). Use the kit for execution; use this document for the full-plan overview and the later batches (4–5).
+> **V3 note — execution follows `final_upload_package/`.** The V3 pre-upload gate produced the authoritative execution artifacts: exact Batch 1/2/3 manifests (JSON), `global_context_FINAL.txt`, per-batch acceptance suites, red-team tests and the human go/no-go checklist — all in `final_upload_package/`. The `upload_ready/` kit (V2) remains as background. Use this document only for the full-plan overview and the later batches (4–5), which are now detailed in `final_upload_package/batch_4_later_evidence_manifest.json` and `future_upload_roadmap.md`.
 
 ## 1. Principles
 - Upload in **batches**, testing after each with `92_solaria_test_questions.md` — behavior first, evidence later.

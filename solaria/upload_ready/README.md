@@ -1,5 +1,7 @@
 # Upload-Ready Kit — How a Human Uploads This Pack to Solaria
 
+> **V3 SUPERSESSION NOTICE:** execution now follows **`../final_upload_package/`** (exact batch manifests, FINAL global context, per-batch acceptance suites, red-team tests, go/no-go checklist). This kit remains as background reading; where the two differ — notably Batch 3, which V3 expands from 14 to 18 files — the final_upload_package manifests win.
+
 | Attribute | Value |
 |---|---|
 | Document type | Context Manifest / Knowledge Base Rules (operator kit) |

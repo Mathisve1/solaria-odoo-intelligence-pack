@@ -1,5 +1,7 @@
 # Batch 3 — First Functional-Summary Selection (14 modules, summaries only)
 
+> **V3 SUPERSESSION NOTICE:** the authoritative Batch 3 is now **`../final_upload_package/batch_3_manifest.json`** (18 files: these 14 plus `web_studio`, `base_automation` and the AI pack's functional summary + governance doc). Use that manifest for execution.
+
 **Goal:** module depth where client conversations actually happen — **functional summaries only**. Do NOT upload models.json / views / security / workflow / standard_vs_custom files yet (see `do_not_upload_initially.md`); they follow on demand once retrieval quality is proven.
 **Prerequisite:** Batch 2 passed.
 
