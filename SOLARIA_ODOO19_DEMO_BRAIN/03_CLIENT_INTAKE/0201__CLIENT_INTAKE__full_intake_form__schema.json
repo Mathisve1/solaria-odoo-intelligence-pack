@@ -1,0 +1,105 @@
+{
+ "_meta": {
+  "title": "Full Client Intake (machine-readable schema)",
+  "canonical": "foundation 0003",
+  "scoring": "foundation 0004",
+  "category": "CLIENT_INTAKE"
+ },
+ "client_profile": {
+  "client_name": "",
+  "industry": "",
+  "sub_industry": "",
+  "countries": [],
+  "employees": null,
+  "legal_entities": null,
+  "main_locations": [],
+  "revenue_range": "",
+  "growth_plans": "",
+  "current_erp": "",
+  "other_systems": [],
+  "current_partner": ""
+ },
+ "sales_opportunity": {
+  "stage": "intro|discovery|demo|fit_gap|poc|final_selection",
+  "decision_date": "",
+  "budget_range": "",
+  "implementation_size": "",
+  "competitors": [],
+  "decision_criteria": [],
+  "deloitte_owner": ""
+ },
+ "meeting_setup": {
+  "date": "",
+  "duration_minutes": null,
+  "format": "in_person|remote|hybrid",
+  "language": "",
+  "attendee_count": null,
+  "client_attendees": [],
+  "deloitte_attendees": [],
+  "decision_makers_present": [],
+  "technical_stakeholders_present": []
+ },
+ "audience": [
+  {
+   "role": "",
+   "department": "",
+   "seniority": "",
+   "main_objective": "",
+   "main_concern": "",
+   "likely_objection": "",
+   "desired_wow_moment": ""
+  }
+ ],
+ "business_challenges": [
+  {
+   "current_process": "",
+   "pain": "",
+   "root_cause": "",
+   "business_impact": "",
+   "workarounds": "",
+   "desired_future_state": "",
+   "is_most_urgent": false,
+   "is_politically_sensitive": false
+  }
+ ],
+ "scope": {
+  "in_scope_processes": [],
+  "out_of_scope": [],
+  "odoo_apps_hypothesis": [],
+  "integrations": [],
+  "migration_expectations": "",
+  "localisation": [],
+  "security_requirements": "",
+  "reporting_requirements": "",
+  "ai_topics": ""
+ },
+ "demo_objectives": {
+  "must_understand": "",
+  "must_believe": "",
+  "must_feel": "",
+  "next_action": "",
+  "wow_moments_required": [
+   "",
+   "",
+   ""
+  ],
+  "topics_not_to_dominate": [
+   "",
+   "",
+   ""
+  ]
+ },
+ "constraints_risks": {
+  "unclear_requirements": [],
+  "unavailable_data": [],
+  "unstable_functionality": [],
+  "circulating_assumptions": [],
+  "customisation_expectations_set": "",
+  "prep_days_available": null,
+  "sensitive_commercial_topics": []
+ },
+ "completeness": {
+  "score_0_100": null,
+  "band": "insufficient|provisional|workable|client_specific"
+ }
+}
